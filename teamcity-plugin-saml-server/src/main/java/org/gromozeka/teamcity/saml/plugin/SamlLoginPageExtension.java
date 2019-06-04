@@ -16,7 +16,7 @@ public class SamlLoginPageExtension extends SimplePageExtension {
         super(pagePlaces,
                 PlaceId.LOGIN_PAGE,
                 PAGE_EXTENSION_ID,
-                descriptor.getPluginResourcesPath("/buildServerResources/SamlLogin.jsp"));
+                descriptor.getPluginResourcesPath("SamlLogin.jsp"));
         register();
     }
 
