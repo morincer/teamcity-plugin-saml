@@ -7,4 +7,5 @@
     <bean id="samlAuthenticationScheme" class="org.gromozeka.teamcity.saml.plugin.SamlAuthenticationScheme"/>
     <bean id="samlLoginExtension" class="org.gromozeka.teamcity.saml.plugin.SamlLoginPageExtension"/>
     <bean id="samlLoginInitiateController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginInitiateController"/>
+    <bean id="samlPluginAdminPage" class="org.gromozeka.teamcity.saml.plugin.SamlPluginAdminPage"/>
 </beans>
