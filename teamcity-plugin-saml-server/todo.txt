@@ -1,11 +1,12 @@
 * Implement MVP SAML auth plugin with Okta
-    [ ] (FTR) "Login with SAML" button
+    [x] (FTR) "Login with SAML" button
     [ ] (FTR) Login with SAML controller and redirect to Okta login
     [ ] (FTR) SAML callback 
     [ ] (FTR) Session persistence
 
 * Extend the implementation
     [ ] Nice UI
+        [ ] Center Login with SSO button
     [ ] Settings page
         [ ] (FTR) SAML settings
         [ ] (FTR) "loging with SAML" button name

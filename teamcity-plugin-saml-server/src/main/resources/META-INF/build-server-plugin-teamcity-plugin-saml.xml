@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringBeanConstructorArgInspection -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
     <bean id="samlAuthenticationScheme" class="org.gromozeka.teamcity.saml.plugin.SamlAuthenticationScheme"/>
     <bean id="samlLoginExtension" class="org.gromozeka.teamcity.saml.plugin.SamlLoginPageExtension"/>
+    <bean id="samlLoginInitiateController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginInitiateController"/>
 </beans>
