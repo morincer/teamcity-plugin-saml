@@ -40,14 +40,17 @@
                 <outputFile>${basedir}/target/teamcity-plugin.xml</outputFile>
                 <replacements>
                     <replacement>
+                        <!--suppress UnresolvedMavenProperty -->
                         <token>@Version@</token>
                         <value>${teamcity.teamcity-plugin-saml.plugin.version}</value>
                     </replacement>
                     <replacement>
+                        <!--suppress UnresolvedMavenProperty -->
                         <token>@VendorName@</token>
                         <value>${teamcity.teamcity-plugin-saml.plugin.vendorName}</value>
                     </replacement>
                     <replacement>
+                        <!--suppress UnresolvedMavenProperty -->
                         <token>@VendorURL@</token>
                         <value>${teamcity.teamcity-plugin-saml.plugin.vendorUrl}</value>
                     </replacement>
@@ -66,13 +69,30 @@
                 </goals>
                 <configuration>
                   <finalName>teamcity-plugin-saml</finalName>
-                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
                   <appendAssemblyId>false</appendAssemblyId>
                   <descriptors>
                     <descriptor>plugin-assembly.xml</descriptor>
                   </descriptors>
                 </configuration>
               </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>teamcity-sdk-maven-plugin</artifactId>
+            <version>0.4</version>
+            <configuration>
+                <pluginPackageName>teamcity-plugin-saml.zip</pluginPackageName>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>deploy</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>reload</goal>
+                    </goals>
+                </execution>
             </executions>
         </plugin>
     </plugins>
