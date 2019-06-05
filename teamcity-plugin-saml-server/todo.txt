@@ -17,3 +17,5 @@
         [ ] (FTR) Oneclick
         [ ] (???) Other
     [ ] (???) Agents authentication
+    [ ] Import metadata from URL
+    [ ] Import metadata from Text
