@@ -8,4 +8,8 @@
     <bean id="samlLoginExtension" class="org.gromozeka.teamcity.saml.plugin.SamlLoginPageExtension"/>
     <bean id="samlLoginInitiateController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginInitiateController"/>
     <bean id="samlPluginAdminPage" class="org.gromozeka.teamcity.saml.plugin.SamlPluginAdminPage"/>
+    <bean id="samlPluginSettingsStorage"
+          class="org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage"
+          init-method="init"/>
+    <bean id="samlPluginSettingsController" class="org.gromozeka.teamcity.saml.plugin.SamlPluginSettingsController"/>
 </beans>

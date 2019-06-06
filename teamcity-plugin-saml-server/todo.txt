@@ -12,7 +12,8 @@
         [ ] (FTR) SAML settings
             [ ] (FTR) SAML SP Entity ID - generate or update
         [ ] (FTR) "loging with SAML" button name
-    [ ] Profile pre-loading
+        [ ] AJAX-based saving and validation
+        [ ] Profile pre-loading
         [ ] (FTR) Okta
         [ ] (FTR) Oneclick
         [ ] (???) Other
