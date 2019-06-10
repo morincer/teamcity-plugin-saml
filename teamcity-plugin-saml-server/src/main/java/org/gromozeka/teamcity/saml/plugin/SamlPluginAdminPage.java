@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class SamlPluginAdminPage extends AdminPage {
+    private final PluginDescriptor pluginDescriptor;
     private SamlPluginSettings pluginSettings;
     private SamlPluginSettingsStorage settingsStorage;
 
@@ -23,8 +24,7 @@ public class SamlPluginAdminPage extends AdminPage {
                                   @NotNull SamlPluginSettingsStorage settingsStorage) {
         super(pagePlaces);
         this.settingsStorage = settingsStorage;
-
-
+        this.pluginDescriptor = pluginDescriptor;
         this.pluginSettings = pluginSettings;
         setPluginName(SamlPluginConstants.PLUGIN_NAME);
         setIncludeUrl(pluginDescriptor.getPluginResourcesPath("SamlPluginAdminPage.jsp"));
@@ -42,6 +42,8 @@ public class SamlPluginAdminPage extends AdminPage {
     @Override
     public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request) {
         super.fillModel(model, request);
+        model.put("pluginResources", this.pluginDescriptor.getPluginResourcesPath());
+
         try {
             model.put("settings", this.settingsStorage.load());
         } catch (IOException e) {

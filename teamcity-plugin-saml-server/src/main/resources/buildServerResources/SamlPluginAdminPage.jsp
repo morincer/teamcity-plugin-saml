@@ -4,8 +4,17 @@
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/forms" %>
 <%@ taglib prefix="forms" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="settings" scope="request" type="org.gromozeka.teamcity.saml.core.config.SamlPluginSettings"/>
+<jsp:useBean id="pluginResources" scope="request" type="java.lang.String"/>
+
+<script type="text/javascript" src="<%=pluginResources%>js/samlAdminSettingsFormHandler.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+       samlAdminSettingsFormHandler.bind($("#sandboxAdminForm"));
+    })
+</script>
 
 <%
     URL requestUrl = new URL(request.getRequestURL().toString());
@@ -15,9 +24,16 @@
         settings.setEntityId(entityIdUrl.toString());
     }
 %>
+<bs:messages key="message"/>
+<br/>
+<div id="errors">
+</div>
 
 <div id="settingsContainer">
-    <form action="<%=SamlPluginConstants.SETTINGS_CONTROLLER_PATH%>" id="sandboxAdminForm" method="post">
+    <form action="<%=SamlPluginConstants.SETTINGS_CONTROLLER_PATH%>"
+          id="sandboxAdminForm"
+          method="post"
+          onsubmit="samlAdminSettingsFormHandler.save(); return false;">
         <table class="runnerFormTable">
             <tr class="groupingTitle">
                 <td colspan="2">Identity Provider Configuration</td>
@@ -68,7 +84,7 @@
 
         </table>
         <div class="saveButtonsBlock">
-            <f:submit label="Save" />
+            <f:submit label="Save"/>
             <f:saving/>
         </div>
     </form>

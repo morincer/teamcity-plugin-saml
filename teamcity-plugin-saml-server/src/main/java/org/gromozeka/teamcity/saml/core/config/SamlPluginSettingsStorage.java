@@ -17,10 +17,13 @@ public class SamlPluginSettingsStorage {
     private final Path configPath;
     private ServerPaths serverPaths;
 
+    private SamlPluginSettings settings;
+
     public SamlPluginSettingsStorage(ServerPaths serverPaths) {
         this.serverPaths = serverPaths;
         this.objectMapper = new ObjectMapper();
         this.configPath = Paths.get(this.serverPaths.getConfigDir(), SamlPluginConstants.CONFIG_FILE_NAME);
+        this.settings = null;
     }
 
     public void init() throws IOException {
@@ -28,15 +31,20 @@ public class SamlPluginSettingsStorage {
     }
 
     public SamlPluginSettings load() throws IOException {
-        if (!this.configPath.toFile().exists()) {
-            save(new SamlPluginSettings());
+        if (this.settings == null) {
+            if (!this.configPath.toFile().exists()) {
+                save(new SamlPluginSettings());
+            }
+
+            this.settings = this.objectMapper.readValue(this.configPath.toFile(), SamlPluginSettings.class);
         }
 
-        return this.objectMapper.readValue(this.configPath.toFile(), SamlPluginSettings.class);
+        return this.settings;
     }
 
     public void save(SamlPluginSettings settings) throws IOException {
         this.objectMapper.writeValue(this.configPath.toFile(), settings);
+        this.settings = settings;
     }
 
 }
