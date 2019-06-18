@@ -14,6 +14,7 @@ import org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,12 +58,11 @@ public class SamlLoginInitiateController extends BaseController {
             if (!urlValidator.isValid(endpoint)) throw new Exception(String.format("SSO endpoint (%s) must be a valid URL ", endpoint));
 
             log.info(String.format("Redirecting to %s", endpoint));
-            httpServletResponse.sendRedirect(endpoint);
+            return new ModelAndView(new RedirectView(endpoint));
+
         } catch (Exception e) {
             log.error(String.format("Error while initating SSO login redirect: ", e.getMessage()), e);
             throw e;
         }
-
-        return new ModelAndView();
     }
 }

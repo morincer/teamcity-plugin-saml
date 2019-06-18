@@ -8,6 +8,7 @@
         The issue is the by some reason the Origin:null in the incoming request -
         make sure to understand why it happens and how to bypass it.
     [ ] (BUG) Multiple redirects when calling the login button
+    [ ] (BUG?)  WARN - .InstantiationStrategySelector - Spring selected non-public constructor to create instance
 
 * Extend the implementation
     [ ] Nice UI
@@ -26,3 +27,4 @@
     [ ] Import metadata from URL
     [ ] Import metadata from Text
     [ ] Add meaningfull logging
+    [ ] (FTR) Allow creating new users by login

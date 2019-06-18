@@ -7,6 +7,7 @@
     <bean id="samlAuthenticationScheme" class="org.gromozeka.teamcity.saml.plugin.SamlAuthenticationScheme"/>
     <bean id="samlLoginExtension" class="org.gromozeka.teamcity.saml.plugin.SamlLoginPageExtension"/>
     <bean id="samlLoginInitiateController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginInitiateController"/>
+    <bean id="samlLoginCallbackController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginCallbackController"/>
     <bean id="samlPluginAdminPage" class="org.gromozeka.teamcity.saml.plugin.SamlPluginAdminPage"/>
     <bean id="samlPluginSettingsStorage"
           class="org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage"
