@@ -1,9 +1,13 @@
 * Implement MVP SAML auth plugin with Okta
     [x] (FTR) "Login with SAML" button
-    [ ] (FTR) Plugin settings
-    [ ] (FTR) Login with SAML controller and redirect to Okta login
-    [ ] (FTR) SAML callback 
+    [x] (FTR) Plugin settings
+    [x] (FTR) Login with SAML controller and redirect to Okta login
+    [ ] (FTR) SAML callback logic
     [ ] (FTR) Session persistence
+    [ ] (BUG/FTR) Deal with CORS / HTTPS / Whatever is causing the CORS denial
+        The issue is the by some reason the Origin:null in the incoming request -
+        make sure to understand why it happens and how to bypass it.
+    [ ] (BUG) Multiple redirects when calling the login button
 
 * Extend the implementation
     [ ] Nice UI
@@ -21,3 +25,4 @@
     [ ] (???) Agents authentication
     [ ] Import metadata from URL
     [ ] Import metadata from Text
+    [ ] Add meaningfull logging
