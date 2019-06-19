@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.settings.Saml2Settings;
 import com.onelogin.saml2.settings.SettingsBuilder;
@@ -25,21 +26,20 @@ import java.util.Map;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
-    private PluginDescriptor pluginDescriptor;
+    private final Logger LOG = Loggers.SERVER;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
 
+
     public SamlAuthenticationScheme(
-            @NotNull PluginDescriptor pluginDescriptor,
             final LoginConfiguration loginConfiguration,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
             @NotNull UserModel userModel) {
-        this.pluginDescriptor = pluginDescriptor;
 
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
         loginConfiguration.registerAuthModuleType(this);
-        Loggers.SERVER.info("Registered SAML-based authentication scheme");
+        LOG.info("Registered SAML-based authentication scheme");
     }
 
     @NotNull
@@ -85,19 +85,19 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", auth.getNameId(), SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
 
-            Loggers.SERVER.info(String.format("SAML request authenticated for user %s", user.getName()));
+            LOG.info(String.format("SAML request authenticated for user %s", user.getName()));
 
             return HttpAuthenticationResult.authenticated(
                     new ServerPrincipal(user.getRealm(), user.getUsername(), null, false, new HashMap<>()),
                     true).withRedirect("/");
         } catch (Exception e) {
-            Loggers.SERVER.error(e);
+            LOG.error(e);
             return sendUnauthorizedRequest(request, response, String.format("Failed to authenticate request: %s", e.getMessage()));
         }
     }
 
     private HttpAuthenticationResult sendUnauthorizedRequest(HttpServletRequest request, HttpServletResponse response, String reason) throws IOException {
-        Loggers.SERVER.warn(reason);
+        LOG.warn(reason);
         HttpAuthUtil.setUnauthenticatedReason(request, reason);
         response.sendError(HttpStatus.UNAUTHORIZED.value(), reason);
         return HttpAuthenticationResult.unauthenticated();

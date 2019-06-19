@@ -20,7 +20,7 @@ public class SamlLoginController extends BaseController {
 
     private final SamlPluginSettingsStorage settingsStorage;
 
-    private final static Logger log = Loggers.SERVER;
+    private final Logger LOG = Loggers.SERVER;
 
     public SamlLoginController(@NotNull SBuildServer server,
                                @NotNull WebControllerManager webControllerManager,
@@ -29,7 +29,7 @@ public class SamlLoginController extends BaseController {
         super(server);
         this.settingsStorage = settingsStorage;
 
-        Loggers.SERVER.info("Initializing SAML controller");
+        LOG.info("Initializing SAML controller");
 
         interceptor.addPathNotRequiringAuth(SamlPluginConstants.SAML_INITIATE_LOGIN_URL);
         webControllerManager.registerController(SamlPluginConstants.SAML_INITIATE_LOGIN_URL, this);
@@ -40,7 +40,7 @@ public class SamlLoginController extends BaseController {
     protected ModelAndView doHandle(@NotNull HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse) throws Exception {
 
         try {
-            log.info("Initiating SSO login");
+            LOG.info("Initiating SSO login");
 
             var settings = settingsStorage.load();
 
@@ -54,11 +54,11 @@ public class SamlLoginController extends BaseController {
 
             if (!urlValidator.isValid(endpoint)) throw new Exception(String.format("SSO endpoint (%s) must be a valid URL ", endpoint));
 
-            log.info(String.format("Redirecting to %s", endpoint));
+            LOG.info(String.format("Redirecting to %s", endpoint));
             return new ModelAndView(new RedirectView(endpoint));
 
         } catch (Exception e) {
-            log.error(String.format("Error while initating SSO login redirect: ", e.getMessage()), e);
+            LOG.error(String.format("Error while initating SSO login redirect: ", e.getMessage()), e);
             throw e;
         }
     }

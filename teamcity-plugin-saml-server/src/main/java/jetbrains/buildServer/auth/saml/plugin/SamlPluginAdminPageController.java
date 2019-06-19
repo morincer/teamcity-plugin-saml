@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.controllers.ActionErrors;
 import jetbrains.buildServer.controllers.BaseFormXmlController;
 import jetbrains.buildServer.controllers.FormUtil;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 public class SamlPluginAdminPageController extends BaseFormXmlController {
 
+    private final Logger LOG = Loggers.SERVER;
     private SamlPluginSettingsStorage settingsStorage;
 
     public SamlPluginAdminPageController(@NotNull SamlPluginSettingsStorage settingsStorage,
@@ -41,7 +43,7 @@ public class SamlPluginAdminPageController extends BaseFormXmlController {
             try {
                 settingsStorage.save(settings);
             } catch (IOException e) {
-                Loggers.SERVER.error("Failed to store settings in the file: " + e.getMessage(), e);
+                LOG.error("Failed to store settings in the file: " + e.getMessage(), e);
                 errors.addException("ssoUrl", e);
             }
 

@@ -7,8 +7,8 @@
         The issue is the by some reason the Origin:null in the incoming request -
         make sure to understand why it happens and how to bypass it.
     [x] (BUG) Multiple redirects when calling the login button
-    [ ] (IMP) Migrate Spring configuration to code-based config
-    [ ] (BUG?)  WARN - .InstantiationStrategySelector - Spring selected non-public constructor to create instance
+    [x] (IMP) Migrate Spring configuration to code-based config
+    [x] (BUG?)  WARN - .InstantiationStrategySelector - Spring selected non-public constructor to create instance
 
 * Extend the implementation
     [x] Nice UI

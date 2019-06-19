@@ -43,23 +43,23 @@
                     <label for="ssoEndpoint">Single Sign-On URL</label>
                 </th>
                 <td>
-                    <forms:input id="ssoEndpoint" path="settings.ssoEndpoint" cssStyle="width: 300px"/>
+                    <forms:input id="ssoEndpoint" path="settings.ssoEndpoint" cssStyle="width: 100%"/>
                 </td>
             </tr>
             <tr>
                 <th>
-                    <label for="issuerUrl">Issuer URL</label>
+                    <label for="issuerUrl">Issuer URL (Identity Provider Entity Id)</label>
                 </th>
                 <td>
-                    <forms:input id="issuerUrl" path="settings.issuerUrl" cssStyle="width: 300px"/>
+                    <forms:input id="issuerUrl" path="settings.issuerUrl" cssStyle="width: 100%"/>
                 </td>
             </tr>
             <tr>
                 <th>
-                    <label for="publicCertificate">Certificate</label>
+                    <label for="publicCertificate">X509 Certificate</label>
                 </th>
                 <td>
-                    <forms:textarea id="publicCertificate" path="settings.publicCertificate" cssStyle="width: 300px"/>
+                    <forms:textarea id="publicCertificate" path="settings.publicCertificate" cssStyle="width: 100%; height: 400px"/>
                 </td>
             </tr>
             <tr class="groupingTitle">

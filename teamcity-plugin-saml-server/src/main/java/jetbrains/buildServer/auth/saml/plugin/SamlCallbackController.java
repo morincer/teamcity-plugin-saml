@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
 import jetbrains.buildServer.controllers.BaseController;
 import jetbrains.buildServer.log.Loggers;
@@ -15,24 +16,22 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SamlCallbackController extends BaseController {
 
-    private final SamlPluginSettingsStorage settingsStorage;
+    private final Logger LOG = Loggers.SERVER;
 
     public SamlCallbackController(@NotNull SBuildServer server,
                                   @NotNull WebControllerManager webControllerManager,
-                                  @NotNull AuthorizationInterceptor interceptor,
-                                  @NotNull SamlPluginSettingsStorage settingsStorage) {
+                                  @NotNull AuthorizationInterceptor interceptor
+                                  ) {
         super(server);
-        this.settingsStorage = settingsStorage;
 
-        Loggers.SERVER.info("Initializing SAML callback controller");
+        LOG.info("Initializing SAML callback controller");
 
-//        interceptor.addPathNotRequiringAuth(SamlPluginConstants.SAML_CALLBACK_URL);
         webControllerManager.registerController(SamlPluginConstants.SAML_CALLBACK_URL, this);
     }
 
     @Nullable
     @Override
-    protected ModelAndView doHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) throws Exception {
+    protected ModelAndView doHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         return new ModelAndView(new RedirectView("/"));
     }
 }

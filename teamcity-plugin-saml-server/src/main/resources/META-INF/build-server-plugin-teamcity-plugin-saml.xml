@@ -4,14 +4,5 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
-    <bean id="samlAuthenticationScheme" class="jetbrains.buildServer.auth.saml.plugin.SamlAuthenticationScheme"/>
-    <bean id="samlLoginExtension" class="jetbrains.buildServer.auth.saml.plugin.SamlLoginPageExtension"/>
-    <bean id="samlLoginInitiateController" class="jetbrains.buildServer.auth.saml.plugin.SamlLoginController"/>
-    <bean id="samlLoginCallbackController" class="jetbrains.buildServer.auth.saml.plugin.SamlCallbackController"/>
-    <bean id="samlPluginAdminPage" class="jetbrains.buildServer.auth.saml.plugin.SamlPluginAdminPage"/>
-    <bean id="samlPluginSettingsStorage"
-          class="jetbrains.buildServer.auth.saml.plugin.SamlPluginSettingsStorage"
-          init-method="init"/>
-    <bean id="samlPluginSettingsController" class="jetbrains.buildServer.auth.saml.plugin.SamlPluginAdminPageController"/>
-    <bean id="samlAuthenticationSchemeProperties" class="org.gromozeka.teamcity.saml.plugin.SamlAuthenticationSchemeProperties"/>
+    <bean id="samlPluginConfiguration" class="jetbrains.buildServer.auth.saml.plugin.SamlPluginConfiguration"/>
 </beans>

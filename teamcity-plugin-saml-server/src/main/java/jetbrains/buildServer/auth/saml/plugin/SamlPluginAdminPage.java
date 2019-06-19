@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.auth.Permission;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class SamlPluginAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
+    private final Logger LOG = Loggers.SERVER;
     private SamlPluginSettings pluginSettings;
     private SamlPluginSettingsStorage settingsStorage;
 
@@ -27,7 +29,7 @@ public class SamlPluginAdminPage extends AdminPage {
         setIncludeUrl(pluginDescriptor.getPluginResourcesPath("SamlPluginAdminPage.jsp"));
         setTabTitle("SAML Settings");
         register();
-        Loggers.SERVER.info("SAML configuration page registered");
+        LOG.info("SAML configuration page registered");
     }
 
     @NotNull
@@ -44,7 +46,7 @@ public class SamlPluginAdminPage extends AdminPage {
         try {
             model.put("settings", this.settingsStorage.load());
         } catch (IOException e) {
-            Loggers.SERVER.error("Failed to load the settings from the storage: " + e.getMessage(), e);
+            LOG.error("Failed to load the settings from the storage: " + e.getMessage(), e);
             model.put("settings", new SamlPluginSettings());
         }
     }
