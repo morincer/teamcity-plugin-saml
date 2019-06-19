@@ -10,8 +10,8 @@
     [ ] (BUG?)  WARN - .InstantiationStrategySelector - Spring selected non-public constructor to create instance
 
 * Extend the implementation
-    [ ] Nice UI
-        [ ] Center Login with SSO button
+    [x] Nice UI
+        [x] Center Login with SSO button
     [ ] Settings page
         [ ] (FTR) SAML settings
             [ ] (FTR) SAML SP Entity ID - generate or update
