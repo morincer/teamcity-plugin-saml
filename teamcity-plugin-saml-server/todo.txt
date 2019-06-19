@@ -28,3 +28,4 @@
     [ ] Import metadata from Text
     [ ] Add meaningfull logging
     [ ] (FTR) Allow creating new users by login
+    [ ] (FTR) Allow configuring fields for the name ID lookup
