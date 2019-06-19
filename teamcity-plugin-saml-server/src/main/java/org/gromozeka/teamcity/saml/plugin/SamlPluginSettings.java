@@ -1,4 +1,4 @@
-package org.gromozeka.teamcity.saml.core.config;
+package org.gromozeka.teamcity.saml.plugin;
 
 import lombok.Data;
 

@@ -6,11 +6,8 @@ import jetbrains.buildServer.controllers.BaseController;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
-import lombok.extern.log4j.Log4j;
 import lombok.var;
 import org.apache.commons.validator.UrlValidator;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettings;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,16 +16,16 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SamlLoginInitiateController extends BaseController {
+public class SamlLoginController extends BaseController {
 
     private final SamlPluginSettingsStorage settingsStorage;
 
     private final static Logger log = Loggers.SERVER;
 
-    public SamlLoginInitiateController(@NotNull SBuildServer server,
-                                       @NotNull WebControllerManager webControllerManager,
-                                       @NotNull AuthorizationInterceptor interceptor,
-                                       @NotNull SamlPluginSettingsStorage settingsStorage) {
+    public SamlLoginController(@NotNull SBuildServer server,
+                               @NotNull WebControllerManager webControllerManager,
+                               @NotNull AuthorizationInterceptor interceptor,
+                               @NotNull SamlPluginSettingsStorage settingsStorage) {
         super(server);
         this.settingsStorage = settingsStorage;
 

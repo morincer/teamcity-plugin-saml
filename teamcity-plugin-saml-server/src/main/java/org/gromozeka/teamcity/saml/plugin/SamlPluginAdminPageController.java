@@ -7,8 +7,6 @@ import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import org.apache.commons.validator.UrlValidator;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettings;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,12 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class SamlPluginSettingsController extends BaseFormXmlController {
+public class SamlPluginAdminPageController extends BaseFormXmlController {
 
     private SamlPluginSettingsStorage settingsStorage;
 
-    public SamlPluginSettingsController(@NotNull SamlPluginSettingsStorage settingsStorage,
-                                        @NotNull WebControllerManager webControllerManager) {
+    public SamlPluginAdminPageController(@NotNull SamlPluginSettingsStorage settingsStorage,
+                                         @NotNull WebControllerManager webControllerManager) {
         this.settingsStorage = settingsStorage;
         webControllerManager.registerController(SamlPluginConstants.SETTINGS_CONTROLLER_PATH, this);
     }

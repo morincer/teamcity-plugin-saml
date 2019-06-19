@@ -1,16 +1,11 @@
-package org.gromozeka.teamcity.saml.core.config;
+package org.gromozeka.teamcity.saml.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jetbrains.buildServer.serverSide.ServerPaths;
-import lombok.Getter;
-import lombok.Setter;
-import org.gromozeka.teamcity.saml.plugin.SamlPluginConstants;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static com.intellij.openapi.application.PathManager.getConfigPath;
 
 public class SamlPluginSettingsStorage {
     private final ObjectMapper objectMapper;

@@ -11,9 +11,10 @@ import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.serverSide.auth.ServerPrincipal;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import lombok.var;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +26,16 @@ import java.util.Map;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
+    private PluginDescriptor pluginDescriptor;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
 
-    public SamlAuthenticationScheme(final LoginConfiguration loginConfiguration,
-                                    @NotNull final SamlPluginSettingsStorage settingsStorage,
-                                    @NotNull UserModel userModel) {
+    public SamlAuthenticationScheme(
+            @NotNull PluginDescriptor pluginDescriptor,
+            final LoginConfiguration loginConfiguration,
+            @NotNull final SamlPluginSettingsStorage settingsStorage,
+            @NotNull UserModel userModel) {
+        this.pluginDescriptor = pluginDescriptor;
 
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
@@ -48,6 +53,11 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     @Override
     public String getDescription() {
         return SamlPluginConstants.AUTH_SCHEME_DESCRIPTION;
+    }
+
+    @Override
+    public boolean isMultipleInstancesAllowed() {
+        return false;
     }
 
     @NotNull

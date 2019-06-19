@@ -6,11 +6,12 @@
        default-autowire="constructor">
     <bean id="samlAuthenticationScheme" class="org.gromozeka.teamcity.saml.plugin.SamlAuthenticationScheme"/>
     <bean id="samlLoginExtension" class="org.gromozeka.teamcity.saml.plugin.SamlLoginPageExtension"/>
-    <bean id="samlLoginInitiateController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginInitiateController"/>
-    <bean id="samlLoginCallbackController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginCallbackController"/>
+    <bean id="samlLoginInitiateController" class="org.gromozeka.teamcity.saml.plugin.SamlLoginController"/>
+    <bean id="samlLoginCallbackController" class="org.gromozeka.teamcity.saml.plugin.SamlCallbackController"/>
     <bean id="samlPluginAdminPage" class="org.gromozeka.teamcity.saml.plugin.SamlPluginAdminPage"/>
     <bean id="samlPluginSettingsStorage"
-          class="org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage"
+          class="org.gromozeka.teamcity.saml.plugin.SamlPluginSettingsStorage"
           init-method="init"/>
-    <bean id="samlPluginSettingsController" class="org.gromozeka.teamcity.saml.plugin.SamlPluginSettingsController"/>
+    <bean id="samlPluginSettingsController" class="org.gromozeka.teamcity.saml.plugin.SamlPluginAdminPageController"/>
+    <bean id="samlAuthenticationSchemeProperties" class="org.gromozeka.teamcity.saml.plugin.SamlAuthenticationSchemeProperties"/>
 </beans>

@@ -6,10 +6,10 @@
 <%@ taglib prefix="forms" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 
-<jsp:useBean id="settings" scope="request" type="org.gromozeka.teamcity.saml.core.config.SamlPluginSettings"/>
+<jsp:useBean id="settings" scope="request" type="org.gromozeka.teamcity.saml.plugin.SamlPluginSettings"/>
 <jsp:useBean id="pluginResources" scope="request" type="java.lang.String"/>
 
-<script type="text/javascript" src="<%=pluginResources%>js/samlAdminSettingsFormHandler.js"></script>
+<script type="text/javascript" src="<%=pluginResources%>js/SamlAdminSettingsFormHandler.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
        samlAdminSettingsFormHandler.bind($("#sandboxAdminForm"));

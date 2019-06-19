@@ -5,14 +5,11 @@ import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettings;
-import org.gromozeka.teamcity.saml.core.config.SamlPluginSettingsStorage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class SamlPluginAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;

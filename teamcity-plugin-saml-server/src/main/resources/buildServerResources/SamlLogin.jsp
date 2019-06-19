@@ -1,4 +1,4 @@
-<%@ page import="org.gromozeka.teamcity.saml.core.config.SamlPluginSettings" %>
+<%@ page import="org.gromozeka.teamcity.saml.plugin.SamlPluginSettings" %>
 <%@ page import="java.net.URL" %>
 <%@ page import="org.gromozeka.teamcity.saml.plugin.SamlPluginConstants" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
