@@ -2,12 +2,11 @@
     [x] (FTR) "Login with SAML" button
     [x] (FTR) Plugin settings
     [x] (FTR) Login with SAML controller and redirect to Okta login
-    [ ] (FTR) SAML callback logic
-    [ ] (FTR) Session persistence
+    [x] (FTR) SAML callback logic
     [ ] (BUG/FTR) Deal with CORS / HTTPS / Whatever is causing the CORS denial
         The issue is the by some reason the Origin:null in the incoming request -
         make sure to understand why it happens and how to bypass it.
-    [ ] (BUG) Multiple redirects when calling the login button
+    [x] (BUG) Multiple redirects when calling the login button
     [ ] (BUG?)  WARN - .InstantiationStrategySelector - Spring selected non-public constructor to create instance
 
 * Extend the implementation
