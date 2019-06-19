@@ -19,8 +19,7 @@ public class SamlCallbackController extends BaseController {
     private final Logger LOG = Loggers.SERVER;
 
     public SamlCallbackController(@NotNull SBuildServer server,
-                                  @NotNull WebControllerManager webControllerManager,
-                                  @NotNull AuthorizationInterceptor interceptor
+                                  @NotNull WebControllerManager webControllerManager
                                   ) {
         super(server);
 
