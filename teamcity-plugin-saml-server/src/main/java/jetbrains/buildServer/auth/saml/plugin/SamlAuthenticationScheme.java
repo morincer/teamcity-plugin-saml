@@ -1,4 +1,4 @@
-package org.gromozeka.teamcity.saml.plugin;
+package jetbrains.buildServer.auth.saml.plugin;
 
 import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.settings.Saml2Settings;
@@ -14,7 +14,6 @@ import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;

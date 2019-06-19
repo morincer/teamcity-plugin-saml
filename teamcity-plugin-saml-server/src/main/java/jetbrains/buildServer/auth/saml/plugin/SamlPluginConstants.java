@@ -1,4 +1,4 @@
-package org.gromozeka.teamcity.saml.plugin;
+package jetbrains.buildServer.auth.saml.plugin;
 
 import jetbrains.buildServer.users.AuthPropertyKey;
 

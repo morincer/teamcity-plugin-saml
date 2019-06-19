@@ -1,4 +1,4 @@
-package org.gromozeka.teamcity.saml.plugin;
+package jetbrains.buildServer.auth.saml.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jetbrains.buildServer.serverSide.ServerPaths;

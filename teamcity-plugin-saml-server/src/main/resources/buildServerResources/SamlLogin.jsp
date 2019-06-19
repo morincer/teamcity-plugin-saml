@@ -1,6 +1,6 @@
-<%@ page import="org.gromozeka.teamcity.saml.plugin.SamlPluginSettings" %>
+<%@ page import="jetbrains.buildServer.auth.saml.plugin.SamlPluginSettings" %>
 <%@ page import="java.net.URL" %>
-<%@ page import="org.gromozeka.teamcity.saml.plugin.SamlPluginConstants" %>
+<%@ page import="jetbrains.buildServer.auth.saml.plugin.SamlPluginConstants" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
 <div class="buttons">

@@ -1,4 +1,4 @@
-package org.gromozeka.teamcity.saml.plugin;
+package jetbrains.buildServer.auth.saml.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
