@@ -79,7 +79,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             Loggers.SERVER.info(String.format("SAML request authenticated for user %s", user.getName()));
 
             return HttpAuthenticationResult.authenticated(
-                    new ServerPrincipal(user.getRealm(), user.getUsername()),
+                    new ServerPrincipal(user.getRealm(), user.getUsername(), null, false, new HashMap<>()),
                     true).withRedirect("/");
         } catch (Exception e) {
             Loggers.SERVER.error(e);
