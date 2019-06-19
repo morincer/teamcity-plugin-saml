@@ -32,4 +32,4 @@
     [ ] (FTR) Implement multi-tenancy
         [ ] (IMP) Move settings to scheme set up
     [ ] (IMP) Move strings to constants
-    [ ] (IMP) Set logger as constant
+    [x] (IMP) Set logger as constant
