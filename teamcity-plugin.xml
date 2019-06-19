@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
   <info>
-    <name>teamcity-plugin-saml</name>
-    <display-name>teamcity-plugin-saml</display-name>
+    <name>saml-authentication</name>
+    <display-name>SAML Authentication</display-name>
     <version>@Version@</version>
-    <description>Plugin description</description>
-    <download-url>Plugin download URL</download-url>
-    <email>Plugin author e-mail</email>
+    <description>The plug-in adds ability to authenticate users by SAML-based SSO providers (like Okta, Onelogin etc.)</description>
+    <download-url>https://github.com/morincer/teamcity-plugin-saml</download-url>
+    <email>morincer@gmail.com</email>
     <vendor>
       <name>@VendorName@</name>
       <url>@VendorURL@</url>
-      <logo>Plugin vendor logo URL</logo>
+      <logo></logo>
     </vendor>
   </info>
   <deployment use-separate-classloader="true"/>

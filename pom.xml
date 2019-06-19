@@ -27,7 +27,7 @@
               <artifactId>teamcity-sdk-maven-plugin</artifactId>
               <version>0.4</version>
               <configuration>
-                  <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
+                  <teamcityDir>servers/${teamcity-version}</teamcityDir>
               </configuration>
           </plugin>
       </plugins>

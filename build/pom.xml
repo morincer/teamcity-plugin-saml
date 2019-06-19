@@ -83,7 +83,8 @@
             <artifactId>teamcity-sdk-maven-plugin</artifactId>
             <version>0.4</version>
             <configuration>
-                <pluginPackageName>teamcity-plugin-saml.zip</pluginPackageName>
+                <teamcityDir>../servers/${teamcity-version}</teamcityDir>
+                <pluginPackageName>saml-authentication.zip</pluginPackageName>
             </configuration>
             <executions>
                 <execution>

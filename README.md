@@ -54,13 +54,7 @@ The SAML authentication sequence is a following:
  
  The plugin was built with the help of [TeamCity SDK Maven Plugin](https://github.com/JetBrains/teamcity-sdk-maven-plugin). It contains the [build](./build) folder with Maven tasks making life easier.
  
- So go there...
- 
- ```bash
- cd build
- ```
- 
- ...Install and initialize a local TeamCity server version (controlled by teamcity-version property in the parent [pom.xml](./pom.xml)...
+  ...Install and initialize a local TeamCity server version (controlled by teamcity-version property in the parent [pom.xml](./pom.xml)...
  
  ```bash
  mvn tc-sdk:init
@@ -71,8 +65,7 @@ The SAML authentication sequence is a following:
  mvn tc-sdk:start
  ```
  
- ...And compile+deploy the plugin there (note that you use the parent pom.xml)
+ ...And compile+deploy the plugin 
  ```bash
- cd ..
  mvn package 
  ```
