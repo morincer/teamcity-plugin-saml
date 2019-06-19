@@ -1,4 +1,4 @@
-<%@ page import="jetbrains.buildServer.auth.saml.SamlPluginConstants" %>
+<%@ page import="jetbrains.buildServer.auth.saml.plugin.SamlPluginConstants" %>
 <%@ page import="java.net.URL" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
@@ -6,7 +6,7 @@
 <%@ taglib prefix="forms" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 
-<jsp:useBean id="settings" scope="request" type="jetbrains.buildServer.auth.saml.SamlPluginSettings"/>
+<jsp:useBean id="settings" scope="request" type="jetbrains.buildServer.auth.saml.plugin.SamlPluginSettings"/>
 <jsp:useBean id="pluginResources" scope="request" type="java.lang.String"/>
 
 <script type="text/javascript" src="<%=pluginResources%>js/SamlAdminSettingsFormHandler.js"></script>

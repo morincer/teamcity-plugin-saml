@@ -36,7 +36,7 @@ public class SamlPluginConfiguration {
 
     @Bean
     SamlCallbackController samlCallbackController(SBuildServer server, WebControllerManager webControllerManager, AuthorizationInterceptor interceptor) {
-        return new SamlCallbackController(server, webControllerManager, interceptor);
+        return new SamlCallbackController(server, webControllerManager);
     }
 
     @Bean

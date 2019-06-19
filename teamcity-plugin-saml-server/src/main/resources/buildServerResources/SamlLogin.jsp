@@ -1,6 +1,4 @@
-<%@ page import="jetbrains.buildServer.auth.saml.SamlPluginSettings" %>
-<%@ page import="java.net.URL" %>
-<%@ page import="jetbrains.buildServer.auth.saml.SamlPluginConstants" %>
+<%@ page import="jetbrains.buildServer.auth.saml.plugin.SamlPluginConstants" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
 <div class="buttons">

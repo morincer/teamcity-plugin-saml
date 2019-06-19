@@ -4,7 +4,15 @@
 
 The plug-in adds ability to authenticate users with SAML-based SSO providers (like Okta, Onelogin etc.).
 
-The plug-in is still under active development (see the [todo list](./teamcity-plugin-saml-server/todo.txt)) and is currently provides only basic functionality.
+The plug-in is still under active development (see the [todo list](./teamcity-plugin-saml-server/todo.txt)) and is currently provides only basic functionality - you manually setup SAML interaction and it authenticates users given SAML assertions recieved from IdP.
+
+Things the plug-in does NOT currently support (but they're on the roadmap):
+
+* Metadata import and generation
+* Multi-tenancy
+* Creating new users on login
+* Authenticating against the e-mail field
+* Pre-defined profiles for major SAML identity providers
 
 ## Installation
 
@@ -16,13 +24,19 @@ The plugin has been tested with Okta and Onelogin but should work fine with othe
 
 * Login as administrator and go to Administration > Authentication
 
-* Switch to advanced mode and add module HTTP-SAML.v2
+* Switch to advanced mode and add module **HTTP-SAML.v2**
 
-* Under User Management click SAML Settings
+![Add Module](docs/img/add_module.png)
 
-* Specify values for all the fields in the Identity Provider Configuration section. These values are usually shown when configuring SAML SSO connection for your particular identity provider. 
+* Under User Management click **SAML Settings**
 
-* Use values from the Service Provider Configuration section when configuring SAML SSO connection on the identity provider side.
+* Specify values for all the fields in the **Identity Provider Configuration** section. These values are usually shown when configuring SAML SSO connection for your particular identity provider. 
+
+![Edit Settings](docs/img/edit_settings.png)
+
+* Use values from the **Service Provider Configuration** section when configuring SAML SSO connection on the identity provider side.
+
+Please refer the example of set up for [Okta](./docs/OktaSetup.md) if you need some details.
 
 * Make sure you have properly set up users on the TeamCity side - their usernames should match the SAML assertion name ID (usually - e-mail). 
 
