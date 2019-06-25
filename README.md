@@ -4,7 +4,7 @@
 
 The plug-in adds ability to authenticate users with SAML-based SSO providers (like Okta, Onelogin etc.).
 
-The plug-in is still under active development (see the [todo list](./teamcity-plugin-saml-server/todo.txt)) and is currently provides only basic functionality - you manually setup SAML interaction and it authenticates users given SAML assertions recieved from IdP.
+The plug-in is still under active development (see the [todo list](./teamcity-plugin-saml-server/todo.txt)) and is currently providing only basic functionality - you manually setup SAML interaction parameters and the plugin authenticates users given SAML assertions recieved from IdP.
 
 Things the plug-in does NOT currently support (but they're on the roadmap):
 
