@@ -9,10 +9,31 @@
 <jsp:useBean id="settings" scope="request" type="jetbrains.buildServer.auth.saml.plugin.SamlPluginSettings"/>
 <jsp:useBean id="pluginResources" scope="request" type="java.lang.String"/>
 
+<style>
+    .resp-container {
+        position: relative;
+        overflow: hidden;
+        padding-top: 56.25%;
+    }
+
+    .resp-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+
+<div class="resp-container">
+    <iframe src="${pluginResources}/index.jsp" class="resp-iframe"/>
+</div>
+
 <script type="text/javascript" src="<%=pluginResources%>js/SamlAdminSettingsFormHandler.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
-       samlAdminSettingsFormHandler.bind($("#sandboxAdminForm"));
+        samlAdminSettingsFormHandler.bind($("#sandboxAdminForm"));
     })
 </script>
 
@@ -59,7 +80,8 @@
                     <label for="publicCertificate">X509 Certificate</label>
                 </th>
                 <td>
-                    <forms:textarea id="publicCertificate" path="settings.publicCertificate" cssStyle="width: 100%; height: 400px"/>
+                    <forms:textarea id="publicCertificate" path="settings.publicCertificate"
+                                    cssStyle="width: 100%; height: 400px"/>
                 </td>
             </tr>
             <tr class="groupingTitle">
