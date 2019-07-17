@@ -27,7 +27,7 @@
 </style>
 
 <div class="resp-container">
-    <iframe src="${pluginResources}/index.jsp" class="resp-iframe"/>
+    <iframe src="${pluginResources}/admin-ui/index.jsp" class="resp-iframe" scrolling="no" frameborder="0"/>
 </div>
 
 <script type="text/javascript" src="<%=pluginResources%>js/SamlAdminSettingsFormHandler.js"></script>

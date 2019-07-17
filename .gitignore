@@ -28,6 +28,10 @@ hs_err_pid*
 
 **/target
 
+#Web
+**/node_modules
+**/dist
+
 #Other
 build/servers
 servers
