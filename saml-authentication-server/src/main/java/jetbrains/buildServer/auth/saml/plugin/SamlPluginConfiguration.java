@@ -55,4 +55,9 @@ public class SamlPluginConfiguration {
     SamlPluginAdminPageController samlPluginAdminPageController(SamlPluginSettingsStorage settingsStorage, WebControllerManager webControllerManager) {
         return new SamlPluginAdminPageController(settingsStorage, webControllerManager);
     }
+
+    @Bean
+    SamlSettingsAjaxController samlSettingsAjaxController(WebControllerManager controllerManager) {
+        return new SamlSettingsAjaxController(controllerManager);
+    }
 }

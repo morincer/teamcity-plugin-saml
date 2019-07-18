@@ -1,5 +1,5 @@
 <template>
-    <q-form class="q-gutter-md" @submit="onSubmit">
+    <q-form @submit="onSubmit">
 
         <q-banner v-if="errorMessage" dense class="text-white bg-red">{{errorMessage}}</q-banner>
 
@@ -7,8 +7,12 @@
             <div class="text-subtitle1 text-grey-10">Identify Provider Configuration</div>
         </div>
 
-        <div>
-            <q-input label="Single Sign-on URL" dense/>
+        <div class="q-gutter-md">
+            <q-field>
+                <template v-slot:control>
+                    <q-input label="Single Sign-on URL"/>
+                </template>
+            </q-field>
             <q-input label="Issuer URL (Identity Provider Entity Id)" dense/>
             <q-input label="X509 Certificate" type="textarea" dense/>
         </div>
