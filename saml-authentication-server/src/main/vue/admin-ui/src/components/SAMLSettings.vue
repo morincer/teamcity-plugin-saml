@@ -5,25 +5,25 @@
 
         <q-banner v-if="okMessage" dense class="text-white bg-green-5 q-my-lg">{{okMessage}}</q-banner>
 
-        <div class="bg-grey-2 q-pa-sm">
-            <div class="text-subtitle1 text-grey-10">Identify Provider Configuration</div>
+        <div class="bg-separator q-pa-sm">
+            <div class="text-subtitle2 text-grey-10">Identify Provider Configuration</div>
         </div>
 
         <div class="q-gutter-md">
-            <q-input label="Single Sign-on URL"
+            <q-input label="Single Sign-on URL *"
                      v-model="samlSettings.ssoEndpoint"
                     :rules="[val => !!val || 'Field is required']"
             />
-            <q-input label="Issuer URL (Identity Provider Entity Id)"
+            <q-input label="Issuer URL (Identity Provider Entity Id) *"
                      v-model="samlSettings.issuerUrl"
                      :rules="[val => !!val || 'Field is required']"/>
-            <q-input label="X509 Certificate" type="textarea"
+            <q-input label="X509 Certificate *" type="textarea" autogrow
                      v-model="samlSettings.publicCertificate"
                      :rules="[val => !!val || 'Field is required']"/>
         </div>
 
-        <div class="bg-grey-2 q-pa-sm q-mt-md">
-            <div class="text-subtitle1 text-grey-10">Service Provider Configuration</div>
+        <div class="bg-separator q-pa-sm q-mt-md">
+            <div class="text-subtitle2 text-grey-10">Service Provider Configuration</div>
         </div>
 
         <div>
