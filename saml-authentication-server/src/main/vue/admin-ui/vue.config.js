@@ -6,5 +6,6 @@ module.exports = {
     },
     transpileDependencies: [
         /[\\\/]node_modules[\\\/]quasar[\\\/]/
-    ]
+    ],
+    filenameHashing: false
 }

@@ -1,11 +1,13 @@
 <template>
-  <div id="app">
-    <q-layout view="hHh lpR fFf" class="q-px-md">
+    <div id="app" class="app">
+        <body>
+            <q-layout view="hHh lpR fFf" class="q-px-md">
 
-        <router-view />
+                <router-view/>
 
-    </q-layout>
-  </div>
+            </q-layout>
+        </body>
+    </div>
 </template>
 <style scoped>
 

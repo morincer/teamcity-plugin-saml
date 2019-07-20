@@ -72,7 +72,7 @@ public class JsonControllerAction implements ControllerAction {
                 JsonActionResult<?> jsonActionResult = this.handler.apply(request);
 
                 if (jsonActionResult.errors != null && jsonActionResult.errors.length > 0) {
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.setStatus(HttpServletResponse.SC_OK);
                 }
 
                 response.setContentType("application/json");

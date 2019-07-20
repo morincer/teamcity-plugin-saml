@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JsonActionError {
     int code;
-    String messages;
+    String message;
 }

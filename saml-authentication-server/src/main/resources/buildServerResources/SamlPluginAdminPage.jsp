@@ -13,7 +13,7 @@
     .resp-container {
         position: relative;
         overflow: hidden;
-        padding-top: 56.25%;
+        padding-top: 150%;
     }
 
     .resp-iframe {
@@ -26,9 +26,15 @@
     }
 </style>
 
-<div class="resp-container">
-    <iframe src="${pluginResources}/admin-ui/index.jsp" class="resp-iframe" scrolling="no" frameborder="0"/>
-</div>
+<link href=${pluginResources}/admin-ui/css/app.css rel=preload as=style>
+<link href=${pluginResources}/admin-ui/css/chunk-vendors.css rel=preload as=style>
+<link href=${pluginResources}/admin-ui/js/app.js rel=preload as=script>
+<link href=${pluginResources}/admin-ui/js/chunk-vendors.js rel=preload as=script>
+<link href=${pluginResources}/admin-ui/css/chunk-vendors.css rel=stylesheet>
+<link href=${pluginResources}/admin-ui/css/app.css rel=stylesheet>
+<div id=app></div>
+<script src=${pluginResources}/admin-ui/js/chunk-vendors.js></script>
+<script src=${pluginResources}/admin-ui/js/app.js></script>
 
 <script type="text/javascript" src="<%=pluginResources%>js/SamlAdminSettingsFormHandler.js"></script>
 <script type="text/javascript">

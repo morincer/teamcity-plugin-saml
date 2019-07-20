@@ -57,7 +57,7 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsAjaxController samlSettingsAjaxController(WebControllerManager controllerManager) {
-        return new SamlSettingsAjaxController(controllerManager);
+    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager) throws IOException {
+        return new SamlSettingsJsonController(samlPluginSettingsStorage(null), controllerManager);
     }
 }
