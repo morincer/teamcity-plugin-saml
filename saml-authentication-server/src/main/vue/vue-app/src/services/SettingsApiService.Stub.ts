@@ -19,9 +19,17 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
     }
 
     public save(settings: SamlSettings): Promise<ApiCallResult<string>> {
-        return new Promise<ApiCallResult<string>>((resolve) => {
-            resolve({ result: 'ok'});
-        });
+        return new Promise<ApiCallResult<string>>(resolve=> {
+            setTimeout(() => {
+                console.log(settings.ssoEndpoint);
+                if (settings.ssoEndpoint == "error") {
+                    resolve({
+                        errors: [{message: "Some error", code: 100}, {message: "ANother error", code: 200}]
+                    });
+                } else {
+                    resolve({result: "ok"});
+                }
+            }, 500);
+        })
     }
-
 }
