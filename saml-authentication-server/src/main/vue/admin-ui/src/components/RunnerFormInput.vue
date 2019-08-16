@@ -1,6 +1,8 @@
 <template>
     <RunnerFormRow>
-        <template v-slot:label>{{label}}</template>
+        <template v-slot:label>
+            {{label}}<span class="mandatoryAsterix" v-if="required">&nbsp;*</span>
+        </template>
         <template v-slot:content>
             <TextInput v-bind:value="value"
                        v-on:input="$emit('input', $event)"
@@ -37,6 +39,9 @@ export default class RunnerFormInput extends Vue {
 
     @Prop([String])
     public errorMessage?: string;
+
+    @Prop([Boolean])
+    public required?: Boolean;
 }
 </script>
 

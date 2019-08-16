@@ -5,12 +5,12 @@
 
         <RunnerForm>
             <GroupingHeader>Identity Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Single Sign-on URL *" v-model="settings.ssoEndpoint"/>
-            <RunnerFormInput label="Issuer URL (Identity Provider Entity Id) *" :value="settings.issuerUrl"/>
-            <RunnerFormInput label="X509 Certificate *" textarea :value="settings.publicCertificate" />
+            <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
+            <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required :value="settings.issuerUrl"/>
+            <RunnerFormInput label="X509 Certificate" textarea required :value="settings.publicCertificate" />
 
             <GroupingHeader>Service Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Entity ID (Audience)" :value="settings.entityId"/>
+            <RunnerFormInput label="Entity ID (Audience)" required :value="settings.entityId"/>
             <RunnerFormRow>
                 <template v-slot:label>Single Sign-On URL (Recepient)</template>
             </RunnerFormRow>
@@ -34,52 +34,49 @@ import RunnerFormRow from '@/components/RunnerFormRow.vue';
 import RunnerFormInput from '@/components/RunnerFormInput.vue';
 import {Component} from 'vue-property-decorator';
 import {ApiError, ISettingsApiService, SamlSettings} from '@/services/ISettingsApiService';
-import {cid, container, Inject} from "inversify-props";
-import TextInput from "@/components/TextInput.vue";
-import {Dependencies} from "@/main.dependencies";
-import ProgressIndicator from "@/components/ProgressIndicator.vue";
-import MessagesBox from "@/components/MessagesBox.vue";
+import TextInput from '@/components/TextInput.vue';
+import ProgressIndicator from '@/components/ProgressIndicator.vue';
+import MessagesBox from '@/components/MessagesBox.vue';
+import {appConfig} from '@/main.dependencies';
 
 @Component({ components: {
         MessagesBox,
         TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
 export default class SamlPluginSettings extends Vue {
 
-    @Inject(Dependencies.SettingsApiService)
-    settingsApiService!: ISettingsApiService;
-    settings: SamlSettings = {};
-    isLoading: boolean = false;
-    isSaving: boolean = false;
-    errors: ApiError[] = [];
-    successMsg: string = '';
+    public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
 
-    async mounted() {
+    public settings: SamlSettings = {};
+    public isLoading: boolean = false;
+    public isSaving: boolean = false;
+    public errors: ApiError[] = [];
+    public successMsg: string = '';
+
+    public async mounted() {
         try {
             this.isLoading = true;
             const result = await this.settingsApiService.get();
 
             if (result.result) {
-                console.log("Recieved response", result);
                 this.settings = result.result;
             }
         } catch (e) {
-
+            this.errors = [ { message: e, code: 0 }];
         } finally {
             this.isLoading = false;
         }
     }
 
-    async submit() {
+    public async submit() {
         this.isSaving = true;
         this.errors = [];
-        this.successMsg = "";
+        this.successMsg = '';
 
         const result = await this.settingsApiService.save(this.settings);
         this.isSaving = false;
-        console.log(result);
         if (result.result) {
-            this.successMsg = "Configuration is saved";
-        } else if (result.errors){
+            this.successMsg = 'Your changes have been saved.';
+        } else if (result.errors) {
             this.errors = result.errors;
         }
     }

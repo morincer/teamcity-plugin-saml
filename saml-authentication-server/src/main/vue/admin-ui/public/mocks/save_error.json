@@ -1,8 +1,0 @@
-{
-  "errors": [
-    {
-      "code": 400,
-      "message": "Entity ID is empty"
-    }
-  ]
-}

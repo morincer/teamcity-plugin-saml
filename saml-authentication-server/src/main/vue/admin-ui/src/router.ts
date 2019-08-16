@@ -1,19 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Settings from "@/views/Settings.vue";
-import NewSAMLConnectionWizard from "@/components/NewSAMLConnectionWizard.vue";
+import Vue from 'vue';
+import Router from 'vue-router';
+import AdminDemo from './views/AdminDemo.vue';
+import SamlPluginSettings from "@/views/SamlPluginSettings.vue";
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      component: Settings,
-    },
-    {
-      path: '/new',
-      component: NewSAMLConnectionWizard
-    }
-  ]
-})
+    routes: [
+        {
+            path: '/',
+            name: "SamlPluginSettings",
+            component: SamlPluginSettings
+        },
+        {
+            path: '/demo',
+            name: 'AdminPage',
+            component: AdminDemo,
+        },
+    ],
+});

@@ -1,11 +1,12 @@
 module.exports = {
-    indexPath: "index.jsp",
+    indexPath: "index.html",
     publicPath: "./",
     pluginOptions: {
-        quasar: {}
+
     },
-    transpileDependencies: [
-        /[\\\/]node_modules[\\\/]quasar[\\\/]/
-    ],
     filenameHashing: false,
+    chainWebpack(config) {
+        config.optimization.delete('splitChunks');
+    }
+
 };

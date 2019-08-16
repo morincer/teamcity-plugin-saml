@@ -1,9 +1,7 @@
 import axios from 'axios';
 import {ApiCallResult, SamlSettings, ISettingsApiService} from '@/services/ISettingsApiService';
-import {injectable} from 'inversify-props';
 
-@injectable()
-export class SettingsApiServiceImpl implements ISettingsApiService {
+export default class SettingsApiServiceImpl implements ISettingsApiService {
     public url: string = process.env.SETTINGS_URL;
 
     public get(): Promise<ApiCallResult<SamlSettings>> {

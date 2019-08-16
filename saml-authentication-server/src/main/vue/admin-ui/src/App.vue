@@ -1,10 +1,5 @@
 <template>
     <div id="app">
-        <q-layout view="hHh lpR fFf" class="q-px-md">
-            <router-view/>
-        </q-layout>
+        <router-view/>
     </div>
 </template>
-<style lang="stylus">
-    $typography-font-family = serif
-</style>
