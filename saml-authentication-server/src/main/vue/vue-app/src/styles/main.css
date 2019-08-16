@@ -1,0 +1,2498 @@
+/*----------- basic layout */
+html {
+    /* We need a scrollbar even when everything fits, see https://youtrack.jetbrains.com/issue/TW-55540 */
+    overflow-y: scroll;
+}
+
+body {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    font: 82%/1.5em "Helvetica Neue", Arial, sans-serif;
+    color: #1f2326;
+    text-rendering: optimizeLegibility;
+    text-size-adjust: none;
+}
+
+.ua-win-chrome body {
+    text-rendering: auto;
+}
+
+/* Needed for IE10 support */
+[hidden] {
+    display: none !important;
+}
+
+#bodyWrapper:before {
+    content: '';
+    height: 90px;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    background: -moz-linear-gradient(top, #f6f6f6 0%, #f6f6f6 40%, #ffffff 100%, #ffffff 100%);
+    background: -webkit-linear-gradient(top, #f6f6f6 0%, #f6f6f6 40%, #ffffff 100%, #ffffff 100%);
+    background: -ms-linear-gradient(top, #f6f6f6 0%, #f6f6f6 40%, #ffffff 100%, #ffffff 100%);
+    background: linear-gradient(to bottom, #f6f6f6 0%, #f6f6f6 40%, #ffffff 100%, #ffffff 100%);
+}
+
+body.pageBG.ring {
+    background-position: 0 68px;
+}
+
+input, select, button {
+    font: normal 100% "Helvetica Neue", Arial, sans-serif;
+}
+
+textarea {
+    font: normal 12px Menlo, "Bitstream Vera Sans Mono", "Ubuntu Mono", Consolas, "Courier New", Courier, monospace;
+}
+
+img {
+    border: none;
+}
+
+/* For browsers that have relative font weight (bolder) defined for the strong tag */
+strong {
+    font-weight: bold;
+}
+
+a {
+    color: #1564c2;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #1564c2;
+}
+
+h2 {
+    margin: 0;
+    padding: 3px 18px 3px 0;
+    font-weight: normal;
+    font-size: 18px;
+    letter-spacing: 0;
+    color: #1f2326;
+}
+
+h3 {
+    font-size: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Normalize styling of form elements */
+form {
+    margin: 0;
+    padding: 0;
+}
+
+input, select, textarea {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+optgroup {
+    font-style: normal;
+    font-weight: bold;
+}
+
+optgroup:disabled {
+    color: #999;
+}
+
+input[type='text'], input[type='password'], input[type='search'], textarea, select[multiple] {
+    min-height: 20px !important;
+    margin: 0;
+    padding: 1px 3px;
+    line-height: 1.5em;
+
+    border: 1px solid;
+    border-color: #888 #CCC #CCC;
+
+    /*box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);*/
+    font-size: 13px;
+}
+
+input[type='checkbox'], input[type='radio'] {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+input[disabled] {
+    background-color: #F9F9F9;
+    color: #999;
+    border-color: #CCC #DDD #DDD;
+}
+
+/* select[multiple] horizontal scrollbar emulation */
+
+.select-multiple__wrapper {
+    width: 100%;
+    height: 166px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+
+    border: 1px solid;
+    border-color: #888 #CCC #CCC;
+
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+select.select-multiple__inner {
+    min-width: 100%;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    overflow-y: visible;
+}
+
+/* Custom buttons */
+.btn,
+.healthItemIndicator,
+.ui-datepicker-buttonpane button {
+    display: inline-block;
+    padding: 5px 14px 6px;
+    outline: 0;
+    cursor: pointer;
+
+    background-color: #f6f6f6;
+
+    color: #333;
+    font-size: 13px;
+    line-height: normal;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+
+    border: 1px solid #ccc;
+    border-bottom-color: #bbb;
+    border-radius: 3px;
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover,
+.healthItemIndicator:hover,
+.ui-datepicker-buttonpane button:hover {
+    background-color: #efefef;
+    filter: none;
+
+    color: #333;
+    text-decoration: none;
+
+    -webkit-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+}
+
+.btn:focus,
+.healthItemIndicator:focus,
+.ui-datepicker-buttonpane button:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.btn:active,
+.ui-datepicker-buttonpane button:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+    outline: 0;
+}
+
+.btn[disabled],
+.btn[disabled]:hover,
+.btn[disabled]:active {
+    background-color: #e6e6e6;
+    background-image: none;
+    background-position: 0 0;
+    filter: inherit;
+
+    color: #666;
+
+    box-shadow: inherit;
+}
+
+.btn_primary {
+    color: #FFF;
+
+    background-color: #2d5fb3;
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient(top, #438ed7, #2d5fb3);
+    background-image: linear-gradient(to bottom, #438ed7, #2d5fb3);
+    filter: none;
+
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+    border-color: #2d5fb3 #2d5fb3 #003f81;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    box-shadow: none;
+}
+
+.btn_primary:hover {
+    color: #FFF;
+    background-color: #2d5fb3;
+    background-position: 0 -15px;
+    box-shadow: none;
+
+    -webkit-transition: background-position 0.1s linear;
+    transition: background-position 0.1s linear;
+
+}
+
+.btn_hint {
+    background-color: #C0DDFD;
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient(top, #F3F8FD, #C0DDFD);
+    background-image: linear-gradient(to bottom, #F3F8FD, #C0DDFD);
+
+    filter: none;
+
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.ua-ie .btn_primary:hover {
+    background-color: #204480;
+}
+
+.ua-ie .btn_hint:hover {
+    background-color: #9bcafd;
+}
+
+.btn_small {
+    padding: 7px 9px;
+}
+
+.btn_mini {
+    padding: 0 6px;
+}
+
+.btn_mini .icon-caret-down {
+    position: relative;
+    top: 1px;
+    color: #737577;
+}
+
+.btn.popupLink .icon-list-ul, .btn_mini.popupLink .icon-list-ul {
+    padding-right: 4px;
+    padding-left: 2px;
+    color: #737577;
+}
+
+.btn_mini.popupLink .icon-list-ul {
+    font-size: 80%;
+}
+
+.btn_line {
+    margin: 4px 0;
+}
+
+.btn_icon {
+    padding: 3px 6px;
+}
+
+.btn_icon:focus {
+    outline: none;
+}
+
+.btn_icon .btn_icon_inner {
+    vertical-align: bottom;
+}
+
+/* Right part of the combo-button */
+.btn_append {
+    width: 20px;
+    padding: 0;
+    text-align: center;
+}
+
+/* Button group */
+.btn-group {
+    display: block;
+    white-space: nowrap;
+}
+
+.btn-group .btn {
+    border-radius: 0;
+    margin: 0 0 0 -1px;
+}
+
+.btn-group_run .btn {
+    line-height: 16px;
+    height: 18px;
+}
+
+.btn-group .btn:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.btn-group .btn:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.btn-group .btn:only-child {
+    border-radius: 4px;
+}
+
+.btn-group .popupLink {
+    white-space: nowrap;
+}
+
+/* Custom checkbox */
+.custom-checkbox {
+    background: #9A9A9A;
+    background-color: rgba(178, 178, 178, 0.8);
+    background: -webkit-linear-gradient(rgba(192, 192, 192, 0.5), rgba(49, 49, 49, 0.5));
+    background: linear-gradient(rgba(192, 192, 192, 0.5), rgba(49, 49, 49, 0.5));
+    background-clip: padding-box;
+
+    display: inline-block;
+    font: 0/0 a;
+    margin: 0 2px 1px;
+    padding: 0;
+    vertical-align: middle;
+
+    cursor: default;
+}
+
+.custom-checkbox_focused {
+    background: #072342;
+    background-color: rgba(7, 34, 66, 0.8);
+    background: -webkit-linear-gradient(rgba(21, 100, 194, 0.5), rgba(7, 34, 66, 0.5));
+    background: linear-gradient(rgba(21, 100, 194, 0.5), rgba(7, 34, 66, 0.5));
+    background-clip: padding-box;
+}
+
+.custom-checkbox_disabled {
+    opacity: 0.4;
+}
+
+.custom-checkbox .custom-checkbox_input {
+    background: none;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin: 1px 0 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    outline: none;
+    z-index: 4;
+}
+
+.custom-checkbox .custom-checkbox_bg {
+    background: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
+    background: -webkit-linear-gradient(top, color-stop(10%, rgba(255, 255, 255, 0.95)), color-stop(60%, rgba(250, 250, 250, 0.85)), color-stop(80%, rgba(245, 245, 245, 0.80)), color-stop(100%, rgba(230, 230, 230, 0.70)));
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95) 10%, rgba(250, 250, 250, 0.85) 60%, rgba(245, 245, 245, 0.80) 80%, rgba(230, 230, 230, 0.70) 100%);
+    background-clip: padding-box;
+
+    display: inline-block;
+    margin: 1px;
+    padding: 0;
+}
+
+.custom-checkbox .custom-checkbox_tick {
+    width: 11px;
+    height: 11px;
+
+    display: inline-block;
+    font: 0/0 a;
+}
+
+.custom-checkbox:not(.custom-checkbox_checked) .custom-checkbox_tick {
+    background-position: 0 0;
+}
+
+.ua-mac .custom-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.ua-mac .custom-scroll::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+}
+
+.ua-mac .custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #CCC;
+}
+
+.ua-mac .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+}
+
+::selection {
+    background-color: #B3D4FD;
+}
+
+::-moz-selection {
+    background-color: #B3D4FD;
+}
+
+.textarea {
+    margin-bottom: .3em;
+}
+
+._top {
+    vertical-align: top;
+}
+
+label.tableLabel {
+    float: left;
+    width: 12.5em;
+}
+
+div.fixedWidth {
+    min-width: 960px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 32px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+#bodyWrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+#content {
+    margin: 0;
+}
+
+#loadingWarning {
+    display: none;
+    position: fixed;
+    top: 0%;
+    left: 50%;
+    width: 10em;
+    height: 2em;
+    margin-left: -5em;
+    margin-top: -2px;
+    padding-top: 2px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #c6c6c6;
+    border-radius: 3px;
+    font: 1em "Helvetica Neue", Arial, sans-serif;
+    z-index: 1000;
+}
+
+@-webkit-keyframes ball-colors {
+    12.5% {
+        background-color: #D73CEA;
+    }
+    25% {
+        background-color: #9135E0;
+    }
+    37.5% {
+        background-color: #5848F4;
+    }
+    50% {
+        background-color: #25B7FF;
+    }
+    62.5% {
+        background-color: #59BD00;
+    }
+    75% {
+        background-color: #FBAC02;
+    }
+    87.5% {
+        background-color: #E32581;
+    }
+    100% {
+        background-color: #D73CEA;
+    }
+}
+
+@keyframes ball-colors {
+    12.5% {
+        background-color: #D73CEA;
+    }
+    25% {
+        background-color: #9135E0;
+    }
+    37.5% {
+        background-color: #5848F4;
+    }
+    50% {
+        background-color: #25B7FF;
+    }
+    62.5% {
+        background-color: #59BD00;
+    }
+    75% {
+        background-color: #FBAC02;
+    }
+    87.5% {
+        background-color: #E32581;
+    }
+    100% {
+        background-color: #D73CEA;
+    }
+}
+
+@-webkit-keyframes ball-moves {
+    0% {
+        -webkit-transform: rotate(0deg) translateX(-5.5px);
+        transform: rotate(0deg) translateX(-5.5px);
+    }
+    100% {
+        -webkit-transform: rotate(360deg) translateX(-5.5px);
+        transform: rotate(360deg) translateX(-5.5px);
+    }
+}
+
+@keyframes ball-moves {
+    0% {
+        -webkit-transform: rotate(0deg) translateX(-5.5px);
+        transform: rotate(0deg) translateX(-5.5px);
+    }
+    100% {
+        -webkit-transform: rotate(360deg) translateX(-5.5px);
+        transform: rotate(360deg) translateX(-5.5px);
+    }
+}
+
+@-webkit-keyframes loader-rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loader-rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.ring-loader-inline {
+    display: inline-block;
+    position: relative;
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-animation: loader-rotation 2.5s linear infinite;
+    animation: loader-rotation 2.5s linear infinite;
+    vertical-align: text-bottom;
+}
+
+.ring-loader-inline__ball {
+    position: absolute;
+    top: 5.5px;
+    left: 5.5px;
+    width: 5px;
+    height: 5px;
+    background-color: #D73CEA;
+    border-radius: 50%;
+    -webkit-animation: ball-moves 1.2s cubic-bezier(0.48, 0.2, 0.48, 0.8) infinite, ball-colors 3s linear infinite;
+    animation: ball-moves 1.2s cubic-bezier(0.48, 0.2, 0.48, 0.8) infinite, ball-colors 3s linear infinite;
+    -webkit-animation-delay: -0.25s;
+    animation-delay: -0.25s;
+}
+
+.ring-loader-inline__ball_second {
+    opacity: 0.8;
+    -webkit-animation-delay: -0.5s;
+    animation-delay: -0.5s;
+}
+
+.ring-loader-inline__ball_third {
+    opacity: 0.6;
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+}
+
+#loadingWarning .text {
+    display: inline-block;
+    padding: 5px 0 0 5px;
+}
+
+/*-------------------- content helpers */
+pre,
+.revisionNum {
+    font: normal 12px Menlo, "Bitstream Vera Sans Mono", "Ubuntu Mono", Consolas, "Courier New", Courier, monospace;
+}
+
+.hidden,
+.advanced_hidden {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+._inline-block {
+    display: inline-block;
+}
+
+.posRel {
+    display: inline-block;
+    position: relative;
+    padding-right: 40px;
+}
+
+.completionIconWrapper {
+    width: 95%;
+    position: relative;
+    padding-right: 40px;
+}
+
+.paramsPopupHandle {
+    position: absolute;
+    display: inline-block;
+    visibility: hidden;
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    right: 20px;
+    top: 0;
+}
+
+.resolveValue {
+    left: -20px;
+    position: absolute;
+    cursor: pointer;
+    top: 3px;
+    color: grey;
+}
+
+.resolveValue:hover {
+    color: cornflowerblue;
+}
+
+/**
+ * Forces long strings without spaces to break.
+ * Works across all modern browsers, suitable for cases
+ * where inserting soft hyphens is undesired.
+ */
+.longValue {
+    display: inline-block;
+    max-width: 50em;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+/*-------------------- styles for the top navigation */
+#topWrapper {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.headBG {
+    height: 58px;
+    padding: 10px 0;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.headBG .fixedWidth {
+    display: flex;
+}
+
+.headerLogo {
+    float: left;
+    padding: 0 0 0 3px;
+}
+
+.headerLogoImg {
+    margin-top: -3px;
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: url("../img/icons/teamcity.svg") no-repeat 50% 50%;
+    background-size: 100% 100%;
+}
+
+p.note {
+    margin: 0;
+    padding-top: 1em;
+    font-weight: normal;
+}
+
+img.handle {
+    cursor: pointer;
+}
+
+span.handle,
+.blockHeader.expanded:before,
+.blockHeader.collapsed:before {
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.leftIconShift,
+.blockHeader.expanded,
+.blockHeader.collapsed {
+    position: relative;
+    padding-left: 22px;
+}
+
+.blockHeader.expanded:before,
+.blockHeader.collapsed:before {
+    content: '';
+    width: 18px;
+    vertical-align: top;
+    position: absolute;
+    left: 0;
+    top: calc(50% - 9px);
+}
+
+/*---------------- Collapsible blockHeaders*/
+.blockHeader {
+    background: #EBEDEF no-repeat 5px 5px;
+    color: #3F3F3F;
+
+    padding: 4px 4px 4px 6px;
+    border-bottom: 1px solid #E3E9EF;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    cursor: pointer;
+    font-weight: bold;
+}
+
+span.greyNote {
+    color: #737577;
+    font-size: 90%;
+}
+
+span.commentText {
+    color: #737577;
+    font-weight: normal;
+}
+
+span.notFixedSettingsRevision {
+    color: #737577;
+    font-weight: normal;
+}
+
+span.commentText.small {
+    font-size: 80%;
+}
+
+.clr {
+    clear: both;
+    height: 0;
+    font-size: 0;
+
+    overflow: hidden;
+}
+
+/* Cross-browser clearfix */
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/* -------------------------------------- links*/
+
+a.red {
+    color: #c22731;
+}
+
+a.red:visited {
+    color: #c22731;
+}
+
+a.red:hover {
+    background-color: #c22731;
+    text-decoration: none;
+    color: white;
+}
+
+/* FontAwesome spinner */
+.icon-refresh {
+    color: #4da400;
+}
+
+/*---------------- Headers */
+
+h3.title_underlined,
+h4.title_underlined {
+    margin-top: 1.5em;
+    padding-bottom: 0.1em;
+    border-bottom: #dbdbdb 1px solid;
+    font-weight: bold;
+}
+
+a.noUnderline,
+a.noUnderline:hover {
+    text-decoration: none;
+}
+
+/*----- Expand All || Collapse All */
+
+.expandCollapseAllLeft {
+    margin: 0;
+    padding: 0 0 3px;
+}
+
+.comment {
+    margin: 0.5em 0 0.2em 0;
+    padding: 0 25px;
+    font-size: 95%;
+}
+
+textarea.commentTextArea {
+    width: 100%;
+    color: #3f3f3f;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td.action {
+    text-align: center;
+}
+
+td.action input {
+    width: 50px;
+}
+
+td.highlight {
+    cursor: pointer;
+}
+
+.highlightable tr:hover > td.highlight {
+    color: #254193;
+    background-color: #ffffcc;
+}
+
+input.action {
+    min-width: 4.5em;
+    padding: 0 4px;
+    font-size: 9pt;
+}
+
+.error,
+.red-text {
+    color: #c22731;
+}
+
+.none {
+    color: #737577;
+}
+
+td.center {
+    text-align: center;
+}
+
+/** Used when showing several user actions, like in popup with build comment + build change status */
+p.userActionBlock {
+    margin: 0;
+    padding: 0.25em;
+
+    border-bottom: 1px solid #dbdbdb;
+}
+
+p.userActionBlock:last-child {
+    border-bottom: none;
+}
+
+/*---------- pop-up windows*/
+
+.tooltipDiv {
+    background-color: #ffe;
+    display: none;
+    position: absolute;
+    width: auto;
+    padding: 3px 5px;
+    border: black 1px solid;
+    z-index: 200;
+}
+
+/* ---------------- Overview page toolbar */
+#toolbar {
+    margin: 10px 0;
+}
+
+div.toolbar-left {
+    float: left;
+    padding-top: 1px;
+}
+
+div.toolbar-right {
+    float: right;
+    padding-top: 1px;
+}
+
+div.toolbar-absolute {
+    position: absolute;
+    top: 58px;
+    right: 0;
+}
+
+/*----------- footer styles */
+#footer {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-width: 960px;
+    height: 8.5em;
+    background-color: #FFF;
+}
+
+#footer .footerMainContainer {
+    width: 100%;
+    min-width: 960px;
+    margin: 20px 0 0;
+    border-top: solid 1px #A0A0A0;
+}
+
+#footer .footerMain {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#footer .column1,
+#footer .column2,
+#footer .column3 {
+    float: left;
+    width: 20%;
+}
+
+#footer .column2 {
+    width: 60%;
+    text-align: center;
+}
+
+#footer .column3 {
+    text-align: right;
+}
+
+#footer .columnContent {
+    margin: 0 30px;
+}
+
+#footer .column1 .columnContent {
+    margin-left: 0;
+}
+
+#footer .column3 .columnContent {
+    margin-right: 0;
+}
+
+#footer .columnContent .version {
+    color: #1f2326;
+}
+
+#footer .helpLink {
+    margin-right: 2em;
+}
+
+#footer .helpLink,
+#footer .feedbackLink,
+#footer .newVersionLink {
+    white-space: nowrap;
+}
+
+#footer .expirationWarning {
+    color: #c22731;
+}
+
+#footer span.vWord {
+    display: none;
+}
+
+/*------------------------- error messages*/
+div.errors {
+    background-color: white;
+    width: 500px;
+    margin: 2em auto;
+    border: 2px solid #c22731;
+    text-align: center;
+    font-size: 120%;
+}
+
+/*-------- Styles for the 'success message' -- shown after successful edits*/
+
+.successMessage {
+    background-color: #ffc;
+    margin: 1em 0;
+    padding: 2px 20px;
+    font-size: 90%;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* -------- Used on my settings page and on the user notifier settings page and on build configuration pages---------------- */
+#globalHealthItems .global-health-item__content {
+    margin-left: 1.5em;
+    line-height: 1.6em;
+}
+
+#globalHealthItems .attentionComment,
+#globalHealthItems .attentionRed {
+    position: relative;
+}
+
+#globalHealthItems .attentionComment .buildStatusIcon,
+#globalHealthItems .attentionRed .buildStatusIcon {
+    position: absolute;
+    top: 0.65em;
+}
+
+.attentionComment,
+.attentionRed {
+    background: #ffc;
+    margin: 0.5em 0;
+    padding: 5px 8px;
+    border: 1px solid #cc8b00;
+    color: #1f2326;
+}
+
+.attentionComment.noBorder,
+.attentionRed.noBorder {
+    border: 0;
+}
+
+.attentionComment .hideHealthItemLink {
+    float: right;
+    margin-left: 1em;
+    text-align: right;
+}
+
+.attentionComment .hideHealthItemLink a {
+    color: #cc8b00;
+}
+
+.inplaceItemsList .hideHealthItemLink {
+    float: right;
+    margin-left: 10px;
+}
+
+.messageNote {
+    background: #E9F3FD;
+    margin: 1em 0;
+    padding: 2px 20px;
+    border: 1px solid #BCE8F1;
+    font-size: 90%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.messagePrompt {
+    background: #E9F3FD;
+    margin-top: 1em;
+    padding: 10px 15px 15px;
+    border: 1px solid #BCE8F1;
+}
+
+.messagePromptButtons {
+    margin-bottom: 0;
+}
+
+/*--- end*/
+
+/*-------------  Generic popups --------------*/
+.popupDiv {
+    background-color: white;
+    background-clip: padding-box;
+
+    overflow: hidden;
+    position: absolute;
+    display: none;
+
+    padding: 5px 7px;
+
+    border: 1px solid;
+    border-color: #ccc #666 #666 #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+    text-align: left;
+    z-index: 100;
+}
+
+/*
+  Fixes TW-23283: Popups may not be rendered fully in Chrome/Win
+  Don't apply this fix on OS X - it's not affected by the problem, and in fact
+  translateZ creates color reproduction issues there.
+*/
+html:not(.ua-mac) .popupDiv {
+    -webkit-transform: translateZ(0);
+    /* fix for MS Edge which otherwise renders popup blurry - looks like Chrome
+    doesn't have this issue in versions 3* */
+    transform: none;
+}
+
+.popupDiv.quickLinksMenuPopup {
+    width: auto;
+    min-width: 25em;
+}
+
+.popupDiv.popupLoading {
+    background-color: #FFF;
+    padding: 5px !important;
+}
+
+.popupDiv.branchSelector {
+    padding: 0 !important;
+}
+
+.popupDiv.popupDiv_has-triangle {
+    overflow: visible;
+}
+
+.popupDiv.popupDiv_has-triangle::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: inherit;
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-color: #ccc #666 #666 #ccc;
+    transform: rotate(45deg);
+    position: absolute;
+    top: -5px;
+    left: 10%;
+}
+
+.popupDiv__inner {
+    overflow: hidden;
+}
+
+#warningPopup {
+    background-color: #ffc;
+}
+
+a.actionLinkNew {
+    background-color: #fff;
+    padding: 3px 10px 3px;
+}
+
+a.actionLinkNew:hover,
+a.actionLinkNewHover {
+    background-color: #e3e9ef;
+}
+
+/*-------------  Changes popup --------------*/
+#changesPopup {
+    width: 42em;
+    padding: 0;
+    z-index: 80;
+}
+
+#changesPopup .changesContainer {
+    margin: 0;
+    padding: 5px 10px;
+}
+
+#changesPopup .userChangesHeader {
+    background-color: #F0F5FB;
+    padding: 2px 5px;
+    font-size: 95%;
+    font-weight: bold;
+    border: none;
+}
+
+#changesPopup .userChangesHeader.highlightChanges {
+    background-color: #FFC;
+}
+
+#changesPopup .userChangeComment {
+    overflow: hidden;
+    margin-right: .5em;
+    font-size: 90%;
+    line-height: 1.6em;
+    text-overflow: ellipsis;
+}
+
+#changesPopup .userChangeFiles {
+    float: right;
+    min-width: 6em;
+    font-size: 85%;
+    text-align: right;
+}
+
+#changesPopup .userChangeFiles span.highlightChanges {
+    left: 0;
+}
+
+#changesPopup .userChanges {
+    border: none;
+}
+
+#changesPopup .userChange {
+    clear: both;
+    padding: 5px 0 5px 5px;
+    border-bottom: 1px solid #E3E9EF;
+}
+
+#changesPopup .userChange:last-of-type {
+    border: none;
+}
+
+#changesPopup .artifactCommentTable {
+    width: 100%;
+}
+
+#changesPopup .artifactCommentBuildType {
+    width: 30%;
+    vertical-align: top;
+}
+
+#changesPopup .buildChangesHeader {
+    font-weight: normal;
+}
+
+#changesPopup .buildStartDate {
+    float: right;
+    font-size: 90%;
+}
+
+#changesPopup .buildChanges {
+    width: 100%;
+}
+
+#changesPopup .buildChanges td.username {
+    width: 30%;
+    font-weight: bold;
+    font-size: 90%;
+}
+
+#changesPopup .buildChanges td.userChange {
+    width: 70%;
+}
+
+#changesPopup .changesPopupTable {
+    width: 100%;
+}
+
+#changesPopup .changesPopupTable th {
+    padding-right: 1em;
+}
+
+#changesPopup .changesPopupTable td.files {
+    text-align: right;
+}
+
+#changesPopup .changesPopupTable td.user {
+    padding-right: 1.5em;
+    text-align: right;
+}
+
+#changesPopup .changesPopupTable .date {
+    padding-right: 1.5em;
+}
+
+#changesPopup .changesPopupTable td,
+#changesPopup .changesPopupTable th {
+    vertical-align: top;
+    font-size: 90%;
+    border-bottom: 1px solid #E3E9EF;
+}
+
+#changesPopup .simpleTabs .tabs {
+    margin: 5px 0 0 10px;
+    overflow: auto;
+}
+
+#changesPopup table.buildChanges {
+    border-collapse: collapse;
+}
+
+#changesPopup table.buildChanges td.username,
+#changesPopup table.buildChanges td.userChangeTD {
+    border-bottom: 1px solid #E3E9EF;
+}
+
+#changesPopup table.buildChanges div.userChange {
+    border: none;
+}
+
+#changesPopup .ellipsis,
+span.textExpandArrow {
+    display: inline-block;
+
+    width: 22px;
+    height: 1em;
+
+    background: #F3F3F3;
+    border: 1px solid #C8C8C8;
+    border-radius: 2px;
+    color: #C8C8C8;
+    text-align: center;
+}
+
+#changesPopup .ellipsis:hover,
+span.textExpandArrow:hover {
+    cursor: pointer;
+    background: #E3E3E3;
+}
+
+#changesPopup .historyBuildNote {
+    margin-bottom: 4px;
+}
+
+#changesPopup .changePopupHeader,
+#changesPopup .changesPopupFooter {
+    background-color: #f5f5f5;
+    padding: 4px;
+    font-size: 90%;
+}
+
+#changesPopup .changePopupHeader {
+    margin-bottom: 6px;
+    border-bottom: 1px solid #E3E9EF;
+}
+
+#changesPopup .changePopupFooter {
+    margin-top: 6px;
+}
+
+#changesPopup .userChangeComment td.status,
+#changesPopup .userChangeComment td.buildNumber {
+    vertical-align: top;
+}
+
+#changesPopup .userChangeComment td.buildNumber {
+    width: 10%;
+}
+
+#changesPopup .artifactsChangeHeader {
+    background-position: 5px 3px;
+    padding-left: 25px;
+}
+
+span.changeName {
+    font-size: 90%;
+}
+
+div.dependencyRelationIcon {
+    float: right;
+}
+
+div.subrepoIcon {
+    float: right;
+}
+
+/* ----------------------------------- Style for the context help popup   */
+#contextHelpPopup,
+#togglePopup,
+.name-value-popup {
+    padding: 0;
+    border: 1px solid #D6D6D6;
+}
+
+.helpPopupContent {
+    font-size: 95%;
+}
+
+.helpPopupBody {
+    margin: 0;
+    padding: 0;
+}
+
+.helpPopupFooter {
+    background-color: #F5F5F5;
+    padding: 5px;
+    text-align: center;
+}
+
+/* ----------------------------------- Style for the help icon (that contains link)   */
+a.helpIcon .tc-icon_help_small {
+    vertical-align: sub;
+    width: 10px;
+}
+
+a.helpIcon:hover {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.stopping,
+a.stopping:hover {
+    color: #c22731;
+}
+
+/*------------------------------- styles used in tags */
+.iconLink {
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    padding-bottom: 5px;
+    padding-left: 20px;
+}
+
+.iconLink_test-history {
+    background-image: url(../img/testDetails.png?v=60925);
+    background-size: 14px 14px;
+}
+
+.iconLink_build-log {
+    background-image: url(../img/showInBuildLog.png?v=60925);
+    background-size: 14px 14px;
+}
+
+.iconLink_IDE {
+    background-image: url(../img/openInIde.png?v=60925);
+    background-size: 14px 14px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 200 / 100), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+
+    .iconLink_test-history {
+        background-image: url(../img/testDetails@2x.png?v=60925);
+    }
+
+    .iconLink_build-log {
+        background-image: url(../img/showInBuildLog@2x.png?v=60925);
+    }
+
+    .iconLink_IDE {
+        background-image: url(../img/openInIde@2x.png?v=60925);
+    }
+}
+
+form.runBuildTag {
+    display: inline;
+    padding-right: 0.7em;
+}
+
+.activationPanel {
+    display: none;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 70px;
+    height: 7px;
+    background: white;
+}
+
+.activationPanel .activationIndicator {
+    float: left;
+    width: 5px;
+    height: 5px;
+    margin: 1px 0 1px 1px;
+    background: yellow;
+}
+
+.messagesHolder {
+    margin-top: 0;
+    margin-bottom: .5em;
+}
+
+.messagesHolder #savingData {
+    display: none;
+}
+
+.messagesHolder #dataSaved {
+    background-color: #ffc;
+    display: none;
+    margin: auto;
+    font-size: 90%;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* -------------- Choose an agent to run a build pop-up*/
+
+#chooseAgentPopup {
+    padding: 0;
+}
+
+#chooseAgentPopup .noAgents {
+    width: 150px;
+    padding: 3px 5px;
+    font-size: 90%;
+    text-align: center;
+}
+
+#chooseAgentPopup div.header {
+    background-color: #E3E9EF;
+    margin: 0;
+    padding: 4px 0 4px 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    font-size: 90%;
+}
+
+.menuList {
+    background-color: #fff;
+    margin: 5px;
+    padding: 0;
+}
+
+.menuList li {
+    margin: 2px 0;
+    padding: 0 5px;
+    list-style: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.menuList li a {
+    display: block;
+}
+
+.menuList .menuItemLinkContent {
+    line-height: 2;
+}
+
+.menuList .menuItemLinkContent a {
+    display: inline;
+}
+
+.menuListGrouped li {
+    border-bottom: none;
+}
+
+.menuListGrouped .menuListSeparator {
+    padding: 0;
+    border-bottom: 1px solid #E7E7E7;
+}
+
+.menuList .menuItemSelected,
+.menuList .menuItemSelected a,
+.menuList li:hover,
+.menuList li:hover a {
+    background-color: #3773C9;
+    color: white;
+    text-decoration: underline;
+}
+
+.menuList li.menuItemDisabled,
+.menuList li.menuItemDisabled a,
+.menuList li.menuItemDisabled:hover,
+.menuList li.menuItemDisabled:hover a {
+    background-color: transparent;
+    text-decoration: none;
+    cursor: default;
+}
+
+.menuListFilterable {
+    overflow: hidden;
+}
+
+.menuListFilterable .menuItemSelected,
+.menuListFilterable .menuItemSelected a {
+    background-color: #FFC;
+    color: #1564C2;
+}
+
+.menuListWrappable li {
+    white-space: normal;
+}
+
+/*  ----------------------------- Common VCS problems styles */
+#systemProblemDetails {
+    width: 55em;
+    padding: 0;
+}
+
+.systemProblemsBar {
+    display: inline-block;
+    width: auto;
+    margin-right: .5em;
+
+    color: #c22731;
+    font-size: 90%;
+    font-weight: normal;
+    text-indent: 0;
+
+    white-space: nowrap;
+}
+
+.systemProblemsBarContainer {
+    display: inline-block;
+    width: auto;
+    margin-right: .5em;
+
+    font-size: 12px;
+    font-weight: normal;
+    text-indent: 0;
+
+    white-space: nowrap;
+}
+
+.systemProblemsBarText {
+    display: inline-block;
+    padding-right: 8px;
+}
+
+button.systemProblemsBarButton {
+    margin-top: -2px;
+    margin-bottom: -3px;
+}
+
+.systemProblemsContainer {
+    background-color: #fff;
+    padding: 1em;
+}
+
+.systemProblemHead {
+    margin: 1.5em 0 .5em;
+}
+
+.systemProblemHead:first-child {
+    margin-top: 0;
+}
+
+.systemProblemsContainer .systemProblem {
+    padding: 0.5em 1em 0.5em 1em;
+    border: 1px solid #ccc;
+}
+
+.systemProblem .problemMessage {
+    color: #c22731;
+    font-size: 12px;
+}
+
+.systemProblem .problemDetails {
+    overflow: auto;
+    height: auto !important;
+    height: 25em;
+    max-height: 25em;
+    margin-top: 5px;
+    font-size: 80%;
+}
+
+/* ------------------------------------------------ */
+/* Table with dark header styles, sortable table, other common table styles  */
+table.dark {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Fixes the iOS table border bug */
+table.dark thead {
+    background-color: #ABB1C4;
+}
+
+table.dark th {
+    background-color: #ABB1C4;
+    margin: 0;
+    padding: 2px 6px;
+    color: #FFF;
+    text-align: left;
+}
+
+table.dark th.emptyCell,
+table.dark td.emptyCell {
+    background: #fff none !important;
+    width: 2px;
+    padding: 0;
+    border: none;
+}
+
+table.dark td {
+    margin: 0;
+    padding: 2px 6px;
+    text-align: left;
+}
+
+table.dark td.center {
+    text-align: center;
+}
+
+table.dark td.idle {
+    padding-right: .5em;
+    color: #737577;
+    text-align: right;
+}
+
+table.sortable th {
+    font-weight: normal;
+}
+
+table.sortable th.sortable {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+table.sortable th.sortable span:last-of-type::after {
+    content: " \f0dc";
+    font-family: FontAwesome;
+}
+
+table.sortable th.sortable span.sortedAsc::after {
+    content: " \f0de";
+    font-family: FontAwesome;
+}
+
+table.sortable th.sortable span.sortedDesc::after {
+    content: " \f0dd";
+    font-family: FontAwesome;
+}
+
+table.sortable .sortedAsc,
+table.sortable .sortedDesc {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+table.borderBottom td {
+    border-bottom: #ccc 1px solid;
+}
+
+span.refreshMessage {
+    background-color: #ffc;
+    padding: 0.3em 5em;
+    text-align: center;
+    font-weight: bold;
+    font-size: 90%;
+}
+
+/** ------------- Styles for toolbar items ------------------------ */
+.spacing {
+    height: 3px;
+}
+
+div.separator {
+    background-color: #9BA9BA;
+    float: left;
+    width: 1px;
+    height: 15px;
+    margin-top: 3px;
+    font-size: 1px;
+}
+
+/** To use with cases like <span class='separator'>|</span>
+*/
+span.separator {
+    padding-right: 5px;
+    padding-left: 5px;
+    color: #9BA9BA;
+}
+
+.toolbarItem {
+    float: left;
+    margin-right: 12px;
+}
+
+/* Normally followed by some other element, but not in Guest mode */
+.toolbarItem:last-child {
+    margin-right: 0;
+}
+
+.toolbarItem input[type='checkbox'] {
+    position: relative;
+    top: -1px;
+}
+
+.ua-ie .toolbarItem input[type='checkbox'] {
+    position: relative;
+    top: 0;
+}
+
+.toolbarItem .pinLink {
+    position: relative;
+    top: -1px;
+    padding: 0 0.3em 0 0.4em;
+    height: 1.3em;
+}
+
+.ua-ie .toolbarItem .pinLink {
+    position: relative;
+    top: -3px;
+}
+
+/* ------------------------- Action bar styles */
+
+.actionBar {
+    background-color: #f5f5f5;
+    margin: 0 0 .3em;
+    padding: .6em 10px;
+    line-height: 2.2;
+}
+
+.actionBar label {
+    margin-left: 0;
+    margin-right: 0.5em;
+    line-height: 2em;
+}
+
+.actionBar label.first {
+    display: inline-block;
+    width: 9em;
+}
+
+.actionBar label.shift {
+    margin-left: 1em;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.actionBar .userDropDown {
+    width: 260px;
+}
+
+.actionBar input[type=text] {
+    width: 262px;
+}
+
+.actionBar input.short {
+    width: 104px;
+}
+
+.actionBar .actionInput {
+    margin-right: 0.8em;
+}
+
+/* make .ufd baseline-alignable https://www.w3.org/TR/CSS21/visudet.html#propdef-vertical-align */
+.actionBar .ufd {
+    overflow: visible;
+    line-height: 20px;
+    vertical-align: baseline;
+}
+
+/* add some in-flow content */
+.actionBar .ufd::after {
+    content: '';
+    display: inline-block;
+}
+
+/* fix overflows */
+.actionBar .ufd.default input {
+    padding: 0 3px;
+}
+
+.actionBar .ufd.default button {
+    height: 20px;
+}
+
+.actionBar .actionBarAdvancedToggle {
+    margin-left: 0.2em;
+}
+
+.actionBar .actionBarRight /*--- right side of the action bar */
+{
+    float: right;
+    margin-left: 1em;
+    white-space: nowrap;
+}
+
+.actionBar .resetLink {
+    width: 16px;
+    display: inline-block;
+}
+
+.actionBar .reset {
+    color: #aaa;
+    font-size: 16px;
+    line-height: 16px;
+    text-decoration: none;
+}
+
+.actionBar .reset:hover {
+    color: #666;
+}
+
+/** ------------- END of styles for toolbar items ------------------------ */
+
+/**  Popup control span popup style */
+span.pc {
+    padding: 1px 2px 2px 0;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+span.pc .resultsLink {
+    white-space: normal;
+}
+
+@supports ((-ms-accelerator:true) or (-ms-ime-align:auto)) {
+    /* target MS Edge 12+ */
+    span.pc .resultsLink {
+        white-space: pre-wrap;
+    }
+}
+
+.oneLineStatus {
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: calc(100% - 44px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: inherit;
+}
+
+.pc.pc_topRightButton {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+
+    max-width: 100%;
+    padding-right: 22px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.pc__toggle-wrapper {
+    white-space: nowrap;
+}
+
+.pc .toggle:hover {
+    cursor: pointer;
+}
+
+.pc_topRightButton .pc__toggle-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/* Do not wrap text in Changes link and for test names in build summary popup
+   TW-21976, TW-53753
+*/
+.summaryContainer .testNamePart span.pc .resultsLink,
+td.changesLink span.pc .resultsLink {
+    white-space: nowrap;
+}
+
+
+.orange {
+    color: #DB9E44;
+}
+
+.smallIcon {
+    font-size: 70%;
+    vertical-align: middle;
+    text-decoration: none !important;
+}
+
+.smallIcon:hover {
+    text-decoration: none !important;
+}
+
+span.pc.highlightChanges {
+    background-color: #FFC;
+}
+
+span.pc .fixed,
+span.pc .fixed a {
+    color: #737577;
+}
+
+span.highlightChanges {
+    background-color: #FFC;
+    position: relative;
+    left: -4px;
+    padding-left: 4px;
+    border-radius: 4px;
+}
+
+div.highlightChanges {
+    background-color: #FFC;
+}
+
+.mono {
+    font-family: Menlo, "Bitstream Vera Sans Mono", "Ubuntu Mono", Consolas, "Courier New", Courier, monospace;
+}
+
+.mono-12px {
+    font-size: 12px;
+}
+
+/*--------------------------- STOP build styles ----------------*/
+#reAddSection {
+    margin-top: .5em;
+}
+
+.stop__infoLine {
+    margin: 12px 0;
+}
+
+#moreToStop {
+    margin-top: .5em;
+}
+
+#moreToStopFragment {
+    overflow: auto;
+    height: auto;
+    max-height: 20em;
+}
+
+.withUnsharedDepsLabel {
+    margin-right: 1em;
+}
+
+#stopBuildForm textarea {
+    width: 98%;
+}
+
+.estimateDetails {
+    font-size: 90%;
+    margin-left: 43px;
+}
+
+#stopBuildForm input.checkboxPlaceholder {
+    visibility: hidden;
+}
+
+/* build results summary popup */
+
+.summaryContainer {
+    padding: 0 0.2em;
+}
+
+.summaryContainer table {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-collapse: collapse;
+}
+
+.summaryContainer table td {
+    vertical-align: top;
+}
+
+.summaryContainer .popupHeader {
+    margin: .5em 0;
+    font-size: 120%;
+}
+
+.summaryContainer .header {
+    background-color: #F0F5FB;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 2px 5px;
+    font-weight: bold;
+}
+
+.summaryContainer ul {
+    margin: 0.5em 0;
+    padding-top: 0;
+    padding-left: 0;
+}
+
+.summaryContainer ul.bsLinks {
+    min-width: 10.5em;
+}
+
+.summaryContainer ul.bsLinks li:empty {
+    display: none;
+}
+
+.summaryContainer ul li {
+    padding: 0 .5em .15em 5px;
+    list-style: none;
+}
+
+.summaryContainer .depsTable td {
+    padding-right: 10px;
+    padding-left: 25px;
+    border-bottom: 1px solid #ececec;
+}
+
+.summaryContainer .info {
+    padding-top: 0.2em;
+    padding-left: 0.5em;
+}
+
+.summaryContainer .estimateDetails {
+    margin-left: 20px;
+}
+
+.summaryContainer .changesTable {
+    width: 100%;
+    margin-top: 0.5em;
+    border-collapse: collapse;
+    font-size: 90%;
+}
+
+.summaryContainer .changesTable td {
+    padding: 5px 1px;
+    border-bottom: 1px solid #E3E9EF;
+}
+
+.summaryContainer .changesTable .changeUsername {
+    width: 20%;
+    padding-right: 10px;
+    vertical-align: top;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.summaryContainer .changesTable .changeComment {
+    width: 70%;
+    vertical-align: top;
+}
+
+.summaryContainer .changesTable .changedFiles {
+    width: 10%;
+    vertical-align: top;
+    text-align: right;
+}
+
+.summaryContainer .downloadBuildLog {
+    margin-left: 8px;
+    line-height: normal;
+    vertical-align: -1px;
+}
+
+#promoDetailsPopup {
+    width: 40em;
+}
+
+/**--------------------------- Clean checkout dialog, for viewType.jsp and agentSummary.jsp */
+.inplaceFilterDiv {
+    width: 100%;
+    padding: 2px 0 2px 0;
+    text-align: right;
+    vertical-align: top;
+    border-bottom: 1px solid #eee;
+}
+
+.inplaceFilterDiv input {
+    width: 100%;
+    font-size: 90%;
+}
+
+td.artifactsLink {
+    width: 5em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+td.artifacts.artifacts.artifacts {
+    padding: 0;
+    width: 1.5%;
+    max-width: 80px;
+    white-space: nowrap;
+}
+
+td.cell-icon.cell-icon.cell-icon,
+table.overviewTypeTable td.cell-icon.cell-icon {
+    padding-bottom: 0;
+    width: 24px;
+    overflow: visible;
+}
+
+td.tags {
+    white-space: nowrap;
+}
+
+td.status {
+    padding-left: 0.5em;
+}
+
+/* ----------------------------------- Styles for the obsolete builds (shown on the Overview and BC homepage)   */
+td.obsoleteRunningBuild {
+    color: #737577;
+}
+
+table.testActionsPopup {
+    font-weight: normal;
+}
+
+table.testActionsPopup td {
+    padding: 1px;
+    border: none;
+    white-space: nowrap;
+}
+
+img.actionPopupIcon {
+    position: relative;
+    top: 2px;
+    padding-right: 3px;
+}
+
+/**-------- Right-most block near failed test on build results + similar block near change on build changes page */
+div.stamp {
+    background-color: #f5f5f5;
+    float: right;
+    min-width: 13.2em;
+    padding: 0.7em;
+    font-size: 90%;
+    font-weight: normal;
+    line-height: 1.4em;
+}
+
+div.stamp.stampMini {
+    background-color: #FFF;
+    margin: 0;
+    padding: 0;
+}
+
+/*--------------- Link for Download build log / artifacts / server logs */
+a.downloadLink {
+    float: right;
+}
+
+a.downloadLink:before {
+    margin-right: 0.2em;
+}
+
+/*-------------- suspended / disabled note */
+
+.editNotificatorSettingsPage > .enableNote {
+    margin-left: 0.6em;
+}
+
+/*--------------- Simple table row highlighting support  */
+tr.highlightRow:hover td {
+    background-color: #f5f5f5;
+}
+
+div.placeholder {
+    position: absolute;
+    padding-left: 3px;
+    color: gray;
+    font-size: 90%;
+}
+
+.dummyDialogClass {
+    width: 36em;
+}
+
+/*--------------- Divs with headers */
+.divsWithHeaders > div {
+    padding: 0.6em 0;
+}
+
+.divsWithHeaders > div:first-child {
+    padding-top: 0;
+}
+
+.divsWithHeaders > div:last-child {
+    padding-bottom: 1em;
+}
+
+.divsWithHeaders h2 {
+    display: inline-block;
+    margin-bottom: 0.2em;
+}
+
+.grey,
+.emptyValue {
+    color: #737577;
+}
+
+/*--------------- Refreshable */
+.refreshable,
+.refreshableInner {
+    margin: 0;
+    padding: 0;
+}
+
+/*--------------- Agent line */
+.osIcon {
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    margin: 0 6px 0 3px;
+}
+
+.osIconSmall {
+    width: 16px;
+    height: 16px;
+}
+
+.osIconMedium {
+    width: 20px;
+    height: 20px;
+}
+
+/*--------------- Static UI extensions  (header & footer) */
+.staticUIExtension {
+    background-color: #F9F9F9;
+    width: 100%;
+    margin-top: 1em;
+    padding: 10px;
+    border: 1px solid #DDD;
+    font-size: 14px;
+}
+
+/*
+ * @media screen and (max-device-width: 480px) = iPhone < 4
+ * @media screen and (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 960px) = iPhone >= 4
+ * @media screen and (min-device-width: 768px) and (max-device-width: 1024px) = iPad
+*/
+@media screen and (max-device-width: 480px), screen and (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 960px), screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .runTable .btn_mini {
+        padding: 5px 9px 5px;
+    }
+
+    .runTable .btn-group .btn_append {
+        width: 30px;
+    }
+}
+
+/* branch selector in breadcrumbs */
+.main-navigation_branch-name-selector {
+    white-space: nowrap;
+}
+
+.branchNameSelector {
+    padding: 0 5px 0 0;
+}
+
+.branchNameSelector.branchNameSelector_inline {
+    display: inline-block;
+    padding-left: 0.5em !important;
+    margin: 0;
+}
+
+.branchNameSelector.branchNameSelector_inline select.branchNameSelector {
+    margin: 0; /* explicitly set to avoid SF rendering issue */
+    width: 14em;
+}
+
+.branchNameSelector.branchNameSelector_inline .ufd.popup.branchNameSelector {
+    height: 20px;
+}
+
+.branchNameSelector.branchNameSelector_inline .ufd.popup.branchNameSelector input {
+    padding: 0 3px 2px;
+}
+
+/* Branch names. See also overviewTable.css */
+
+.branch .branchName {
+    padding: 2px 4px;
+    border-radius: 3px;
+
+    font-size: 11px;
+    font-weight: normal;
+    font-family: Verdana, sans-serif; /* Better legibility at small size */
+    white-space: nowrap;
+    line-height: 14px;
+}
+
+.branch.hasBranch .branchName {
+    background: #d4edff;
+}
+
+.branch.default .branchName {
+    background: #9DCBFA;
+    color: #FFF;
+}
+
+/* The following blocks have a colored background, contrast is needed between them and the branch name - add border, reduce padding */
+.statusTable .branch.hasBranch .branchName,
+.joinedChangeTable .branch.hasBranch .branchName,
+.buildQueueTable .branch.hasBranch .branchName,
+.buildChainHeader .branch.hasBranch .branchName {
+    padding: 1px 3px;
+    border: 1px solid #C6CDE2;
+}
+
+.statusTable .branch.default .branchName,
+.joinedChangeTable .branch.default .branchName,
+.buildQueueTable .branch.default .branchName,
+.buildChainHeader .branch.default .branchName {
+    padding: 1px 3px;
+    border: 1px solid #BCE8F1;
+}
+
+.contextProjectIcon {
+    display: inline;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.contextProjectDescription {
+    padding: 5px;
+}
+
+.contextProjectWrapper {
+    display: inline;
+}
+
+a.testWithDetails:hover {
+    text-decoration: none;
+}
+
+a.testWithDetails:hover {
+    text-decoration: none;
+    border-bottom: 1px dotted #3773C9;
+}
+
+.hoverable:hover {
+    text-decoration: underline;
+}
+
+.progress_holder {
+    padding-right: 1em;
+}
+
+.popupDiv.searchPanel {
+    padding: 0px;
+    width: 300px;
+}
+
+.stickyBar {
+    background-color: white;
+}
+
+.showMore {
+    width: 100%;
+    margin: 10px auto;
+}
+
+.showMore .btn {
+    width: 15%;
+    text-align: center;
+    margin-left: 40%;
+}
+
+td.buildtypename {
+    color: #737577;
+}
+
+td.buildtypename a.buildTypeName {
+    color: #1f2326;
+}
+
+td.buildtypename a.buildTypeName:hover {
+    color: #0F5B99;
+}
+
+.optionalQueuedBuildWord {
+    display: none;
+}

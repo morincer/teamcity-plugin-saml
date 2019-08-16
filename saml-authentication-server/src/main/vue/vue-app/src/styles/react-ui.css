@@ -1,0 +1,198 @@
+body,
+input,
+select,
+button {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Droid Sans,
+    Helvetica Neue, Arial, sans-serif;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+a:hover {
+    /* TODO reenable when the time comes */
+    /* color: #ff008c; */
+}
+
+a,
+a.unselectedTag {
+    color: #0f5b99;
+}
+
+/* TODO move to plugin */
+#myachievements#myachievements {
+    padding: 0;
+}
+
+#myachievements#myachievements i {
+    margin-right: 4px;
+}
+
+.headBG,
+table.borderBottom td,
+.simpleTabs .tabs li,
+.simpleTabs .tabs li.selected,
+#footer .footerMainContainer {
+    border-color: #DFE5EB;
+}
+
+#bodyWrapper:before {
+    content: none;
+}
+
+.popupDiv {
+    border-radius: 3px;
+    box-shadow: 0 2px 8px 0 rgba(0, 42, 76, 0.15);
+}
+
+.popupDiv,
+.popupDiv#restProjectsPopup,
+.popupDiv#fastBreadcrumbsPopup {
+    border-color: rgba(0, 42, 76, 0.1);
+}
+
+td.stopBuild.stopBuild {
+    width: 32px;
+}
+
+table.overviewTypeTable td.stopBuild.stopBuild {
+    width: 36px;
+}
+
+table.modificationBuilds tr td.duration .progress_holder {
+    height: 1.6em;
+}
+
+td.stopBuild {
+    position: relative;
+}
+
+td.stopBuild .stopBuildReact {
+    position: absolute;
+    top: 0px;
+    left: -8px;
+}
+
+table.modificationBuilds .stopBuildReact {
+    top: 4px;
+}
+
+table.statusTable div.duration.duration {
+    width: auto;
+}
+
+table.statusTable div.stopLink .stopBuildReact {
+    position: absolute;
+    top: -2px;
+    left: -23px;
+}
+
+.progress_holder {
+    display: inline-block;
+    padding-right: 0;
+}
+
+.buildChainBuild .progress_holder {
+    margin-top: 3px;
+}
+
+td.buildNumber.buildNumber.buildNumber {
+    padding-right: 24px;
+    white-space: nowrap;
+}
+
+.buildActionsReact {
+    display: inline-block;
+    vertical-align: -1px;
+}
+
+.overviewTypeTable {
+    table-layout: fixed;
+}
+
+.overviewTypeTable td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overviewTypeTable td.buildNumber {
+    overflow: visible;
+    text-overflow: clip;
+}
+
+
+.overviewTypeTable .branch.hasBranch.hasBranch,
+.overviewTypeTable .buildNumber.buildNumber {
+    width: calc(20vw - 96px);
+}
+
+.tableCaption > span.pc.btPopup.btPopup {
+    /* needed for enforcing pixel rounding */
+    display: inline-table;
+    min-width: calc(20vw - 64px);
+}
+
+@media (max-width: 960px) {
+    .overviewTypeTable .branch.hasBranch.hasBranch,
+    .overviewTypeTable .buildNumber.buildNumber {
+        width: calc(0.2 * 960px - 96px);
+    }
+
+    .tableCaption > span.pc.btPopup.btPopup {
+        min-width: calc(0.2 * 960px - 64px);
+    }
+}
+
+@media (min-width: 1600px) {
+    .overviewTypeTable .branch.hasBranch.hasBranch,
+    .overviewTypeTable .buildNumber.buildNumber {
+        width: calc(0.2 * 1600px - 96px);
+    }
+
+    .tableCaption > span.pc.btPopup.btPopup {
+        min-width: calc(0.2 * 1600px - 64px);
+    }
+}
+
+.overviewTypeTable .buildNumberInner {
+    display: inline-flex;
+    display: -ms-inline-flexbox;
+    max-width: 100%;
+}
+
+.overviewTypeTable .buildNumberInner .buildStatusIcon,
+.overviewTypeTable .buildNumberInner .starIcon {
+    margin: 0 0 0 4px;
+}
+
+.overviewTypeTable .buildNumberNumber {
+    overflow: hidden;
+    margin-left: -32px;
+    padding-left: 32px;
+    min-width: 0;
+}
+
+.restPageTitleWrapper {
+    position: relative;
+
+    display: flex;
+
+    margin-top: 12px;
+}
+
+.restPageTitleWrapper #restPageTitle {
+    margin-top: -4px;
+    margin-right: 8px;
+}
+
+.reactPageTitle {
+    flex-shrink: 0;
+}
+
+.ring-loader-inline {
+    margin-top: -1px;
+}
+
+.icon-refresh.ring-loader-inline::before {
+    content: none;
+}
