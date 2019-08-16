@@ -25,8 +25,8 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlLoginPageExtension samlLoginPageExtension(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor) {
-        return new SamlLoginPageExtension(pagePlaces, descriptor);
+    SamlLoginPageExtension samlLoginPageExtension(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage) {
+        return new SamlLoginPageExtension(pagePlaces, descriptor, settingsStorage);
     }
 
     @Bean
