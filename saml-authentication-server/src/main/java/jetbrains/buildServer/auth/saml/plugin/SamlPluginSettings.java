@@ -8,4 +8,5 @@ public class SamlPluginSettings {
     private String entityId;
     private String ssoEndpoint;
     private String publicCertificate;
+    private Boolean hideLoginForm;
 }
