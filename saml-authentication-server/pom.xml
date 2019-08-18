@@ -9,6 +9,7 @@
     </parent>
     <artifactId>saml-authentication-server</artifactId>
     <packaging>jar</packaging>
+
     <dependencies>
 
         <dependency>
@@ -107,6 +108,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -132,6 +134,43 @@
                                     <directory>src/main/vue/admin-ui/dist</directory>
                                 </resource>
                             </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.8.0</version>
+                <configuration>
+                    <nodeVersion>v10.15.0</nodeVersion>
+                    <npmVersion>6.10.1</npmVersion>
+                    <installDirectory>target</installDirectory>
+                    <workingDirectory>src/main/vue/admin-ui</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>Install npm modules</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>Build frontend application</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
