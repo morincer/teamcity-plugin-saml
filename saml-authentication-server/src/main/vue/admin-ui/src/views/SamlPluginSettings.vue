@@ -16,6 +16,20 @@
                 <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
             </RunnerFormRow>
 
+            <GroupingHeader>Users Mapping and Provisioning</GroupingHeader>
+            <RunnerFormInput label="User Name Attribute" required v-model="settings.usernameAttribute"/>
+            <RunnerFormRow>
+                <template v-slot:label>Create users automatically</template>
+                <template v-slot:content><input type="checkbox" v-model="settings.createUsersAutomatically"></template>
+            </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Limit to specific e-mail domains</template>
+                <template v-slot:content>
+                    <input type="checkbox" v-model="settings.limitToEmailDomains">
+                    <TextInput style="margin-left: 10px" v-model="settings.allowedEmailDomains" v-if="settings.limitToEmailDomains"/>
+                </template>
+            </RunnerFormRow>
+
             <GroupingHeader>Misc</GroupingHeader>
             <RunnerFormInput label="Login Button Label" required v-model="settings.ssoLoginButtonName"/>
             <RunnerFormRow>

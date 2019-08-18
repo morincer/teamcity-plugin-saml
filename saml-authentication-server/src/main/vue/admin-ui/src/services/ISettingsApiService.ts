@@ -16,6 +16,11 @@ export interface SamlSettings {
     ssoCallbackUrl? : string;
     hideLoginForm?: boolean;
     ssoLoginButtonName? : string;
+
+    usernameAttribute? : string;
+    createUsersAutomatically? : boolean;
+    limitToEmailDomains? : boolean;
+    allowedEmailDomains? : string;
 }
 
 export interface ISettingsApiService {
