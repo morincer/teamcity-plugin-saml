@@ -1,0 +1,1145 @@
+.icon {
+    vertical-align: baseline;
+}
+
+/*
+ * `icon` and `icon_before` should not be used on the same node
+ * (the latter is not block with modifier, underscore is used to avoid clashes with fontAwesome)
+ * `icon16` is modifier for both `icon` and `icon_before`
+ */
+.icon,
+.tc-icon,
+.icon_before:before,
+.tc-icon_before:before,
+.tc-icon_after:after {
+    display: inline-block;
+    background-color: transparent;
+    background-image: url(../img/icons/teamcity-sprite.png?v=60925);
+    background-repeat: no-repeat;
+    background-size: 240px 634px;
+}
+
+.tc-icon_success,
+.bp,
+.stage-status .stage-status__icon.stage-system-is-ready {
+    background-image: url("../img/icons/teamcity-sprite-old.png?v=60925");
+    background-size: 240px 532px;
+}
+
+.icon.icon16,
+.tc-icon.icon16,
+.icon_before.icon16:before,
+.tc-icon_before.icon16:before,
+.tc-icon_after.icon16:after {
+    width: 16px;
+    height: 16px;
+
+    outline: none;
+    vertical-align: text-bottom;
+}
+
+.icon_before:before,
+.tc-icon_before:before,
+.tc-icon_after:after {
+    content: '';
+}
+
+img.icon {
+    vertical-align: text-bottom;
+}
+
+.handle.handle_collapsed,
+.blockHeader.collapsed:before,
+.tc-icon_before.handle_collapsed:before {
+    background-position: -173px -16px;
+}
+
+.handle.handle_expanded,
+.blockHeader.expanded:before,
+.tc-icon_before.handle_expanded:before {
+    background-position: -175px 4px;
+}
+
+/*
+ * "expanded_light" and "collapsed_light" do not include any padding information
+ * for the enclosing element, so should be used in conjunction with "expanded"
+ * and "collapsed", respectively, e.g.:
+ *
+ * <div class="blockHeader expanded expanded_light"/>
+ */
+.handle.handle_collapsed_light,
+.blockHeader.collapsed_light:before {
+    background-position: -213px -16px;
+}
+
+.handle.handle_expanded_light,
+.blockHeader.expanded_light:before {
+    background-position: -195px 4px;
+}
+
+.tc-icon.tc-icon_attention {
+    height: 14px;
+    vertical-align: text-bottom;
+}
+
+.icon_before.attentionComment:before,
+.tc-icon_before.attentionComment:before,
+.tc-icon_attention_yellow {
+    background-position: -180px -80px;
+    vertical-align: bottom;
+}
+
+.tc-icon_attention_red {
+    background-position: 0px -103px;
+}
+
+/*--------------- project and buildConf icons */
+
+.buildType-icon:before {
+    background-position: -97px 3px;
+}
+
+.buildType-icon_composite:before {
+    background-position: -157px -97px;
+}
+
+.project-icon:before {
+    background-position: -97px -17px;
+}
+
+.template_link:before,
+.buildTypeTemplate-icon:before {
+    background-position: -97px -37px;
+}
+
+.buildType-icon_failing.buildType-icon:before,
+#mainNavigation .failed .buildType-icon:before {
+    background-position: -117px 3px;
+}
+
+.buildType-icon_composite_failing.buildType-icon:before,
+#mainNavigation .failed .buildType-icon_composite:before {
+    background-position: -117px -97px;
+}
+
+.project-icon_failing.project-icon:before {
+    background-position: -117px -17px;
+}
+
+.buildType-icon_successful.buildType-icon:before,
+#mainNavigation .successful .buildType-icon:before {
+    background-position: -137px 3px;
+}
+
+.buildType-icon_composite_successful.buildType-icon:before,
+#mainNavigation .successful .buildType-icon_composite:before {
+    background-position: -137px -97px;
+}
+
+.project-icon_successful.project-icon:before {
+    background-position: -137px -17px;
+}
+
+.vcsRoot_link:before {
+    background-position: -157px 3px;
+}
+
+.tableCaption .buildType-icon {
+    margin-left: 1px;
+}
+
+.bp {
+    margin-bottom: 1px;
+}
+
+#allPopupImg {
+    float: left;
+    position: relative;
+    top: 4px;
+}
+
+.icon.icon_popup,
+span.pc .toggle {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin-bottom: -2px;
+    background-position: -140px -140px;
+}
+
+span.pc_white .toggle {
+    background-position: -120px -140px;
+}
+
+span.pc_grey .toggle {
+    background-position: -160px -140px;
+}
+
+span.pc_right .toggle {
+    background-position: -220px -140px;
+}
+
+#allPopupImg.hovered,
+.icon.icon_popup:hover,
+span.pc .toggle:hover,
+span.pc_grey .toggle:hover {
+    background-position: -180px -140px;
+}
+
+span.pc_right .toggle:hover {
+    background-position: -200px -140px;
+}
+
+.icon16_watched {
+    background-position: -160px -60px;
+    margin-top: 4px;
+}
+
+.icon16_watched.icon16_watched_no {
+    background-position: -160px -60px;
+    margin-top: 4px;
+    opacity: 0.3;
+}
+
+.icon_gray {
+    background-position: 0 -280px;
+}
+
+.tc-icon_success {
+    background-position: -20px 0;
+}
+
+.tc-icon__tick,
+.tc-icon_before.tc-icon__tick:before {
+    background-position: -200px -59px;
+}
+
+/* 8th row */
+.tc-icon_github {
+    background-position: 0px -140px;
+}
+
+.tc-icon_github_disabled {
+    background-position: -20px -140px;
+}
+
+.tc-icon_github-enterprise {
+    background-position: -40px -140px;
+}
+
+.tc-icon_github-enterprise_disabled {
+    background-position: -60px -140px;
+}
+
+.tc-icon_bitbucket {
+    background-position: -80px -139px;
+}
+
+.tc-icon_bitbucket_disabled {
+    background-position: -100px -139px;
+}
+
+/* 8th row end*/
+/* 9th row */
+.tc-icon.os-icon {
+    height: 13px;
+    width: 13px;
+    margin-right: 4px;
+    vertical-align: -1px;
+    line-height: normal;
+}
+
+.os-icon_win {
+    background-position: 0px -160px;
+}
+
+.tc-icon.os-icon_mac {
+    width: 11px;
+    background-position: -20px -160px;
+}
+
+.os-icon_lin {
+    background-position: -39px -160px;
+}
+
+.os-icon_bsd {
+    background-position: -60px -160px;
+}
+
+.os-icon_sol {
+    background-position: -80px -160px;
+}
+
+.os-icon_oux {
+    background-position: -99px -160px;
+}
+
+/* 9th row end */
+/* 18th row */
+.tc-icon_group {
+    background-position: -20px -340px;
+}
+
+.tc-icon_group_current {
+    background-position: -0px -340px;
+}
+
+/* 18th row end */
+/* 19th row */
+.commentIcon,
+.tc-icon_comment,
+.tc-icon_after.commentIcon:after {
+    background-position: -20px -360px;
+}
+
+.commentIcon:hover,
+.tc-icon_comment:hover {
+    background-position: 0 -360px;
+}
+
+.tc-icon_params {
+    background-position: -38px -354px;
+}
+
+.tc-icon_params:hover {
+    background-position: -58px -354px;
+}
+
+.tc-icon_test-history,
+.tc-icon_before.tc-icon_test-history:before {
+    background-position: -78px -358px;
+}
+
+.tc-icon_copy,
+.tc-icon_before.tc-icon_copy:before {
+    background-position: -100px -358px;
+    cursor: pointer;
+}
+
+.tc-icon_patch,
+.tc-icon_before.tc-icon_patch:before,
+.tc-icon_build-log,
+.tc-icon_before.tc-icon_build-log:before {
+    background-position: -140px -357px;
+}
+
+.icon_open-in-ide,
+.tc-icon_IDE,
+.tc-icon_before.tc-icon_IDE:before {
+    background-position: -160px -357px;
+}
+
+.tc-icon_run-build-changes {
+    background-position: -180px -357px;
+}
+
+.icon.externalFileLink {
+    background-position: -200px -360px;
+    margin-bottom: -1px !important;
+}
+
+.icon.externalFileLink_white {
+    background-position: -220px -360px;
+    margin-bottom: -1px !important;
+}
+
+/* 19th row end */
+
+.icon.icon16.bp {
+    width: 19px;
+}
+
+.summaryLink .icon.icon16.bp {
+    width: 16px;
+}
+
+.bp {
+    background-position: 0 -20px;
+}
+
+.bp.fixed {
+    background-position: 0 -60px;
+}
+
+.bp.taken {
+    background-position: 0 -40px;
+}
+
+.bp.muted {
+    background-position: 0 -80px;
+}
+
+.groupHeader.blockExpanded .bp.arrow {
+    background-position: -180px 0;
+    margin-bottom: -2px;
+}
+
+.groupHeader.blockCollapsed .bp.arrow {
+    background-position: -180px -20px;
+}
+
+a.expandable,
+a.collapsable {
+    padding-right: 1.3em;
+    padding-bottom: 0;
+    text-decoration: none;
+}
+
+a.expandable:hover,
+a.collapsable:hover {
+    background-color: white;
+    border-bottom: none;
+    color: #3356C0;
+}
+
+a.expandable:active,
+a.collapsable:active {
+    background: none;
+    border-bottom: none;
+    color: #3356C0;
+}
+
+.tc-icon_breadcrumb,
+.tc-icon_after.tc-icon_breadcrumb:after {
+    background-position: -176px -100px;
+}
+
+.tc-icon_breadcrumb_siblings_small,
+.tc-icon_after.tc-icon_breadcrumb_siblings_small:after {
+    background-position: -180px -120px;
+    width: 8px;
+    height: 8px;
+    margin-top: -1px;
+}
+
+.tc-icon_breadcrumb_siblings,
+.tc-icon_after.tc-icon_breadcrumb_siblings:after {
+    background-position: -220px 7px;
+    margin-left: 1px;
+}
+
+/* 20th row */
+.tc-icon_help_small {
+    background-position: 0 -380px;
+}
+
+.tc-icon_help,
+.tc-icon_help_grey:hover,
+.tc-icon_before.tc-icon_help_grey:hover:before {
+    background-position: -19px -379px;
+}
+
+.tc-icon_help_grey,
+.tc-icon_before.tc-icon_help_grey:before {
+    background-position: -39px -379px;
+}
+
+.tc-icon_help_disabled {
+    background-position: -20px -380px;
+}
+
+.newVersionLink:before {
+    background-position: -79px -379px;
+}
+
+.tc-icon_subrepo {
+    background-position: -100px -379px;
+}
+
+.tc-icon_feed {
+    background-position: -120px -379px;
+}
+
+/* 20th row end */
+/* 21st row */
+.addNew:before {
+    background-position: 0 -397px;
+}
+
+.tc-icon_cog {
+    background-position: -79px -399px;
+}
+
+.cloudIcon {
+    margin-right: 5px;
+}
+
+.cloudIcon {
+    background-position: -100px -397px;
+}
+
+.tc-icon_branch,
+.tc-icon_before.tc-icon_branch:before {
+    background-position: -120px -398px;
+}
+
+.tc-icon_branch_disabled {
+    background-position: -140px -398px;
+}
+
+.tc-icon_graph,
+.tc-icon_before.tc-icon_graph:before {
+    background-position: -158px -398px;
+}
+
+.tc-icon_wand {
+    background-position: -180px -400px;
+}
+
+.tc-icon_folders {
+    background-position: -200px -398px;
+}
+
+/* 22nd row */
+.collapser.collapser_collapsed:before {
+    background-position: 2px -417px;
+}
+
+.collapser.collapser_expanded:before {
+    background-position: -17px -417px;
+}
+
+.tc-icon_x {
+    background-position: -40px -417px;
+}
+
+.icon_collapse-all {
+    background-position: -59px -419px;
+}
+
+.icon_expand-all {
+    background-position: -79px -418px;
+}
+
+.tc-icon_move-top,
+.tc-icon_move-top.tc-icon_move-top_inactive {
+    background-position: -100px -419px;
+    cursor: pointer;
+}
+
+.tc-icon_move-top.tc-icon_move-top_disabled {
+    background-position: -120px -419px;
+    cursor: auto;
+}
+
+.tc-icon_move-top:hover,
+.tc-icon_move-top.tc-icon_move-top_active {
+    background-position: -140px -419px;
+}
+
+.tc-icon_top {
+    background-position: -160px -420px;
+}
+
+.tc-icon_draggable,
+.tc-icon_before.tc-icon_draggable:before,
+.draggable:before {
+    background-position: -177px -420px;
+}
+
+.tc-icon_download,
+.tc-icon_before.tc-icon_download:before {
+    background-position: -200px -420px;
+    vertical-align: bottom;
+}
+
+.tc-icon_download_white {
+    background-position: -220px -420px;
+}
+
+/* 22nd row end */
+
+.icon.tc-icon_switch,
+.icon_before.tc-icon_switch:before {
+    width: 20px;
+    height: 12px;
+}
+
+.icon.tc-icon_switch_on,
+.icon_before.tc-icon_switch_on:before,
+.icon.tc-icon_switch_enabled,
+.icon_before.tc-icon_switch_enabled:before {
+    background-position: -180px -40px;
+    cursor: pointer;
+}
+
+.icon.tc-icon_switch_off,
+.icon_before.tc-icon_switch_off:before,
+.icon.tc-icon_switch_disabled,
+.icon_before.tc-icon_switch_disabled:before {
+    background-position: -200px -40px;
+    cursor: pointer;
+}
+
+.icon.tc-icon_switch_error,
+.icon_before.tc-icon_switch_error:before {
+    background-position: -220px -40px;
+}
+
+/*
+  switch icon with comment
+  e.g. icon.icon16.tc-icon_switch.tc-icon_switch_enabled.tc-icon_after.commentIcon
+  i.e. switch icon in element and commentIcon in its :after pseudo-element
+ */
+.tc-icon_switch.commentIcon {
+    margin-right: 16px;
+}
+
+.tc-icon_switch.commentIcon:after {
+    margin-left: 22px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 200 / 100), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+
+    .icon,
+    .tc-icon,
+    .icon_before:before,
+    .tc-icon_before:before,
+    .tc-icon_after:after {
+        background-image: url(../img/icons/teamcity-sprite@2x.png?v=60925);
+    }
+
+    .tc-icon_success,
+    .bp,
+    .stage-status .stage-status__icon.stage-system-is-ready {
+        background-image: url("../img/icons/teamcity-sprite-old@2x.png?v=60925");
+    }
+
+}
+
+.testActionsPopup .icon16.tc-icon_before:before,
+.problemPopup .icon16.tc-icon_before:before {
+    width: 19px;
+    margin-right: 3px;
+}
+
+#restPageTitle .icon,
+#restPageTitle .tc-icon,
+#restPageTitle .icon_before:before,
+#restPageTitle .tc-icon_before:before,
+#restPageTitle .tc-icon_after:after,
+#restPageTitle .buildTypeTemplate-icon:before {
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+}
+
+#restPageTitle .project-icon:before {
+    background-position: 0px -240px;
+}
+
+#restPageTitle .buildType-icon:before {
+    background-position: 0px -220px;
+}
+
+#restPageTitle .buildType-icon_composite:before {
+    background-position: -220px -220px;
+}
+
+#restPageTitle .buildTypeTemplate-icon,
+#restPageTitle .buildTypeTemplate-icon:before {
+    background-position: -60px -220px;
+}
+
+#restPageTitle .failed .buildType-icon,
+#restPageTitle .failed .buildType-icon:before {
+    background-position: -40px -220px;
+}
+
+#restPageTitle .failed .buildType-icon_composite:before {
+    background-position: -180px -220px;
+}
+
+#restPageTitle .successful .buildType-icon,
+#restPageTitle .successful .buildType-icon:before {
+    background-position: -20px -220px;
+}
+
+#restPageTitle .successful .buildType-icon_composite:before {
+    background-position: -200px -220px;
+}
+
+#restBreadcrumbs .contentWrapper .hasSiblings {
+    cursor: pointer;
+}
+
+#restPageTitle .contentWrapper:hover .project-icon.hasSiblings:before {
+    background-position: -120px -240px;
+}
+
+#restPageTitle .contentWrapper:hover .buildType-icon.hasSiblings:before {
+    background-position: -120px -220px;
+}
+
+#restPageTitle .contentWrapper:hover .buildType-icon_composite.hasSiblings:before {
+    background-position: -220px -240px;
+}
+
+#restPageTitle .contentWrapper:hover .buildTypeTemplate-icon.hasSiblings,
+#restPageTitle .contentWrapper:hover .buildTypeTemplate-icon.hasSiblings:before {
+    background-position: -60px -240px;
+}
+
+#restPageTitle .failed .contentWrapper:hover .buildType-icon.hasSiblings,
+#restPageTitle .failed .contentWrapper:hover .buildType-icon.hasSiblings:before {
+    background-position: -160px -220px;
+}
+
+#restPageTitle .failed .contentWrapper:hover .buildType-icon_composite.hasSiblings:before {
+    background-position: -180px -240px;
+}
+
+#restPageTitle .successful .contentWrapper:hover .buildType-icon.hasSiblings,
+#restPageTitle .successful .contentWrapper:hover .buildType-icon.hasSiblings:before {
+    background-position: -140px -220px;
+}
+
+#restPageTitle .successful .contentWrapper:hover .buildType-icon_composite.hasSiblings:before {
+    background-position: -200px -240px;
+}
+
+#restNavigation .contentWrapper:hover .project-icon.hasSiblings,
+#restNavigation .contentWrapper:hover .project-icon.hasSiblings:before {
+    background-position: -117px -77px;
+}
+
+#restNavigation .contentWrapper:hover .buildType-icon.hasSiblings,
+#restNavigation .contentWrapper:hover .buildType-icon.hasSiblings:before {
+    background-position: -97px -77px;
+}
+
+#restNavigation .contentWrapper:hover .buildType-icon_composite.hasSiblings:before {
+    background-position: -157px -117px;
+}
+
+.branchNameSelector_placeholder .branch {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    left: 4px;
+    background-position: -120px -397px;
+}
+
+.branchNameSelector_placeholder .branch.loading {
+    background-position: -140px -139px;
+}
+
+.tc-icon_tfs {
+    background-position: -60px -440px;
+}
+
+.tc-icon_tfs_disabled {
+    background-position: -80px -440px;
+}
+
+.tc-icon_edit,
+.tc-icon_edit_gray:hover {
+    background-position: 0px -440px;
+    margin-bottom: -1px;
+}
+
+.tc-icon_edit_disabled,
+.tc-icon_edit_gray {
+    background-position: -20px -440px;
+    margin-bottom: -1px;
+}
+
+.tc-icon_build-chain {
+    background-position: -160px -40px;
+    position: relative;
+    top: 2px;
+}
+
+
+/*editing notification rules form (temporary solution to show loading)*/
+#selectorWrapper iron-list, #sbtSelector iron-list {
+    background-image: url(../img/icons/teamcity-sprite.png?v=60925);
+    background-position: 0 487px;
+    background-size: 240px 634px;
+    background-repeat: no-repeat;
+}
+
+#selectorWrapper iron-list.nothing_found, #sbtSelector iron-list.nothing_found {
+    background: none;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 200 / 100), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    #selectorWrapper iron-list, #sbtSelector iron-list {
+        background-image: url(../img/icons/teamcity-sprite@2x.png?v=60925);
+    }
+
+}
+
+.searchPanel .node.tree-node {
+    padding-top: 0px;
+}
+
+.searchPanel .iron-list {
+    margin-top: 0px;
+}
+
+.searchPanel .checkboxes.tree-node {
+    padding-top: 2px;
+}
+
+.svg-icon {
+    display: inline-block;
+    fill: currentColor;
+}
+
+.svg-icon svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+}
+
+button.actionIconWrapper:not(.btn) {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.actionIcon {
+    color: #B8D1E5;
+    vertical-align: -3px;
+    line-height: normal;
+    transition: color 0.3s ease-out;
+}
+
+.actionIconSuper {
+    vertical-align: 3px;
+}
+
+.actionIconWrapper {
+    outline: none;
+}
+
+.actionIconWrapper:hover .actionIcon,
+.actionIconWrapper:focus .actionIcon {
+    color: #80C6FF;
+    transition: none;
+}
+
+.actionIconMain,
+.actionIconWrapper:active .actionIcon {
+    color: #008EFF;
+}
+
+.tagIcon {
+    color: #999;
+    vertical-align: -6px;
+}
+
+.starIcon {
+    vertical-align: -2px;
+}
+
+.starIconFilled .actionIcon {
+    color: #444;
+}
+
+.selectedTag .starIcon,
+.menuItemSelected .starIcon {
+    color: inherit;
+}
+
+.menuItem .starIcon {
+    transition: none;
+    margin-left: 4px;
+}
+
+.addToFavorite .starIconFilled {
+    display: none;
+}
+
+.starIconEmpty {
+    display: none;
+}
+
+.addToFavorite .starIconEmpty {
+    display: inline;
+}
+
+.osTypeIcon {
+    vertical-align: -2px;
+    margin-right: 4px;
+    color: #444;
+}
+
+.osTypeIcon-secondary {
+    color: #999;
+}
+
+.os-windows {
+    vertical-align: -1px;
+}
+
+.os-solaris {
+    vertical-align: -3px;
+}
+
+.statusIcon {
+    color: #999;
+}
+
+.statusIcon_failing {
+    color: #db5860;
+}
+
+.statusIcon_successful {
+    color: #59a869;
+}
+
+.projectOrBuildTypeIcon {
+    vertical-align: -3px;
+    line-height: normal;
+}
+
+#mainNavigation .projectOrBuildTypeIcon {
+    vertical-align: 0px;
+    margin-right: 4px;
+}
+
+#restNavigation .projectOrBuildTypeIcon {
+    margin: 0 1px 0 3px;
+}
+
+#restPageTitle .projectOrBuildTypeIcon {
+    vertical-align: 2px;
+}
+
+#restBreadcrumbs .contentWrapper:hover .projectOrBuildTypeIcon.hasSiblings {
+    display: none;
+}
+
+#restBreadcrumbs .contentWrapper:hover .projectOrBuildTypeIcon_arrow.hasSiblings {
+    display: inline;
+}
+
+.tableCaption .projectOrBuildTypeIcon {
+    vertical-align: -4px;
+}
+
+.projectsPopupTable .projectOrBuildTypeIcon,
+.chainBuilds .projectOrBuildTypeIcon,
+.buildTypesPopup .projectOrBuildTypeIcon,
+.projectTree .projectOrBuildTypeIcon,
+.projectHierarchy .projectOrBuildTypeIcon {
+    margin: 0 4px;
+}
+
+.buildStatusIcon,
+.buildProblemIcon {
+    display: inline-block;
+    line-height: normal;
+    vertical-align: -1px;
+    margin-right: 4px;
+}
+
+.buildStatusIcon svg,
+.buildProblemIcon svg {
+    vertical-align: baseline;
+}
+
+.buildStatusIcon svg,
+.buildStatusIcon .secondary {
+    fill: #999999;
+}
+
+.buildStatusIcon_running-red svg,
+.buildStatusIcon_running-red .secondary,
+.buildStatusIcon_error svg,
+.buildStatusIcon_error .secondary,
+.buildStatusIcon_red-sign svg,
+.buildStatusIcon_red-sign .secondary,
+.buildProblemIcon svg {
+    fill: #db5860;
+}
+
+.buildStatusIcon_running-green svg,
+.buildStatusIcon_running-green .secondary,
+.buildStatusIcon_successful svg,
+.buildStatusIcon_successful .secondary {
+    fill: #59a869;
+}
+
+.buildStatusIcon_running-green svg,
+.buildStatusIcon_running-red svg {
+    position: relative;
+    z-index: 4; /* should be unique for different composite layer */
+
+    transform-origin: 50% 50%;
+
+    animation: spin 1.8s linear infinite;
+}
+
+.buildStatusIcon_running-red svg {
+    animation-direction: reverse;
+}
+
+.buildStatusIcon_queued {
+    margin-left: -1px;
+}
+
+.buildStatusIcon_queued svg {
+    fill: #bbb;
+}
+
+.buildStatusIcon_personal {
+    position: relative;
+    vertical-align: -2px;
+}
+
+.buildStatusIcon_personal svg {
+    fill: #999999;
+}
+
+.buildStatusIcon_my svg {
+    fill: #008EFF;
+}
+
+.buildStatusIcon__static {
+    vertical-align: baseline;
+}
+
+.buildStatusIcon__static .secondary {
+    display: none;
+}
+
+.buildStatusIcon__static svg {
+    animation: none;
+}
+
+.buildStatusIcon__spinning {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.buildStatusIcon__spinning path:not(.secondary) {
+    display: none;
+}
+
+.buildStatusIcon__spinning svg {
+    transform-origin: 69.92% 66.8%;
+}
+
+.buildStatusIcon_size_M {
+    vertical-align: baseline;
+}
+
+.buildStatusIcon_red-sign {
+    margin-left: -1px;
+    vertical-align: -2px;
+}
+
+.buildStatusIcon_size_M.buildStatusIcon_personal {
+    vertical-align: -3px;
+}
+
+.warningIcon svg {
+    fill: #eda200;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.buildProblemIcon {
+    width: 20px;
+}
+
+.buildProblemIcon_new {
+    position: relative;
+}
+
+.nameT .buildProblemIcon,
+.summaryLink .buildProblemIcon {
+    width: 16px;
+}
+
+.testActionsPopup .buildProblemIcon,
+.actions .buildProblemIcon,
+.addMessage .buildProblemIcon,
+.responsible .buildProblemIcon {
+    width: auto;
+}
+
+.summaryLink .buildProblemIcon {
+    margin-left: 4px;
+}
+
+.helpLink .actionIconHelp,
+.feedbackLink .actionIcon {
+    margin-right: 4px;
+}
+
+.buildProblemIcon_internal {
+    vertical-align: -2px;
+}
+
+.buildProblemIcon_taken {
+    vertical-align: -4px;
+}
+
+.buildProblemIcon_taken svg,
+.buildProblemIcon_muted svg,
+.buildProblemIcon_ignored svg,
+.buildProblemIcon_flaky svg {
+    fill: #999999;
+}
+
+.buildProblemIcon_fixed svg {
+    fill: #008EFF;
+}
+
+.buildProblemIcon__asterisk-small {
+    position: absolute;
+    top: -3px;
+    left: 12px;
+}
+
+.buildProblemIcon__asterisk-small svg {
+    vertical-align: top;
+}
+
+.buildProblemIcon__asterisk-small svg,
+.buildProblemIcon_asterisk svg {
+    fill: #eda200;
+}
+
+.reactSpinningIcon {
+    margin-right: 4px;
+}
+
+.commentIcon .svg-icon {
+    color: #999999;
+    vertical-align: -2px;
+}
+
+.commentIcon svg {
+    transform: scaleX(-1);
+}
+
+.commentIconFlip svg {
+    transform: none;
+}
+
+.buildNumber .commentIcon {
+    margin-left: 4px;
+}
+
+button.actionIconWrapper.removeFromQueueIcon {
+    vertical-align: -2px;
+    padding: 0 8px;
+}

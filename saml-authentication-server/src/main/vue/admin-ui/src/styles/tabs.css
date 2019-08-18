@@ -1,0 +1,692 @@
+/* Top-level tabs (header) */
+#tabsContainer .tabs {
+    margin: 0;
+    padding: 0;
+}
+
+#tabsContainer .tabs li {
+    float: left;
+    height: 26px;
+    margin: 6px 0 0 0;
+    list-style: none;
+}
+
+#tabsContainer .tabs li.first {
+    margin-left: 10px;
+}
+
+#tabsContainer .tabs li p {
+    float: left;
+    margin: 0;
+    padding: 3px 10px;
+}
+
+#tabsContainer .tabs li.leftBorder p {
+    border-left: none;
+    padding-left: 16px;
+}
+
+#tabsContainer .tabs li.selected,
+#tabsContainer .tabs li.selected a {
+    color: black;
+}
+
+#tabsContainer .tabs #overview_Tab {
+    padding-right: 5px;
+}
+
+#tabsContainer .tabs #overview_Tab p {
+    width: auto;
+    padding-right: 0;
+}
+
+#tabsContainer .tabs #overview_Tab p a {
+    padding-right: 5px;
+}
+
+#tabsContainer .tabs #agents_Tab {
+    width: auto;
+    min-width: 115px; /* to avoid page jumping when mug is painted */
+}
+
+#tabsContainer .tabs #agents_Tab p {
+    padding-right: 5px;
+}
+
+#tabsContainer .tabs #agents_Tab p a {
+    margin-right: 0;
+}
+
+#tabsContainer .tabs #changes_Tab p {
+    padding-left: 13px;
+    padding-right: 13px;
+}
+
+/* Agent busyness indicator */
+.mug {
+    float: left;
+    position: relative;
+    width: 12px;
+    height: 16px;
+    margin: 4px 10px 0 0;
+    padding: 0;
+
+    border: 1px solid #0062c5;
+    border-radius: 3px;
+
+    font-size: 0;
+    line-height: 0;
+
+    background-color: white;
+}
+
+.mugStuff {
+    background-color: #0062c5;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+}
+
+div.mug + p,
+#allPopupImg + p {
+    display: none; /* Fix strange bug in IE and Chrome when additional paragraph appears in the top */
+}
+
+/* Breadcrumb */
+#mainNavigation {
+    visibility: hidden;
+    clear: left;
+    float: left;
+    margin: 10px 0;
+    padding: 0;
+    list-style: none;
+    max-width: 60%;
+    line-height: 22px;
+}
+
+#mainNavigation li {
+    display: inline;
+    margin: 0 2px 0 0;
+    padding: 0;
+    font-size: 130%;
+}
+
+#mainNavigation .contentWrapper {
+    display: inline-block;
+    /* IE 7 hack */
+    zoom: 1;
+    *display: inline;
+}
+
+#mainNavigation li.last {
+    white-space: nowrap; /* TW-29035 - only nowrap the last item, should be enough. If we nowrap all items, the breadcrumb stops wrapping completely */
+}
+
+#mainNavigation small {
+    font-size: 100%;
+    color: #737577;
+}
+
+#mainNavigation li .tc-icon_after:after {
+    margin-left: 6px;
+}
+
+#mainNavigation li.selected .tc-icon_after:after,
+#mainNavigation li.buildType.last .tc-icon_after:after {
+    background: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#mainNavigation li.selected,
+#mainNavigation li.selected a,
+#mainNavigation li a:hover {
+    color: #3f3f3f;
+}
+
+#mainNavigation .icon16 {
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+#mainNavigation .icon16.toggle {
+    margin-bottom: 0;
+}
+
+#mainNavigation .project-icon:before,
+#mainNavigation .buildType-icon:before,
+#mainNavigation .buildTypeTemplate-icon:before {
+    margin-bottom: 2px;
+}
+
+#mainNavigation .icon16.icon_disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+#mainNavigation .icon16.buildDataIcon {
+    position: relative;
+    top: -2px;
+    margin-right: 3px;
+}
+
+/* Right-hand side links */
+.quickLinks {
+    clear: right;
+    float: right;
+    margin: 10px 0;
+    white-space: nowrap;
+    min-height: 1em;
+}
+
+.quickLinksItem {
+    margin-left: 1.5em;
+}
+
+.quickLinksControlLink {
+    margin-left: 1.5em;
+}
+
+
+/*-------------------- styles for the user panel navigation */
+
+#userPanel {
+    flex: 1;
+
+    clear: right;
+    float: right;
+    width: 45%;
+    margin: 6px 0 0;
+    color: #737577;
+    font-weight: normal;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.lt1000 #userPanel {
+    width: 42%;
+}
+
+#userPanel .info {
+    display: inline-block;
+    padding: 3px 4px 15px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+#userPanel .info.selected,
+#userPanel .info.selected .pc__label a {
+    color: #000;
+}
+
+#usernamePopupContent {
+    padding: 0.2em;
+    border: 1px solid #D6D6D6;
+}
+
+#usernamePopupContent div {
+    padding: 0.2em 0.6em;
+}
+
+#usernamePopupContent div.settings {
+    border-bottom: 1px solid #D6D6D6;
+}
+
+#usernamePopupContent div:hover,
+#usernamePopupContent div:hover a {
+    background-color: #3773C9;
+    color: white;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.investigationsTicker {
+    float: left;
+    margin-right: 4px;
+    min-width: 21px;
+    height: 19px;
+    box-sizing: border-box;
+}
+
+.investigationsTicker.investigationsOld,
+.investigationsTicker.investigationsNew {
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.investigationsTicker .investigationsLink {
+    display: block;
+    min-width: 13px;
+    height: 13px;
+    line-height: 13px;
+    padding: 2px 3px;
+    text-align: center;
+}
+
+.investigationsOld .investigationsLink {
+    color: #666;
+}
+
+.investigationsOld .investigationsLink:hover {
+    color: #1564C2;
+    text-decoration: none;
+}
+
+.investigationsNew {
+    background-color: #e58902;
+    border: 1px solid #e58902;
+}
+
+.investigationsNew .investigationsLink {
+    color: white;
+    font-weight: bold;
+}
+
+.investigationsNew .investigationsLink:hover {
+    color: white;
+}
+
+/*----------- Navigation for 3rd, 4th level ---*/
+
+.simpleTabs .tabs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.simpleTabs .tabs li {
+    float: left;
+    margin: 4px 0 0;
+    padding: 0 2px 0 0;
+    cursor: pointer;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+.simpleTabs .tabs li #restBranchSelector {
+    cursor: auto;
+}
+
+.simpleTabsWithSelector .tabs li {
+    height: 2.1em
+}
+
+.simpleTabs .tabs li.last {
+    padding: 0 4px 0 0;
+}
+
+.simpleTabs .tabs li p {
+    margin: 0;
+    padding: 5px 10px 3px;
+}
+
+.simpleTabs .tabs li.selected {
+    margin: 4px 0 0;
+    padding: 0;
+
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+}
+
+.simpleTabs .tabs li.selected a {
+    position: relative;
+    top: -1px;
+    left: -1px;
+    color: #1f2326;
+    text-decoration: none;
+}
+
+.simpleTabs .tabs li.selected a:link,
+.simpleTabs .tabs li.selected a:hover {
+    padding-bottom: 2px;
+    color: #3f3f3f;
+    text-decoration: none;
+}
+
+.simpleTabs .tabs li span.mandatoryAsterix {
+    font-size: 100%;
+}
+
+.simpleTabs .tabs li p.branchNameSelector {
+    padding-left: 0;
+}
+
+.tabs .branchNameSelector.rest {
+    margin-top: -5px;
+}
+
+.simpleTabs .tabs li p.branchNameSelector #branchNameSelector,
+.simpleTabs .tabs li p.branchNameSelector > span.ufd {
+    position: relative;
+    top: -5px;
+    width: 15em;
+}
+
+.-ufd-teamcity-ui-branchNameSelector {
+    width: 15px !important;
+}
+
+.simpleTabs .tabs li p.branchNameSelector #branchNameSelector input {
+    width: 174px !important;
+}
+
+/*---- table for showing content beside the tabs */
+.tabsTable {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+}
+
+.tabCounter {
+    position: relative;
+    top: -1px;
+    display: inline-block;
+    margin: 0 5px;
+    padding: 0 7px;
+    border-top: 1px solid #D1E0F3;
+    border-bottom: 1px solid #E7F0F9;
+    border-radius: 8px;
+
+    background: #E7F0F9;
+    color: #1564C2;
+
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+}
+
+.tabCounter:empty {
+    visibility: hidden;
+}
+
+.simpleTabs .tabs li.selected .tabCounter {
+    left: -1px;
+    top: -2px;
+    border-top: 1px solid #DDD;
+
+    background: #EFEFEF;
+    color: #1f2326;
+}
+
+/* For when one level of tabs is not enough (Build Log, Dependencies) */
+.subTabs {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.subTabs:empty {
+    margin: 0;
+}
+
+.subTabs .subTabsRight {
+    float: right;
+    border-collapse: collapse;
+}
+
+
+#restBreadcrumbs {
+    display: none;
+    clear: left;
+    float: left;
+    padding: 0;
+    list-style: none;
+    max-width: 70%;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+#restNavigation, #restPageTitle, #restPageDescription {
+    display: none;
+    margin: 0;
+}
+
+#restPageTitle {
+    margin-bottom: 0;
+    margin-top: 10px;
+    font-size: 22px;
+    line-height: 26px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+#restPageTitle .selected {
+    font-size: 22px;
+    vertical-align: middle;
+}
+
+#restPageTitle .selected.buildType,
+#restPageTitle .selected.project {
+    white-space: normal;
+    max-width: 70vw;
+}
+
+#restPageTitle a:not(.error-url) {
+    color: inherit;
+}
+
+#restPageDescription {
+    color: #737577;
+    margin-top: 5px;
+}
+
+#restBreadcrumbs ul {
+    padding-left: 0;
+}
+
+#restNavigation {
+    margin-top: 10px
+}
+
+#restNavigation li {
+    display: inline-block;
+    margin: 0 2px 0 0;
+    padding: 0;
+}
+
+#restNavigation li a {
+    color: #737577;
+}
+
+#restNavigation li a:hover {
+    color: #737577;
+    text-decoration: underline;
+}
+
+#restBreadcrumbs .tc-icon_breadcrumb_slash:after {
+    content: '/';
+    color: #737577;
+    margin-right: 5px;
+    margin-left: 4px;
+    vertical-align: 1px;
+}
+
+#restBreadcrumbs li {
+    margin-left: -3px;
+}
+
+#restBreadcrumbs .contentWrapper {
+    display: inline-block;
+    padding: 0;
+    border-radius: 3px;
+}
+
+#restBreadcrumbs .selected .contentWrapper {
+    color: #1f2326;
+    font-weight: 500;
+}
+
+#restNavigation .contentWrapper a {
+    padding-right: 1px;
+}
+
+#restPageTitle .selected {
+    display: inline-block;
+}
+
+li.main-navigation_branch-name-selector.rest p {
+    padding: 0;
+    width: 220px;
+}
+
+.prefix {
+    color: #737577;
+    padding-right: 10px;
+}
+
+#restBreadcrumbs .contentWrapper i {
+    margin: 0;
+    padding: 0;
+}
+
+#restBreadcrumbs .contentWrapper .iWrapper {
+    margin: -3px 1px -2px -2px;
+    padding: 3px 2px 2px 2px;
+    border-radius: 3px;
+}
+
+#restBreadcrumbs .contentWrapper .iWrapper:hover {
+    background-color: #e8e8e8;
+}
+
+#restPageTitle .contentWrapper .iWrapper {
+    margin: -1px 2px -3px -6px;
+    padding: 1px 3px 3px 6px;
+    border-radius: 3px;
+}
+
+#restPageTitle .contentWrapper .iWrapper:hover {
+    background-color: #e8e8e8;
+}
+
+#restPageTitle i.itemSeverity.tc-icon {
+    width: 15px;
+    height: 15px;
+}
+
+#restPageTitle .healthItemIndicator {
+    height: 15px;
+    vertical-align: middle;
+}
+
+.healthItemIndicator .warningIcon {
+    margin-left: 0.3em;
+}
+
+#restPageTitle .healthItemIndicator i.itemSeverity {
+    vertical-align: baseline;
+    font-size: 13px;
+    line-height: 13px;
+    width: 0.8em;
+}
+
+#restNavigation .noIconLink {
+    margin-left: 4px;
+}
+
+.branchNameSelector_placeholder {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    border: 1px solid lightgray;
+    padding: 0;
+    border-radius: 3px;
+}
+
+.branchNameSelector_placeholder.minimalistic {
+    background-color: #d4edff;
+    border: none;
+    width: 99%;
+    height: 1.8em;
+    font-size: 13px;
+    padding-top: 1px;
+    box-sizing: border-box;
+}
+
+.branchNameSelector_placeholder input {
+    border: none;
+    background-color: transparent;
+    width: 83%;
+    padding-left: 4px;
+}
+
+.branchNameSelector_placeholder.minimalistic .branch {
+    top: -2.5px;
+    left: 7px;
+}
+
+.branchNameSelector_placeholder.minimalistic .branch.loading {
+    left: 2.5px;
+    top: -1.5px;
+}
+
+#restBranchSelector .minimalistic {
+    display: inline-block;
+    width: 100%;
+    vertical-align: -7px;
+}
+
+#restBranchSelector .minimalistic input {
+    vertical-align: top;
+    background-color: #d4edff;
+    border: none;
+    border-radius: 3px;
+    padding-left: 24px;
+    height: 1.8em;
+    line-height: 1.8em;
+}
+
+#restBranchSelector .minimalistic search-input.search-panel {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+#restBranchSelector .minimalistic .it.branch {
+    top: 4px;
+}
+
+#restBranchSelector .minimalistic .it.itr {
+    top: 3px;
+    right: 2px;
+}
+
+#restBranchSelector .minimalistic .dropdown-content {
+    font-size: 13px;
+    padding: 0 0 0 10px;
+    border: 1px solid lightgray;
+    margin-top: -3px;
+}
+
+#restBranchSelector .minimalistic .node.helper {
+    margin-left: -8px;
+}
+
+.branchSearchWrapper {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 4px;
+}
+
+ul.tabs i.tc-icon_attention {
+    margin-left: -18px;
+    margin-right: 2px;
+}
+
+.experimental-ui-toggle {
+    float: left;
+    margin-right: 16px;
+}
+
+.usernamePopup .pc__label {
+    margin-left: 4px;
+}

@@ -65,7 +65,22 @@ The SAML authentication sequence is a following:
  mvn tc-sdk:start
  ```
  
- ...And compile+deploy the plugin 
+ ...Compile+package the plugin (note that it will also build and package Vue.js part of the plugin)
  ```bash
  mvn package 
  ```
+
+...Deploy it
+```bash
+mvn tc-sdk:reload
+```
+
+### Admin UI Development with Vue
+
+The plugin's admin UI is built using Vue.js framework with Typescript and therefore supports standard Vue-cli-based toolchain.  The Vue part is located in the [vue/admin-ui](./saml-authentication-server/src/main/vue/admin-ui) sub-folder of the plugin and contains it's own package.json file with all the needed dependencies and basic build commands. 
+
+To start the built-in Vue server just use
+```bash
+npm run serve 
+```
+And navigate to http://localhost:8080 (to see the admin UI as a standalone controls) or http://localhost:8080/#/demo - to see it in the Teamcity-like design.

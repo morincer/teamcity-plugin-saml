@@ -1,0 +1,609 @@
+@import url("./settingsTable.css");
+@import url("./vcsTable.css");
+
+.admin-ui:not(.admin-ui_old) #bodyWrapper:before {
+    background: none;
+}
+
+.admin-ui:not(.admin-ui_old) #mainContent {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.admin-ui:not(.admin-ui_old) #content {
+    margin-top: 0;
+}
+
+.admin-ui:not(.admin-ui_old) #topWrapper.with-border {
+    border-bottom: 1px solid #dfe5eb;
+}
+
+.admin-ui:not(.admin-ui_old) #globalWarningsWrapper .tabsTable td {
+    padding: 0;
+}
+
+.admin-ui:not(.admin-ui_old) #globalWarningsWrapper .attentionComment:first-of-type,
+.admin-ui:not(.admin-ui_old) #globalWarningsWrapper .attentionRed:first-of-type {
+    margin-top: 0;
+}
+
+.admin-ui:not(.admin-ui_old) #globalWarningsWrapper .attentionComment:last-of-type,
+.admin-ui:not(.admin-ui_old) #globalWarningsWrapper .attentionRed:last-of-type {
+    margin-bottom: 10px;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-content #restNavigation {
+    display: none !important;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-content #restPageTitle {
+    margin-top: 0;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-content #restBreadcrumbs {
+    margin-bottom: 12px;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-content .quickLinks {
+    margin: 0;
+}
+
+.admin-ui:not(.admin-ui_old) #topWrapper #breadcrumbsWrapper {
+    padding: 0 32px 8px;
+}
+
+.admin-ui:not(.admin-ui_old) #adminBreadcrumbsWrapper .fixedWidth {
+    padding: 0;
+    min-width: 644px; /* 960px - widthOfLeftPanel(252) - paddingsOfContentBox(64px) */
+    max-width: 1284px; /* 1600px - widthOfLeftPanel(252) - paddingsOfContentBox(64px) */
+}
+
+#all-projects {
+    margin-top: 1em;
+}
+
+#all-projects .expand_collapse {
+    margin-bottom: 1em;
+}
+
+.admin-container h2 {
+    width: 100%;
+    padding-top: 10px;
+    padding-right: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.admin-container h2.noBorder {
+    padding-top: 0;
+    border: none;
+}
+
+p.sectionDescription {
+    margin: 0 0 1em;
+    padding: 0;
+
+    font-style: italic;
+}
+
+#content {
+    margin-top: 1em;
+}
+
+td.copy,
+td.move {
+    width: 5%;
+    text-align: center;
+    font-size: 70%;
+    border-left: 1px solid #ccc;
+}
+
+p.createProject {
+    margin-top: 0;
+}
+
+tr.buildConfigurationRow td.addBuildConfiguration {
+    border-right: none;
+}
+
+table.settings td {
+    padding-left: 1em;
+    border-right: 1px solid #ccc;
+}
+
+table.settings td.edit {
+    padding-left: .5em;
+}
+
+table.settings th.name,
+table.settings th.runner {
+    background-color: #f5f5f5;
+    width: auto;
+    padding-left: 1em;
+    border-right: 1px solid #ccc;
+    text-align: left;
+    font-size: 90%;
+}
+
+table.settings th.usedIn {
+    width: 25%;
+}
+
+table.settings th.vcsRootScope {
+    width: 15%;
+}
+
+/* Project hierarchy tree-table */
+.projectHierarchy .hl {
+    background: #FF0;
+}
+
+.configurationSection #subprojects,
+.configurationSection #configurations,
+.configurationSection #templates {
+    margin-top: 10px;
+}
+
+.vcsRootsSection,
+.errorSection,
+.templatesSection {
+    background-color: #f5f5f5;
+    margin-top: 0.5em;
+    padding: 3px;
+}
+
+.vcsRootsSection .attentionComment,
+.templatesSection .attentionComment {
+    background-color: #ffffcc;
+    border: none;
+}
+
+.vcsRootsSection ul,
+.templatesSection ul {
+    margin: 0;
+    padding: 0 0 0 0.5em;
+    list-style: none;
+}
+
+#copyProjectFormDialog.wide,
+#regenerateFormDialog {
+    width: 55em;
+}
+
+#copyBuildTypeFormDialog label, #copyTemplateFormDialog label {
+    width: 8.5em;
+    padding-right: 2em;
+}
+
+#generateTokenFormDialog {
+    width: 45em;
+}
+
+#generateTokenFormDialog label {
+    width: 8em;
+}
+
+#generateTokenFormDialog .mono {
+    margin-left: .5em;
+    margin-top: .5em;
+}
+
+#moveProjectFormDialog label {
+    display: inline-block;
+    width: 9em;
+    line-height: 2em;
+    white-space: nowrap;
+}
+
+#moveProjectFormDialog table {
+    width: 100%;
+}
+
+span.templateUsage {
+    max-width: 60%;
+    float: right;
+    text-align: right;
+}
+
+/* sidebar */
+
+#admin-container {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.admin-sidebar,
+.admin-content {
+    vertical-align: top;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-content {
+    padding: 24px 32px 24px;
+}
+
+.admin-sidebar {
+    min-width: 16%;
+    width: 204px;
+    padding: 0 20px 10px 0;
+    box-sizing: content-box;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar {
+    min-width: 16%;
+    width: 252px;
+    position: relative;
+    background: #f7f9fa;
+    padding: 0 0 16px;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar.compact {
+    padding: 24px 0;
+}
+
+.admin-ui:not(.admin-ui_old) .user-profile.admin-sidebar.compact {
+    padding-left: 0;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .usefulLinks {
+    margin-left: 32px;
+    max-width: 220px;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-menu__bg {
+    background: #f7f9fa;
+    width: 100vw;
+    min-height: 50vh;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    z-index: -1;
+    top: 0;
+    box-shadow: 0 50vh #f7f9fa;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-menu__bg:after {
+    content: '';
+    display: block;
+    position: absolute;
+    min-height: 50vh;
+    height: 100%;
+    border-right: none;
+    box-shadow: 0px 50vh 0px 0px #DFE5EB;
+    background: #DFE5EB;
+    right: -1px;
+    width: 1px;
+}
+
+.admin-sidebar .item,
+.admin-sidebar .category {
+    padding: 0.2em 0;
+}
+
+.admin-sidebar .category:first-child {
+    padding-top: 0;
+}
+
+.admin-sidebar .item {
+    max-width: 240px;
+    padding-left: 20px;
+    white-space: nowrap;
+}
+
+.admin-sidebar .item.active {
+    background: #E9F3FD;
+    font-weight: bold;
+}
+
+.admin-sidebar .item:hover {
+    background: #E9F3FD;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .item:hover {
+    background: none;
+}
+
+.admin-sidebar .item a {
+    display: block;
+    text-decoration: none;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .item a:hover {
+    text-decoration: underline;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .category {
+    margin-top: 24px;
+    color: #737577;
+}
+
+.admin-ui:not(.admin-ui_old).admin-ui:not(.admin-ui_old) .admin-sidebar .item,
+.admin-ui:not(.admin-ui_old) .user-profile.admin-sidebar .item,
+.admin-ui:not(.admin-ui_old).admin-ui:not(.admin-ui_old) .admin-sidebar .category,
+.admin-ui:not(.admin-ui_old) .admin-sidebar.compact #projectTabsContainer .tabs li,
+.admin-ui:not(.admin-ui_old) .admin-sidebar.compact #buildTypeTabsContainer .tabs li {
+    padding-left: 40px;
+    margin-left: 0;
+}
+
+.admin-ui:not(.admin-ui_old).admin-ui:not(.admin-ui_old) .admin-sidebar .category {
+    padding-left: 32px;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .item.active a,
+.admin-ui:not(.admin-ui_old) .admin-sidebar .item.active:hover a,
+.admin-ui:not(.admin-ui_old) #projectTabsContainer .tabs li.selected a,
+.admin-ui:not(.admin-ui_old) #buildTypeTabsContainer .tabs li.selected a,
+.admin-ui:not(.admin-ui_old) #projectTabsContainer .tabs li.selected .tabCounter,
+.admin-ui:not(.admin-ui_old) #buildTypeTabsContainer .tabs li.selected .tabCounter {
+    color: #000;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .tabs li p {
+    display: inline-flex;
+    align-items: baseline;
+    width: 100%;
+    max-width: 100%;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .tabs li p > i {
+    align-self: center;
+}
+
+.admin-ui:not(.admin-ui_old) .admin-sidebar .tabs li p a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-sidebar .stepLink {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 1px;
+}
+
+.admin-sidebar .item + .category {
+    margin-top: 10px;
+}
+
+.admin-sidebar .usefulLinks {
+    max-width: 240px;
+}
+
+.admin-sidebar .usefulLinks .pc {
+    display: inline-block;
+}
+
+.admin-sidebar .usefulLinks .pc .pc__label {
+    white-space: normal;
+}
+
+.admin-sidebar #projectTabsContainer ul.tabs, .admin-sidebar #buildTypeTabsContainer ul.tabs {
+    margin-bottom: 40px;
+}
+
+/* copy project */
+
+table.copyProject {
+    width: 100%;
+}
+
+.copyProject th {
+    width: 8em;
+    text-align: left;
+    font-weight: normal;
+    vertical-align: top;
+}
+
+.copyProject .subprojects th {
+    vertical-align: top;
+}
+
+.copyProject .subprojects textarea {
+    width: 100%;
+    height: 8em;
+}
+
+.copyProject .subprojects textarea.gt-5 {
+    height: 12em;
+}
+
+.copyProject .subprojects textarea.gt-10 {
+    height: 16em;
+}
+
+.copyProject .subprojects textarea.gt-15 {
+    height: 20em;
+}
+
+.copyProject label {
+    float: none;
+    width: auto;
+    white-space: nowrap;
+}
+
+.copyProject input {
+    width: 100%;
+}
+
+.copyProject .error {
+    margin: 0;
+}
+
+
+.configurationSection .shift {
+    margin-left: 1em;
+}
+
+.configurationSection .runner {
+    vertical-align: top;
+}
+
+.configurationSection div.shift {
+    display: inline-block;
+}
+
+a.regenerate {
+    margin-left: 0.5em;
+}
+
+.copyProject a.regenerate {
+    float: right;
+}
+
+/* Regenerate dialog */
+
+table.regenerate th {
+    width: 6em;
+}
+
+.regenerate input {
+    width: 21em;
+}
+
+/* Common style for E-mail header in tables with users */
+.allEmails {
+    float: left;
+    margin-top: 3px;
+    margin-right: 3px;
+
+}
+
+div.nextStepHint {
+    padding: 1em;
+    background-color: #E9F3FD;
+}
+
+.nextStepHint p.sectionDescription {
+    font-style: normal;
+}
+
+/* Parameters table */
+
+table.parametersTable {
+    width: 100%;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+table.parametersTable th {
+    background-color: #f5f5f5;
+    text-align: left;
+    font-weight: normal;
+    border: 1px solid #ccc;
+}
+
+table.parametersTable th,
+table.parametersTable td {
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: .3em 0 .3em 0.3em;
+    vertical-align: top;
+}
+
+table.parametersTable td.edit {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-right: none;
+    width: 4%;
+}
+
+table.settings td.beforeActions, table.parametersTable td.beforeActions {
+    border-right: none;
+}
+
+table.parametersTable tr td.contentDisabled {
+    color: #999;
+}
+
+table.parametersTable tr td.contentDisabled * {
+    color: #999;
+}
+
+table.parametersTable .actionIconWrapper .actionIcon {
+    color: #0f5b99de;
+}
+
+.admin-content .section {
+    clear: both;
+    margin-top: 40px;
+}
+
+.admin-content .section.noMargin {
+    margin-top: 0;
+}
+
+.admin-content .section.smallMargin {
+    margin-top: 2em;
+}
+
+.admin-content .section .grayNote {
+    margin-bottom: 10px;
+}
+
+.buildTypeContent .parametersTable td,
+.buildTypeContent .parametersTable th,
+.projectContent .parametersTable td,
+.projectContent .parametersTable th {
+    padding: 5px 10px;
+}
+
+.tc-icon_folders.tc-icon_folders_insert-artifacts {
+    position: absolute;
+    right: -4px;
+    top: 1px;
+    cursor: pointer;
+}
+
+textarea#artifactPaths {
+    white-space: pre;
+    overflow: auto;
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
+
+#maxBuilds {
+    width: 4em;
+    font-size: 90%;
+}
+
+.admin-sidebar.compact .item {
+    max-width: 240px;
+    padding-left: 5px;
+    margin-left: -5px;
+}
+
+.admin-sidebar.compact .category:first-child {
+    display: none;
+}
+
+.admin-sidebar.compact #projectTabsContainer .tabs li, .admin-sidebar.compact #buildTypeTabsContainer .tabs li {
+    padding-left: 5px;
+    margin-left: -5px;
+}
+
+.admin-ui:not(.admin-ui_old) #footer .footerMainContainer {
+    margin-top: 0;
+    border-top-color: #DFE5EB;
+}
+
+.admin-ui:not(.admin-ui_old) #editProjectForm .runnerFormTable tr:first-child th,
+.admin-ui:not(.admin-ui_old) #editProjectForm .runnerFormTable tr:first-child td {
+    padding: 0 8px 0 8px;
+}
+
+.admin-ui:not(.admin-ui_old) .headerNote {
+    margin-top: -10px;
+}
+
+.artifactsTreePopup {
+    padding: 16px 32px 24px;
+}
+
+.artifactsTreeWrapper {
+    margin: 8px -32px 0;
+}

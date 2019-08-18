@@ -1,0 +1,8 @@
+/* Bottom-sticking footer */
+html, body {
+    height: 100%;
+}
+
+#mainContent {
+    padding-bottom: 8em;
+}
