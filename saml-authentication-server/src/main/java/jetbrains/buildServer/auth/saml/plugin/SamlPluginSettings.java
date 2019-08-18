@@ -17,4 +17,5 @@ public class SamlPluginSettings {
 
     @NotEmpty(message = "X509 certificate is mandatory")
     private String publicCertificate;
+    private Boolean hideLoginForm;
 }
