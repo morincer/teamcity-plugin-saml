@@ -1,33 +1,18 @@
-* Implement MVP SAML auth plugin with Okta
-    [x] (FTR) "Login with SAML" button
-    [x] (FTR) Plugin settings
-    [x] (FTR) Login with SAML controller and redirect to Okta login
-    [x] (FTR) SAML callback logic
-    [ ] (BUG/FTR) Deal with CORS / HTTPS / Whatever is causing the CORS denial
-        The issue is the by some reason the Origin:null in the incoming request -
-        make sure to understand why it happens and how to bypass it.
-    [x] (BUG) Multiple redirects when calling the login button
-    [x] (IMP) Migrate Spring configuration to code-based config
-    [x] (BUG?)  WARN - .InstantiationStrategySelector - Spring selected non-public constructor to create instance
+* Current
+    [ ] (FTR) Allow creating new users by login
+    [ ] (FTR) Import metadata from URL
 
 * Extend the implementation
-    [x] Nice UI
-        [x] Center Login with SSO button
     [ ] Settings page
         [ ] (FTR) SAML settings
             [ ] (FTR) SAML SP Entity ID - generate or update
-        [ ] (FTR) "loging with SAML" button name
-        [ ] AJAX-based saving and validation
-        [ ] OK message on success
         [ ] Profile pre-loading
         [ ] (FTR) Okta
         [ ] (FTR) Oneclick
         [ ] (???) Other
     [ ] (???) Agents authentication
-    [ ] Import metadata from URL
     [ ] Import metadata from Text
     [ ] Add meaningfull logging
-    [ ] (FTR) Allow creating new users by login
     [ ] (FTR) Allow configuring fields for the name ID lookup
     [ ] (FTR) Implement multi-tenancy
         [ ] (IMP) Move settings to scheme set up
