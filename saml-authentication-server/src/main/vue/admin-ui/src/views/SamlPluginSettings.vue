@@ -6,13 +6,21 @@
         <RunnerForm>
             <GroupingHeader>Identity Provider Configuration</GroupingHeader>
             <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
-            <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required :value="settings.issuerUrl"/>
-            <RunnerFormInput label="X509 Certificate" textarea required :value="settings.publicCertificate" />
+            <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
+            <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
 
             <GroupingHeader>Service Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Entity ID (Audience)" required :value="settings.entityId"/>
+            <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"/>
             <RunnerFormRow>
                 <template v-slot:label>Single Sign-On URL (Recepient)</template>
+                <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
+            </RunnerFormRow>
+
+            <GroupingHeader>Misc</GroupingHeader>
+            <RunnerFormInput label="Login Button Label" required v-model="settings.ssoLoginButtonName"/>
+            <RunnerFormRow>
+                <template v-slot:label>Hide Login Form</template>
+                <template v-slot:content><input type="checkbox" v-model="settings.hideLoginForm"/></template>
             </RunnerFormRow>
 
             <template v-slot:actions>

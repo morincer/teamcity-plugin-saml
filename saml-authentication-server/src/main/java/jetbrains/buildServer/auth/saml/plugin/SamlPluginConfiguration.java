@@ -40,8 +40,8 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlPluginAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage) {
-        return new SamlPluginAdminPage(pagePlaces, descriptor, settingsStorage);
+    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage) {
+        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage);
     }
 
     @Bean
@@ -49,11 +49,6 @@ public class SamlPluginConfiguration {
         var samlPluginSettingsStorage = new SamlPluginSettingsStorage(serverPaths);
         samlPluginSettingsStorage.init();
         return samlPluginSettingsStorage;
-    }
-
-    @Bean
-    SamlPluginAdminPageController samlPluginAdminPageController(SamlPluginSettingsStorage settingsStorage, WebControllerManager webControllerManager) {
-        return new SamlPluginAdminPageController(settingsStorage, webControllerManager);
     }
 
     @Bean

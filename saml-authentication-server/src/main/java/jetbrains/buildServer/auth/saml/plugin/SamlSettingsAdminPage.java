@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Map;
 
-public class SamlPluginAdminPage extends AdminPage {
+public class SamlSettingsAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
     private final Logger LOG = Loggers.SERVER;
     private SamlPluginSettings pluginSettings;
     private SamlPluginSettingsStorage settingsStorage;
 
-    protected SamlPluginAdminPage(@NotNull PagePlaces pagePlaces,
-                                  @NotNull PluginDescriptor pluginDescriptor,
-                                  @NotNull SamlPluginSettingsStorage settingsStorage) {
+    protected SamlSettingsAdminPage(@NotNull PagePlaces pagePlaces,
+                                    @NotNull PluginDescriptor pluginDescriptor,
+                                    @NotNull SamlPluginSettingsStorage settingsStorage) {
         super(pagePlaces);
         this.settingsStorage = settingsStorage;
         this.pluginDescriptor = pluginDescriptor;

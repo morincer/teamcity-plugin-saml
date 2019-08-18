@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.io.IOException;
+import java.net.URL;
 
 public class SamlSettingsJsonController extends BaseJsonController {
 
@@ -39,7 +40,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
             }
 
             settingsStorage.save(settings);
-            return JsonActionResult.ok("Settings saved...");
+            return JsonActionResult.ok(settings);
 
         } catch (Exception e) {
             return JsonActionResult.fail(e);
@@ -49,6 +50,8 @@ public class SamlSettingsJsonController extends BaseJsonController {
     private JsonActionResult<?> getSettings(HttpServletRequest request) {
         try {
             var samlPluginSettings = settingsStorage.load();
+            var audienceUrl = new URL(new URL(request.getRequestURL().toString()), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+            samlPluginSettings.setSsoCallbackUrl(audienceUrl.toString());
             return JsonActionResult.ok(samlPluginSettings);
         } catch (IOException e) {
             return JsonActionResult.fail(e);

@@ -13,10 +13,13 @@ export interface SamlSettings {
     entityId?: string;
     ssoEndpoint?: string;
     publicCertificate?: string;
+    ssoCallbackUrl? : string;
+    hideLoginForm?: boolean;
+    ssoLoginButtonName? : string;
 }
 
 export interface ISettingsApiService {
     get(): Promise<ApiCallResult<SamlSettings>>;
-    save(settings: SamlSettings): Promise<ApiCallResult<string>>;
+    save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>>;
 }
 

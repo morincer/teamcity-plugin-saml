@@ -17,5 +17,11 @@ public class SamlPluginSettings {
 
     @NotEmpty(message = "X509 certificate is mandatory")
     private String publicCertificate;
+
+    private String ssoCallbackUrl; // Used for UI-purposes only - calculated automatically
+
     private Boolean hideLoginForm;
+
+    @NotEmpty(message = "Login button name is mandatory")
+    private String ssoLoginButtonName = "Login with SSO";
 }
