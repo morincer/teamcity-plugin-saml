@@ -20,7 +20,7 @@ public class SamlPluginSettings {
 
     private String ssoCallbackUrl; // Used for UI-purposes only - calculated automatically
 
-    private Boolean hideLoginForm;
+    private boolean hideLoginForm;
 
     @NotEmpty(message = "Login button name is mandatory")
     private String ssoLoginButtonName = "Login with SSO";
