@@ -14,4 +14,5 @@ public interface SamlPluginConstants {
 
     AuthPropertyKey ID_USER_PROPERTY_KEY = new AuthPropertyKey("HTTP", "teamcity-saml-id", "SAML ID");
 
+    String SAML_RESPONSE_REQUEST_PARAMETER = "SAMLResponse";
 }

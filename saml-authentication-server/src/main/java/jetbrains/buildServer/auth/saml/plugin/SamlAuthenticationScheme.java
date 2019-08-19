@@ -8,11 +8,9 @@ import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationRes
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
 import jetbrains.buildServer.log.Loggers;
-import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.serverSide.auth.ServerPrincipal;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
-import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -32,14 +30,10 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
 
     public SamlAuthenticationScheme(
-            final LoginConfiguration loginConfiguration,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
             @NotNull UserModel userModel) {
-
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
-        loginConfiguration.registerAuthModuleType(this);
-        LOG.info("Registered SAML-based authentication scheme");
     }
 
     @NotNull
@@ -62,7 +56,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     @NotNull
     @Override
     public HttpAuthenticationResult processAuthenticationRequest(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Map<String, String> properties) throws IOException {
-        var saml = request.getParameter("SAMLResponse");
+        var saml = request.getParameter(SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER);
         if (StringUtil.isEmpty(saml)) {
             return HttpAuthenticationResult.notApplicable();
         }

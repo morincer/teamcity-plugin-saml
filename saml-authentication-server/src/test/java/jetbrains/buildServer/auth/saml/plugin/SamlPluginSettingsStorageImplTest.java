@@ -11,16 +11,16 @@ import java.util.UUID;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 
-public class SamlPluginSettingsStorageTest {
+public class SamlPluginSettingsStorageImplTest {
 
-    private SamlPluginSettingsStorage storage;
+    private SamlPluginSettingsStorageImpl storage;
 
     @Before
     public void setUp() throws Exception {
         var tempFile = File.createTempFile("saml-plugin-settings", "test.json");
         tempFile.deleteOnExit();
 
-        this.storage = new SamlPluginSettingsStorage(tempFile.toPath());
+        this.storage = new SamlPluginSettingsStorageImpl(tempFile.toPath());
         this.storage.init();
     }
 

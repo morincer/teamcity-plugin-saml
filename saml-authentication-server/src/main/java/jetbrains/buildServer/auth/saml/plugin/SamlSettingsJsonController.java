@@ -1,7 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import jetbrains.buildServer.controllers.json.BaseJsonController;
-import jetbrains.buildServer.controllers.json.JsonActionError;
 import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.net.URL;
 
