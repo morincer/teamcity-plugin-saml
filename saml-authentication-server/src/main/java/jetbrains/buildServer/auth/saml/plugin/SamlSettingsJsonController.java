@@ -1,17 +1,23 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import jetbrains.buildServer.controllers.json.BaseJsonController;
+import jetbrains.buildServer.controllers.json.JsonActionError;
 import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
+import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.StringUtils;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Validation;
 import java.io.IOException;
 import java.net.URL;
+import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
 
@@ -31,7 +37,14 @@ public class SamlSettingsJsonController extends BaseJsonController {
             var settings = bindFromRequest(request, SamlPluginSettings.class);
 
             var validator = Validation.buildDefaultValidatorFactory().getValidator();
-            var errors = validator.validate(settings);
+
+            var constraintViolations = validator.validate(settings);
+
+            var errors = constraintViolations.stream().map(cv -> new JsonActionError(cv.getMessage())).collect(Collectors.toList());
+
+            if (settings.isLimitToPostfixes() && StringUtil.isEmpty(settings.getAllowedPostfixes())) {
+                errors.add(new JsonActionError("You must specify allowed postfixes"));
+            }
 
             if (errors.size() > 0) {
                 return JsonActionResult.fail(errors);

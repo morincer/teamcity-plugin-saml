@@ -17,16 +17,15 @@
             </RunnerFormRow>
 
             <GroupingHeader>Users Mapping and Provisioning</GroupingHeader>
-            <RunnerFormInput label="User Name Attribute" required v-model="settings.usernameAttribute"/>
             <RunnerFormRow>
                 <template v-slot:label>Create users automatically</template>
                 <template v-slot:content><input type="checkbox" v-model="settings.createUsersAutomatically"></template>
             </RunnerFormRow>
             <RunnerFormRow v-if="settings.createUsersAutomatically">
-                <template v-slot:label>Limit to specific e-mail domains</template>
+                <template v-slot:label>Limit to specific username postfixes</template>
                 <template v-slot:content>
-                    <input type="checkbox" v-model="settings.limitToEmailDomains">
-                    <TextInput style="margin-left: 10px" v-model="settings.allowedEmailDomains" v-if="settings.limitToEmailDomains"/>
+                    <input type="checkbox" v-model="settings.limitToPostfixes">
+                    <TextInput style="margin-left: 10px" v-model="settings.allowedPostfixes" v-if="settings.limitToPostfixes"/>
                 </template>
             </RunnerFormRow>
 

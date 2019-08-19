@@ -13,14 +13,13 @@ export interface SamlSettings {
     entityId?: string;
     ssoEndpoint?: string;
     publicCertificate?: string;
-    ssoCallbackUrl? : string;
+    ssoCallbackUrl?: string;
     hideLoginForm?: boolean;
-    ssoLoginButtonName? : string;
+    ssoLoginButtonName?: string;
 
-    usernameAttribute? : string;
-    createUsersAutomatically? : boolean;
-    limitToEmailDomains? : boolean;
-    allowedEmailDomains? : string;
+    createUsersAutomatically?: boolean;
+    limitToPostfixes?: boolean;
+    allowedPostfixes?: string;
 }
 
 export interface ISettingsApiService {

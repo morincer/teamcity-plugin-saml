@@ -9,6 +9,7 @@ import lombok.var;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,10 +26,17 @@ public class JsonActionResult<T> {
         return jsonActionResult;
     }
 
+
     public static JsonActionResult fail(Throwable e) {
         var jsonActionResult = new JsonActionResult();
         Loggers.SERVER.error(e);
         jsonActionResult.errors = new JsonActionError[] { new JsonActionError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage()) };
+        return jsonActionResult;
+    }
+
+    public static JsonActionResult fail(List<JsonActionError> errors) {
+        var jsonActionResult = new JsonActionResult();
+        jsonActionResult.errors = errors.toArray(new JsonActionError[errors.size()]);
         return jsonActionResult;
     }
 
