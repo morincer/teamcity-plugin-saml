@@ -9,11 +9,13 @@ import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSch
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.auth.ServerPrincipal;
+import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,8 +63,10 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             return HttpAuthenticationResult.notApplicable();
         }
         try {
-            var settings = buildSettings(new URL(request.getRequestURL().toString()));
-            var auth = new Auth(settings, request, response);
+            var settings = this.settingsStorage.load();
+
+            var saml2Settings = buildSettings(new URL(request.getRequestURL().toString()));
+            var auth = new Auth(saml2Settings, request, response);
 
             auth.processResponse();
 
@@ -70,25 +74,60 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request is not authenticated due to errors: " + String.join(", ", auth.getErrors())));
             }
 
-            var user = userModel.findUserAccount(null, auth.getNameId());
+            String username = auth.getNameId();
 
-            if (user == null) {
-                user = userModel.findUserByUsername(auth.getNameId(), SamlPluginConstants.ID_USER_PROPERTY_KEY);
+            SUser user = null;
+
+            if (StringUtils.isEmpty(username)) {
+                LOG.error("Username is empty - authentication stops");
+            } else {
+                user = userModel.findUserAccount(null, username);
+
+                if (user == null) {
+                    user = userModel.findUserByUsername(username, SamlPluginConstants.ID_USER_PROPERTY_KEY);
+                }
+
+                if (user == null && settings.isCreateUsersAutomatically()) {
+                    try {
+                        if (!settings.isLimitToPostfixes() || matchPostfixes(username, settings.getAllowedPostfixes())) {
+                            LOG.info(String.format("Creating new user %s from SAML request", username));
+                            user = userModel.createUserAccount(null, username);
+                            if (user == null) {
+                                LOG.warn(String.format("New user %s was not created due to unknown reason", username));
+                            }
+                        }
+                    } catch (Exception e) {
+                        LOG.error(String.format("Failed to create new user with username %s: %s", username, e.getMessage()), e);
+                    }
+                }
             }
 
             if (user == null) {
-                return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", auth.getNameId(), SamlPluginConstants.ID_USER_PROPERTY_KEY));
+                return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", username, SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
 
             LOG.info(String.format("SAML request authenticated for user %s", user.getName()));
 
             return HttpAuthenticationResult.authenticated(
-                    new ServerPrincipal(user.getRealm(), user.getUsername(), null, false, new HashMap<>()),
+                    new ServerPrincipal(user.getRealm(), user.getUsername(), null, settings.isCreateUsersAutomatically(), new HashMap<>()),
                     true).withRedirect("/");
         } catch (Exception e) {
             LOG.error(e);
             return sendUnauthorizedRequest(request, response, String.format("Failed to authenticate request: %s", e.getMessage()));
         }
+    }
+
+    private boolean matchPostfixes(String username, String allowedPostfixes) {
+        var postfixes = allowedPostfixes.split(",");
+        for(var postfix : postfixes) {
+            if (username.trim().endsWith(postfix.trim())) {
+                LOG.info(String.format("Username %s ends with valid postfix %s", username, postfix));
+                return true;
+            }
+        }
+
+        LOG.warn(String.format("No valid postfixes were detected for username %s", username));
+        return false;
     }
 
     private HttpAuthenticationResult sendUnauthorizedRequest(HttpServletRequest request, HttpServletResponse response, String reason) throws IOException {

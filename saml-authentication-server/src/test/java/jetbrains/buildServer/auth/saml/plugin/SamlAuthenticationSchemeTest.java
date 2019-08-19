@@ -31,6 +31,7 @@ public class SamlAuthenticationSchemeTest {
     private InMemorySamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
     private SUser validUser;
+    private SUser newUser;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -45,8 +46,14 @@ public class SamlAuthenticationSchemeTest {
         when(validUser.getUsername()).thenReturn("valid_user");
         when(validUser.getName()).thenReturn("Valid User");
 
+        this.newUser = mock(SUser.class);
+        when(newUser.getUsername()).thenReturn("new_user");
+        when(newUser.getName()).thenReturn("New User");
+
         this.userModel = mock(UserModel.class);
         when(userModel.findUserAccount(null, "valid_user")).thenReturn(validUser);
+        when(userModel.createUserAccount(null, "new_user")).thenReturn(newUser);
+        when(userModel.createUserAccount(null, "new_user@somemail.com")).thenReturn(newUser);
 
         this.scheme = new SamlAuthenticationScheme(settingsStorage, userModel);
     }
@@ -57,7 +64,96 @@ public class SamlAuthenticationSchemeTest {
         var samlResponsePath = "src/test/resources/saml_signed_message.xml";
 
         var callbackUrl = "http://sp.example.com/demo1/index.php?acs";
+        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
 
+        createSettings();
+
+        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
+        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+
+        var parameterMap = new HashMap<String, String[]>();
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        when(request.getParameterMap()).thenReturn(parameterMap);
+        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        var response = mock(HttpServletResponse.class);
+        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+    }
+
+    @Test
+    public void whenCreationOfNewUsersIsAllowedShouldCreateUserForValidClaim() throws IOException {
+        var request = mock(HttpServletRequest.class);
+        var samlResponsePath = "src/test/resources/saml_signed_new_user.xml";
+
+        var callbackUrl = "http://sp.example.com/demo1/index.php?acs";
+        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+
+        createSettings();
+
+        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
+        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+
+        var parameterMap = new HashMap<String, String[]>();
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        when(request.getParameterMap()).thenReturn(parameterMap);
+        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        var response = mock(HttpServletResponse.class);
+
+        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.UNAUTHENTICATED));
+
+        var settings = settingsStorage.load();
+        settings.setCreateUsersAutomatically(true);
+        settingsStorage.save(settings);
+
+        result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+    }
+
+    @Test
+    public void supportsLimitingNewUsersByPostfixes() throws IOException {
+        var request = mock(HttpServletRequest.class);
+        var samlResponsePathNoMail = "src/test/resources/saml_signed_new_user.xml";
+        var samlResponsePathMail = "src/test/resources/saml_signed_new_user_somemail.com.xml";
+
+        var callbackUrl = "http://sp.example.com/demo1/index.php?acs";
+        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+
+        createSettings();
+
+        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
+        var saml = Files.readFile(Paths.get(samlResponsePathNoMail).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+
+        var parameterMap = new HashMap<String, String[]>();
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        when(request.getParameterMap()).thenReturn(parameterMap);
+        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        var response = mock(HttpServletResponse.class);
+
+        var settings = settingsStorage.load();
+        settings.setCreateUsersAutomatically(true);
+        settings.setLimitToPostfixes(true);
+        settings.setAllowedPostfixes("@somemail.com");
+        settingsStorage.save(settings);
+
+        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.UNAUTHENTICATED));
+
+        saml = Files.readFile(Paths.get(samlResponsePathMail).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+    }
+
+    private void createSettings() throws IOException {
         var settings = new SamlPluginSettings();
         settings.setIssuerUrl("http://idp.example.com/metadata.php");
         settings.setSsoEndpoint("http://idp.example.com/metadata.php");
@@ -81,22 +177,5 @@ public class SamlAuthenticationSchemeTest {
                 "-----END CERTIFICATE-----\n");
 
         this.settingsStorage.save(settings);
-
-        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
-        saml = Base64.encode(saml.getBytes());
-
-        var parameterMap = new HashMap<String, String[]>();
-        parameterMap.put("SAMLResponse", new String[] {saml});
-
-        when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getParameter("SAMLResponse")).thenReturn(saml);
-
-        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
-
-        var response = mock(HttpServletResponse.class);
-
-        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
-        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
     }
 }
