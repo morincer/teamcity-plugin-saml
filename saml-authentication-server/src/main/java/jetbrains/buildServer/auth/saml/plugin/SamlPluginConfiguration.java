@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Configuration
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -46,7 +48,8 @@ public class SamlPluginConfiguration {
 
     @Bean
     SamlPluginSettingsStorage samlPluginSettingsStorage(ServerPaths serverPaths) throws IOException {
-        var samlPluginSettingsStorage = new SamlPluginSettingsStorage(serverPaths);
+        var configPath = Paths.get(serverPaths.getConfigDir(), SamlPluginConstants.CONFIG_FILE_NAME);
+        var samlPluginSettingsStorage = new SamlPluginSettingsStorage(configPath);
         samlPluginSettingsStorage.init();
         return samlPluginSettingsStorage;
     }

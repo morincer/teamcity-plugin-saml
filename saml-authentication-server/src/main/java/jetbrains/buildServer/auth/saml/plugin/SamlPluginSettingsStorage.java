@@ -15,10 +15,6 @@ public class SamlPluginSettingsStorage {
     @Getter
     private final Path configPath;
 
-    public SamlPluginSettingsStorage(ServerPaths serverPaths) {
-        this(Paths.get(serverPaths.getConfigDir(), SamlPluginConstants.CONFIG_FILE_NAME));
-    }
-
     public SamlPluginSettingsStorage(Path configPath) {
         this.objectMapper = new ObjectMapper();
         this.configPath = configPath;
