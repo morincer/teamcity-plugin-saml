@@ -20,6 +20,7 @@
             <RunnerFormRow>
                 <template v-slot:label>Create users automatically</template>
                 <template v-slot:content><input type="checkbox" v-model="settings.createUsersAutomatically"></template>
+                <template v-slot:note>If a user name is missing a new user with this name will be created</template>
             </RunnerFormRow>
             <RunnerFormRow v-if="settings.createUsersAutomatically">
                 <template v-slot:label>Limit to specific username postfixes</template>
@@ -27,7 +28,10 @@
                     <input type="checkbox" v-model="settings.limitToPostfixes">
                     <TextInput style="margin-left: 10px" v-model="settings.allowedPostfixes" v-if="settings.limitToPostfixes"/>
                 </template>
+                <template v-slot:note>Users will only be created if their names end with particular postfixes - for example, @mymail.com (provide comma-separated list for multiple postfixes) </template>
             </RunnerFormRow>
+            <RunnerFormInput v-if="settings.createUsersAutomatically" label="Map Name from" note="Fill new user's name from the specified SAML attribute"/>
+            <RunnerFormInput v-if="settings.createUsersAutomatically" label="Map E-Mail from" note="Fill new user's e-mail from the specified SAML attribute"/>
 
             <GroupingHeader>Misc</GroupingHeader>
             <RunnerFormInput label="Login Button Label" required v-model="settings.ssoLoginButtonName"/>
