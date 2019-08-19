@@ -69,6 +69,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         try {
             var settings = buildSettings(new URL(request.getRequestURL().toString()));
             var auth = new Auth(settings, request, response);
+
             auth.processResponse();
 
             if (!auth.isAuthenticated()) {
