@@ -42,8 +42,20 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
             var errors = constraintViolations.stream().map(cv -> new JsonActionError(cv.getMessage())).collect(Collectors.toList());
 
-            if (settings.isLimitToPostfixes() && StringUtil.isEmpty(settings.getAllowedPostfixes())) {
+            if (settings.isCreateUsersAutomatically() && settings.isLimitToPostfixes() && StringUtil.isEmpty(settings.getAllowedPostfixes())) {
                 errors.add(new JsonActionError("You must specify allowed postfixes"));
+            }
+
+            if (settings.isCreateUsersAutomatically()
+                    && settings.getEmailAttributeMapping().getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)
+                    && StringUtil.isEmpty(settings.getEmailAttributeMapping().getCustomAttributeName())) {
+                errors.add(new JsonActionError("You must specify non-empty attribute name for the e-mail attribute mapping"));
+            }
+
+            if (settings.isCreateUsersAutomatically()
+                    && settings.getNameAttributeMapping().getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)
+                    && StringUtil.isEmpty(settings.getNameAttributeMapping().getCustomAttributeName())) {
+                errors.add(new JsonActionError("You must specify non-empty attribute name for the full name attribute mapping"));
             }
 
             if (errors.size() > 0) {
