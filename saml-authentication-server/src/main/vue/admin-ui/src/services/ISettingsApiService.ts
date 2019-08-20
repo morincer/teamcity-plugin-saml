@@ -8,6 +8,17 @@ export interface ApiCallResult<T> {
     result?: T;
 }
 
+export interface SamlAttributeMapping {
+    mappingType : string;
+    customAttributeName?: string
+}
+
+export const SamlAttributeMappingTypes = {
+    None: "none",
+    NameID: "name_id",
+    Other: "other"
+};
+
 export interface SamlSettings {
     issuerUrl?: string;
     entityId?: string;
@@ -20,6 +31,9 @@ export interface SamlSettings {
     createUsersAutomatically?: boolean;
     limitToPostfixes?: boolean;
     allowedPostfixes?: string;
+
+    emailAttributeMapping?: SamlAttributeMapping;
+    nameAttributeMapping?: SamlAttributeMapping;
 }
 
 export interface ISettingsApiService {

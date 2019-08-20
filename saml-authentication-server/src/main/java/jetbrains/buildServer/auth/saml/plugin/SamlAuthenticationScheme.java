@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
@@ -92,6 +93,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                         if (!settings.isLimitToPostfixes() || matchPostfixes(username, settings.getAllowedPostfixes())) {
                             LOG.info(String.format("Creating new user %s from SAML request", username));
                             user = userModel.createUserAccount(null, username);
+
+                            String email = getAttribute(auth, settings.getEmailAttributeMapping());
+                            String fullname = getAttribute(auth, settings.getNameAttributeMapping());
+
+                            LOG.info(String.format("Setting data for new user: username=%s, full name=%s, email=%s", username, fullname, email));
+
+                            user.updateUserAccount(username, fullname, email);
+
                             if (user == null) {
                                 LOG.warn(String.format("New user %s was not created due to unknown reason", username));
                             }
@@ -106,7 +115,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", username, SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
 
-            LOG.info(String.format("SAML request authenticated for user %s", user.getName()));
+            LOG.info(String.format("SAML request authenticated for user %s/%s", user.getUsername(), user.getName()));
 
             return HttpAuthenticationResult.authenticated(
                     new ServerPrincipal(user.getRealm(), user.getUsername(), null, settings.isCreateUsersAutomatically(), new HashMap<>()),
@@ -114,6 +123,28 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         } catch (Exception e) {
             LOG.error(e);
             return sendUnauthorizedRequest(request, response, String.format("Failed to authenticate request: %s", e.getMessage()));
+        }
+    }
+
+    @NotNull
+    private String getAttribute(@NotNull Auth saml, @NotNull SamlAttributeMappingSettings attributeMappingSettings) {
+        switch (attributeMappingSettings.getMappingType()) {
+            case SamlAttributeMappingSettings.TYPE_NONE: return "";
+            case SamlAttributeMappingSettings.TYPE_NAME_ID: return saml.getNameId();
+            case SamlAttributeMappingSettings.TYPE_OTHER:
+                if (StringUtil.isEmpty(attributeMappingSettings.getCustomAttributeName())) {
+                    LOG.warn("Custom attribute name is not set");
+                    return "";
+                }
+
+                var attributeValue = saml.getAttribute(attributeMappingSettings.getCustomAttributeName());
+                if (attributeValue.size() == 0) return "";
+
+                var result = attributeValue.stream().collect(Collectors.joining(", "));
+                return result;
+            default:
+                LOG.warn(String.format("Unknow mapping type: %s", attributeMappingSettings.getMappingType()));
+                return "";
         }
     }
 

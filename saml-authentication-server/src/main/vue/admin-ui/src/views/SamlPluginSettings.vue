@@ -16,7 +16,7 @@
                 <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
             </RunnerFormRow>
 
-            <GroupingHeader>Users Mapping and Provisioning</GroupingHeader>
+            <GroupingHeader>Automatic Users Creation</GroupingHeader>
             <RunnerFormRow>
                 <template v-slot:label>Create users automatically</template>
                 <template v-slot:content><input type="checkbox" v-model="settings.createUsersAutomatically"></template>
@@ -30,8 +30,19 @@
                 </template>
                 <template v-slot:note>Users will only be created if their names end with particular postfixes - for example, @mymail.com (provide comma-separated list for multiple postfixes) </template>
             </RunnerFormRow>
-            <RunnerFormInput v-if="settings.createUsersAutomatically" label="Map Name from" note="Fill new user's name from the specified SAML attribute"/>
-            <RunnerFormInput v-if="settings.createUsersAutomatically" label="Map E-Mail from" note="Fill new user's e-mail from the specified SAML attribute"/>
+
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Map E-mail From</template>
+                <template v-slot:content>
+                    <SamlAttributeSelect v-model="settings.emailAttributeMapping"  />
+                </template>
+            </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Map Full Name From</template>
+                <template v-slot:content>
+                    <SamlAttributeSelect v-model="settings.nameAttributeMapping"  />
+                </template>
+            </RunnerFormRow>
 
             <GroupingHeader>Misc</GroupingHeader>
             <RunnerFormInput label="Login Button Label" required v-model="settings.ssoLoginButtonName"/>
@@ -63,8 +74,10 @@ import TextInput from '@/components/TextInput.vue';
 import ProgressIndicator from '@/components/ProgressIndicator.vue';
 import MessagesBox from '@/components/MessagesBox.vue';
 import {appConfig} from '@/main.dependencies';
+import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
 @Component({ components: {
+        SamlAttributeSelect,
         MessagesBox,
         TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
 export default class SamlPluginSettings extends Vue {
