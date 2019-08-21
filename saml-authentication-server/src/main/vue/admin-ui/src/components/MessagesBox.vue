@@ -20,7 +20,7 @@
     @Component({})
 export default class MessagesBox extends Vue {
     @Prop()
-    public errors: ApiError[] = [];
+    public errors?: ApiError[];
 
     @Prop()
     public successMessage: string = '';
