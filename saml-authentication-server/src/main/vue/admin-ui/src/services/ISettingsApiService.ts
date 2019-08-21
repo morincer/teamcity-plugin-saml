@@ -8,14 +8,32 @@ export interface ApiCallResult<T> {
     result?: T;
 }
 
+export interface SamlAttributeMapping {
+    mappingType : string;
+    customAttributeName?: string
+}
+
+export const SamlAttributeMappingTypes = {
+    None: "none",
+    NameID: "name_id",
+    Other: "other"
+};
+
 export interface SamlSettings {
     issuerUrl?: string;
     entityId?: string;
     ssoEndpoint?: string;
     publicCertificate?: string;
-    ssoCallbackUrl? : string;
+    ssoCallbackUrl?: string;
     hideLoginForm?: boolean;
-    ssoLoginButtonName? : string;
+    ssoLoginButtonName?: string;
+
+    createUsersAutomatically?: boolean;
+    limitToPostfixes?: boolean;
+    allowedPostfixes?: string;
+
+    emailAttributeMapping?: SamlAttributeMapping;
+    nameAttributeMapping?: SamlAttributeMapping;
 }
 
 export interface ISettingsApiService {

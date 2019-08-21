@@ -86,15 +86,6 @@
                 <teamcityDir>../servers/${teamcity-version}</teamcityDir>
                 <pluginPackageName>saml-authentication.zip</pluginPackageName>
             </configuration>
-            <!--<executions>
-                <execution>
-                    <id>deploy</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>reload</goal>
-                    </goals>
-                </execution>
-            </executions>-->
         </plugin>
     </plugins>
   </build>

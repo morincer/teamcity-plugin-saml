@@ -24,4 +24,12 @@ public class SamlPluginSettings {
 
     @NotEmpty(message = "Login button name is mandatory")
     private String ssoLoginButtonName = "Login with SSO";
+
+    private boolean createUsersAutomatically = false;
+    private boolean limitToPostfixes = false;
+    private String allowedPostfixes = null;
+
+    SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
+    SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();
+
 }

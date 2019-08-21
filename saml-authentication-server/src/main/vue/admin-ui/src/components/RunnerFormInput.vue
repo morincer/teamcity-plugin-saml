@@ -8,8 +8,9 @@
                        v-on:input="$emit('input', $event)"
                        :short="short" :textarea="textarea"/>
         </template>
-        <template v-slot:note v-if="errorMessage">
-            <span class="error">{{errorMessage}}</span>
+        <template v-slot:note>
+            <span v-if="note">{{note}}</span>
+            <span class="error" v-if="errorMessage">{{errorMessage}}</span>
         </template>
     </RunnerFormRow>
 </template>
@@ -42,6 +43,9 @@ export default class RunnerFormInput extends Vue {
 
     @Prop([Boolean])
     public required?: Boolean;
+
+    @Prop([String])
+    public note?: string;
 }
 </script>
 

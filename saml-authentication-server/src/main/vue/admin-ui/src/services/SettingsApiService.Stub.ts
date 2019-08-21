@@ -1,4 +1,5 @@
 import {ApiCallResult, SamlSettings, ISettingsApiService} from '@/services/ISettingsApiService';
+import set = Reflect.set;
 
 export default class SettingsApiServiceStub implements ISettingsApiService {
     public get(): Promise<ApiCallResult<SamlSettings>> {
@@ -20,6 +21,12 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
     }
 
     public save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>> {
+
+        if (process.env.NODE_ENV === 'development') {
+            // tslint:disable-next-line:no-console
+            console.log(JSON.stringify(settings, null, 3));
+        }
+
         return new Promise<ApiCallResult<SamlSettings>>((resolve) => {
             setTimeout(() => {
                 if (settings.ssoEndpoint === 'error') {

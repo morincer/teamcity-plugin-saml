@@ -16,6 +16,34 @@
                 <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
             </RunnerFormRow>
 
+            <GroupingHeader>Automatic Users Creation</GroupingHeader>
+            <RunnerFormRow>
+                <template v-slot:label>Create users automatically</template>
+                <template v-slot:content><input type="checkbox" v-model="settings.createUsersAutomatically"></template>
+                <template v-slot:note>If a user name is missing a new user with this name will be created</template>
+            </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Limit to specific username postfixes</template>
+                <template v-slot:content>
+                    <input type="checkbox" v-model="settings.limitToPostfixes">
+                    <TextInput style="margin-left: 10px" v-model="settings.allowedPostfixes" v-if="settings.limitToPostfixes"/>
+                </template>
+                <template v-slot:note>Users will only be created if their names end with particular postfixes - for example, @mymail.com (provide comma-separated list for multiple postfixes) </template>
+            </RunnerFormRow>
+
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Map E-mail From</template>
+                <template v-slot:content>
+                    <SamlAttributeSelect v-model="settings.emailAttributeMapping"  />
+                </template>
+            </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Map Full Name From</template>
+                <template v-slot:content>
+                    <SamlAttributeSelect v-model="settings.nameAttributeMapping"  />
+                </template>
+            </RunnerFormRow>
+
             <GroupingHeader>Misc</GroupingHeader>
             <RunnerFormInput label="Login Button Label" required v-model="settings.ssoLoginButtonName"/>
             <RunnerFormRow>
@@ -46,8 +74,10 @@ import TextInput from '@/components/TextInput.vue';
 import ProgressIndicator from '@/components/ProgressIndicator.vue';
 import MessagesBox from '@/components/MessagesBox.vue';
 import {appConfig} from '@/main.dependencies';
+import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
 @Component({ components: {
+        SamlAttributeSelect,
         MessagesBox,
         TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
 export default class SamlPluginSettings extends Vue {

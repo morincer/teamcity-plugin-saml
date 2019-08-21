@@ -14,14 +14,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @Configuration
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class SamlPluginConfiguration {
 
     @Bean
-    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel) {
-        return new SamlAuthenticationScheme(loginConfiguration, samlPluginSettingsStorage, userModel);
+    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage SamlPluginSettingsStorage, UserModel userModel) {
+        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(SamlPluginSettingsStorage, userModel);
+        loginConfiguration.registerAuthModuleType(samlAuthenticationScheme);
+
+        return samlAuthenticationScheme;
     }
 
     @Bean
@@ -46,7 +50,8 @@ public class SamlPluginConfiguration {
 
     @Bean
     SamlPluginSettingsStorage samlPluginSettingsStorage(ServerPaths serverPaths) throws IOException {
-        var samlPluginSettingsStorage = new SamlPluginSettingsStorage(serverPaths);
+        var configPath = Paths.get(serverPaths.getConfigDir(), SamlPluginConstants.CONFIG_FILE_NAME);
+        var samlPluginSettingsStorage = new SamlPluginSettingsStorageImpl(configPath);
         samlPluginSettingsStorage.init();
         return samlPluginSettingsStorage;
     }

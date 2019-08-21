@@ -57,6 +57,12 @@
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <version>6.0.17.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>commons-validator</groupId>

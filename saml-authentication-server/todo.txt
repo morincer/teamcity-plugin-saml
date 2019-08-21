@@ -18,3 +18,4 @@
         [ ] (IMP) Move settings to scheme set up
     [ ] (IMP) Move strings to constants
     [x] (IMP) Set logger as constant
+    [ ] (FTR) Add other java-saml settings to configuration screen (check https://github.com/onelogin/java-saml)
