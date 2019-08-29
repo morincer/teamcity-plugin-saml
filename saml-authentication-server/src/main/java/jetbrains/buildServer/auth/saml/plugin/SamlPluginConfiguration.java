@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ServerPaths;
@@ -57,7 +58,7 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager) throws IOException {
-        return new SamlSettingsJsonController(samlPluginSettingsStorage(null), controllerManager);
+    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, RootUrlHolder rootUrlHolder) throws IOException {
+        return new SamlSettingsJsonController(samlPluginSettingsStorage(null), controllerManager, rootUrlHolder);
     }
 }
