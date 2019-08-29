@@ -12,7 +12,7 @@
             <GroupingHeader>Service Provider Configuration</GroupingHeader>
             <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"/>
             <RunnerFormRow>
-                <template v-slot:label>Single Sign-On URL (Recepient)</template>
+                <template v-slot:label>Single Sign-On URL (Recipient)</template>
                 <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
             </RunnerFormRow>
 
