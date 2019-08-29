@@ -3,6 +3,7 @@ package jetbrains.buildServer.auth.saml.plugin;
 import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.log.Loggers;
+import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
@@ -14,17 +15,18 @@ import java.util.Map;
 
 public class SamlSettingsAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
+    private LoginConfiguration loginConfiguration;
     private final Logger LOG = Loggers.SERVER;
-    private SamlPluginSettings pluginSettings;
     private SamlPluginSettingsStorage settingsStorage;
 
     protected SamlSettingsAdminPage(@NotNull PagePlaces pagePlaces,
                                     @NotNull PluginDescriptor pluginDescriptor,
-                                    @NotNull SamlPluginSettingsStorage settingsStorage) {
+                                    @NotNull SamlPluginSettingsStorage settingsStorage,
+                                    @NotNull LoginConfiguration loginConfiguration) {
         super(pagePlaces);
         this.settingsStorage = settingsStorage;
         this.pluginDescriptor = pluginDescriptor;
-        this.pluginSettings = pluginSettings;
+        this.loginConfiguration = loginConfiguration;
         setPluginName(SamlPluginConstants.PLUGIN_NAME);
         setIncludeUrl(pluginDescriptor.getPluginResourcesPath("SamlPluginAdminPage.jsp"));
         setTabTitle("SAML Settings");
@@ -53,6 +55,8 @@ public class SamlSettingsAdminPage extends AdminPage {
 
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
-        return super.isAvailable(request) && checkHasGlobalPermission(request, Permission.CHANGE_SERVER_SETTINGS);
+        return super.isAvailable(request)
+                && checkHasGlobalPermission(request, Permission.CHANGE_SERVER_SETTINGS)
+                && loginConfiguration.isAuthModuleConfigured(SamlAuthenticationScheme.class);
     }
 }
