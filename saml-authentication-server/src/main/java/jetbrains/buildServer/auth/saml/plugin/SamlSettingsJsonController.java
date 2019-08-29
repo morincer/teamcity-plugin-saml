@@ -1,9 +1,11 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.controllers.json.BaseJsonController;
 import jetbrains.buildServer.controllers.json.JsonActionError;
 import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
+import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.StringUtils;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
@@ -22,17 +24,20 @@ import java.util.stream.Collectors;
 public class SamlSettingsJsonController extends BaseJsonController {
 
     private SamlPluginSettingsStorage settingsStorage;
+    private RootUrlHolder rootUrlHolder;
 
     protected SamlSettingsJsonController(@NotNull SamlPluginSettingsStorage settingsStorage,
-                                         WebControllerManager controllerManager) {
+                                         WebControllerManager controllerManager,
+                                         RootUrlHolder rootUrlHolder) {
         super("/admin/samlSettingsApi.html", controllerManager);
         this.settingsStorage = settingsStorage;
+        this.rootUrlHolder = rootUrlHolder;
 
         registerAction(JsonControllerAction.forParam("action", "get").using(HttpMethod.GET).run(this::getSettings));
         registerAction(JsonControllerAction.forParam("action", "save").using(HttpMethod.POST).run(this::saveSettings));
     }
 
-    private JsonActionResult<String> saveSettings(HttpServletRequest request) {
+    public JsonActionResult<String> saveSettings(HttpServletRequest request) {
         try {
             var settings = bindFromRequest(request, SamlPluginSettings.class);
 
@@ -70,10 +75,11 @@ public class SamlSettingsJsonController extends BaseJsonController {
         }
     }
 
-    private JsonActionResult<?> getSettings(HttpServletRequest request) {
+    public JsonActionResult<SamlPluginSettings> getSettings(HttpServletRequest request) {
         try {
             var samlPluginSettings = settingsStorage.load();
-            var audienceUrl = new URL(new URL(request.getRequestURL().toString()), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+            String rootUrl = this.rootUrlHolder.getRootUrl();
+            var audienceUrl = new URL(new URL(rootUrl), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
             samlPluginSettings.setSsoCallbackUrl(audienceUrl.toString());
             return JsonActionResult.ok(samlPluginSettings);
         } catch (IOException e) {
