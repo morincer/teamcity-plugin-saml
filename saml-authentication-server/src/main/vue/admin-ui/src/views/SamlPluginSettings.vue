@@ -3,6 +3,8 @@
 
         <MessagesBox :errors="errors" :successMessage="successMsg"/>
 
+        <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">New Connection Wizard</router-link>
+
         <RunnerForm>
             <GroupingHeader>Identity Provider Configuration</GroupingHeader>
             <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
