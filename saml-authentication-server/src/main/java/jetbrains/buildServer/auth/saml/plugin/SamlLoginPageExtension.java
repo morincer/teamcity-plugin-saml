@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PlaceId;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
@@ -16,19 +17,24 @@ public class SamlLoginPageExtension extends SimplePageExtension {
     @NotNull
     private final SamlPluginSettingsStorage settingsStorage;
     private static final String PAGE_EXTENSION_ID = "SamlLogin";
+    private LoginConfiguration loginConfiguration;
 
-    public SamlLoginPageExtension(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, @NotNull final SamlPluginSettingsStorage settingsStorage) {
+    public SamlLoginPageExtension(@NotNull PagePlaces pagePlaces,
+                                  @NotNull PluginDescriptor descriptor,
+                                  @NotNull final SamlPluginSettingsStorage settingsStorage,
+                                  @NotNull LoginConfiguration loginConfiguration) {
         super(pagePlaces,
                 PlaceId.LOGIN_PAGE,
                 PAGE_EXTENSION_ID,
                 descriptor.getPluginResourcesPath("SamlLogin.jsp"));
+        this.loginConfiguration = loginConfiguration;
         register();
         this.settingsStorage = settingsStorage;
     }
 
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
-        return true;
+        return loginConfiguration.isAuthModuleConfigured(SamlAuthenticationScheme.class);
     }
 
     @Override

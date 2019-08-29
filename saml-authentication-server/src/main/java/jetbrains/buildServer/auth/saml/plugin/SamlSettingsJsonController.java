@@ -79,8 +79,13 @@ public class SamlSettingsJsonController extends BaseJsonController {
         try {
             var samlPluginSettings = settingsStorage.load();
             String rootUrl = this.rootUrlHolder.getRootUrl();
-            var audienceUrl = new URL(new URL(rootUrl), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
-            samlPluginSettings.setSsoCallbackUrl(audienceUrl.toString());
+            var callbackUrl = new URL(new URL(rootUrl), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+            samlPluginSettings.setSsoCallbackUrl(callbackUrl.toString());
+
+            if (StringUtil.isEmpty(samlPluginSettings.getEntityId())) {
+                samlPluginSettings.setEntityId(callbackUrl.toString());
+            }
+
             return JsonActionResult.ok(samlPluginSettings);
         } catch (IOException e) {
             return JsonActionResult.fail(e);
