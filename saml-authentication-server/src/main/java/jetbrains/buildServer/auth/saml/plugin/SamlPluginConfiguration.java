@@ -45,8 +45,8 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage) {
-        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage);
+    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, LoginConfiguration loginConfiguration) {
+        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, loginConfiguration);
     }
 
     @Bean
