@@ -1,10 +1,17 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.onelogin.saml2.settings.IdPMetadataParser;
+import com.onelogin.saml2.settings.Metadata;
+import com.onelogin.saml2.settings.Saml2Settings;
+import com.onelogin.saml2.util.Util;
 import jetbrains.buildServer.RootUrlHolder;
+import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.controllers.json.BaseJsonController;
 import jetbrains.buildServer.controllers.json.JsonActionError;
 import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
+import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.StringUtils;
@@ -19,9 +26,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Validation;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Base64;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
+
+    private static Logger log = Loggers.SERVER;
 
     private SamlPluginSettingsStorage settingsStorage;
     private RootUrlHolder rootUrlHolder;
@@ -35,6 +46,47 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
         registerAction(JsonControllerAction.forParam("action", "get").using(HttpMethod.GET).run(this::getSettings));
         registerAction(JsonControllerAction.forParam("action", "save").using(HttpMethod.POST).run(this::saveSettings));
+        registerAction(JsonControllerAction.forParam("action", "import").using(HttpMethod.POST).run(this::importMetadata));
+    }
+
+    @NotNull
+    public JsonActionResult<SamlPluginSettings> importMetadata(HttpServletRequest request) {
+        try {
+
+            var metadataImport = bindFromRequest(request, MetadataImport.class);
+
+            if (metadataImport == null) {
+                throw new Exception("Invalid request");
+            }
+
+            var metadataXml = metadataImport.getMetadataXml();
+
+            var documentMetadata = Util.loadXML(metadataXml);
+
+            Map<String, Object> metadataInfo = IdPMetadataParser.parseXML(documentMetadata);
+
+            var saml2Settings = new Saml2Settings();
+            IdPMetadataParser.injectIntoSettings(saml2Settings, metadataInfo);
+
+            var result = this.settingsStorage.load();
+
+            result.setIssuerUrl(saml2Settings.getIdpEntityId());
+            result.setSsoEndpoint(saml2Settings.getIdpSingleSignOnServiceUrl().toString());
+
+            result.setPublicCertificate(null);
+            if (saml2Settings.getIdpx509cert() != null) {
+                var encoded = saml2Settings.getIdpx509cert().getEncoded();
+                var base64encoded = Base64.getMimeEncoder(64, "\n".getBytes()).encodeToString(encoded);
+                if (!StringUtil.isEmpty(base64encoded)) {
+                    result.setPublicCertificate("-----BEGIN CERTIFICATE-----\n" + base64encoded + "\n-----END CERTIFICATE-----\n");
+                }
+            }
+
+            return JsonActionResult.ok(result);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return JsonActionResult.fail(e);
+        }
     }
 
     public JsonActionResult<String> saveSettings(HttpServletRequest request) {

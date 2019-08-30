@@ -3,7 +3,7 @@
         <input v-if="!textarea.valueOf()"
                type="text" :class="className" v-bind:value="value"
                v-on:input="$emit('input', $event.target.value)"/>
-        <textarea v-else
+        <textarea v-else :rows="rows"
                   type="text" :class="className" v-bind:value="value"
                   v-on:input="$emit('input', $event.target.value)"/>
     </span>
@@ -15,20 +15,23 @@
     import {Prop} from "vue-property-decorator";
 
     @Component({})
-export default class TextInput extends Vue {
-    @Prop()
-    public value?: string;
+    export default class TextInput extends Vue {
+        @Prop()
+        public value?: string;
 
-    @Prop([Boolean])
-    public short!: Boolean;
+        @Prop([Boolean])
+        public short!: Boolean;
 
-    @Prop([Boolean])
-    public textarea!: Boolean;
+        @Prop([Boolean])
+        public textarea!: Boolean;
 
-    get className(): string {
-        return this.short.valueOf() ? "textField" : "textField longField";
+        @Prop([Number])
+        public rows?: Number;
+
+        get className(): string {
+            return this.short.valueOf() ? "textField" : "textField longField";
+        }
     }
-}
 </script>
 
 <style scoped>

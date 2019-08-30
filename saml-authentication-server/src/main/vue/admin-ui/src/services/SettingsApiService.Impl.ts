@@ -13,7 +13,7 @@ export default class SettingsApiServiceImpl implements ISettingsApiService {
     }
 
     public importMetadata(metadata: string): Promise<ApiCallResult<SamlSettings>> {
-        return axios.post(`${this.url}?action=import`, metadata).then((res) => res.data);
+        return axios.post(`${this.url}?action=import`, { metadataXml: metadata }).then((res) => res.data);
     }
 
 

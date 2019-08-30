@@ -3,7 +3,7 @@
 
         <MessagesBox :errors="errors" :successMessage="successMsg"/>
 
-        <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">Setup Connection Wizard</router-link>
+        <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">Run Connection Wizard</router-link>
 
         <RunnerForm>
             <GroupingHeader>Identity Provider Configuration</GroupingHeader>
@@ -12,7 +12,8 @@
             <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
 
             <GroupingHeader>Service Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"/>
+            <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"
+                             note="Could be any valid URN - by default it matches the callback URL" />
             <RunnerFormRow>
                 <template v-slot:label>Single Sign-On URL (Recipient)</template>
                 <template v-slot:content>{{settings.ssoCallbackUrl}}</template>

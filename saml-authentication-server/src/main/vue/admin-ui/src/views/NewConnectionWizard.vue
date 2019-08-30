@@ -11,7 +11,6 @@
                 <option :value="SsoProvider.OneLogin">OneLogin</option>
                 <option disabled>-----------------</option>
                 <option :value="SsoProvider.ImportMetadata">Other - Import Metadata</option>
-                <option :value="SsoProvider.None">Other - Exit and Setup Manually</option>
             </select>
             <SettingsFacade v-if="provider == SsoProvider.Okta" :settingsDecoration="oktaDecoration"
                             :settings="settings"/>

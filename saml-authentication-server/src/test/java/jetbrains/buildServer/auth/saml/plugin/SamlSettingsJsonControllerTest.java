@@ -6,8 +6,15 @@ import lombok.var;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.file.Paths;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -61,5 +68,43 @@ public class SamlSettingsJsonControllerTest {
 
         assertThat(callbackUrl, notNullValue());
         assertThat(enitityId, equalTo(callbackUrl));
+    }
+
+    @Test
+    public void shouldParseMetadataIntoSettings() throws IOException {
+        var metadataFilePath = "src/test/resources/metadata.xml";
+        var metadataPubCert = "src/test/resources/metadata_pub.key";
+
+        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+        var metadataCert = Files.readFile(Paths.get(metadataPubCert).toAbsolutePath().toFile());
+
+        var reader = new BufferedReader(new FileReader(metadataFilePath));
+
+        var request = mock(HttpServletRequest.class);
+        when(request.getReader()).thenReturn(reader);
+
+        assertThat(metadataXml, notNullValue());
+
+        var result = this.controller.importMetadata(request);
+
+        assertThat(result.getErrors(), nullValue());
+
+        var settings = result.getResult();
+        assertThat(settings, notNullValue());
+
+        assertThat(settings.getIssuerUrl(), equalTo("entityid"));
+        assertThat(settings.getSsoEndpoint(), equalTo("https://mycert.lan"));
+        assertThat(settings.getPublicCertificate(), equalTo(metadataCert));
+    }
+
+    @Test
+    public void shouldErrorWhenMetadataEmpty() {
+        var reader = new BufferedReader(new StringReader(""));
+
+    }
+
+    @Test
+    public void shouldErrorWhenMetadataWrong() {
+
     }
 }

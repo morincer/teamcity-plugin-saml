@@ -7,7 +7,7 @@
             <RunnerFormRow>
                 <template v-slot:label>Metadata XML</template>
                 <template v-slot:content>
-                    <TextInput textarea/>
+                    <TextInput textarea rows="10"/>
                     <input type="submit" class="btn btn_primary submitButton"
                            value="Import"
                            :disabled="isSaving"
