@@ -2,10 +2,8 @@
     <div>
         <div class="successMessage" v-if="settingsDecoration.introMessage" style="margin-bottom: 10px">{{settingsDecoration.introMessage}}
         </div>
-        <RunnerForm :disabled="isLoading" v-for="group in settingsDecoration.groups">
-            <GroupingHeader>{{group.title}}
-                <ProgressIndicator title="...fetching current settings..." v-if="isLoading"/>
-            </GroupingHeader>
+        <RunnerForm v-for="group in settingsDecoration.groups">
+            <GroupingHeader>{{group.title}}</GroupingHeader>
 
             <tr v-if="group.message">
                 <td colspan="2">
@@ -60,26 +58,8 @@
         @Prop()
         settingsDecoration?: SettingsDecoration;
 
-        settings?: SamlSettings = {};
-
-        public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
-
-        isLoading: Boolean = false;
-
-        async mounted() {
-            try {
-                this.isLoading = true;
-                const result = await this.settingsApiService.get();
-
-                if (result.result) {
-                    this.settings = result.result;
-                }
-            } catch (e) {
-                this.settings = {};
-            } finally {
-                this.isLoading = false;
-            }
-        }
+        @Prop()
+        settings?: SamlSettings;
     }
 </script>
 
