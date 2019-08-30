@@ -21,12 +21,6 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
     }
 
     public save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>> {
-
-        if (process.env.NODE_ENV === 'development') {
-            // tslint:disable-next-line:no-console
-            console.log(JSON.stringify(settings, null, 3));
-        }
-
         return new Promise<ApiCallResult<SamlSettings>>((resolve) => {
             setTimeout(() => {
                 if (settings.ssoEndpoint === 'error') {
@@ -38,5 +32,23 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
                 }
             }, 500);
         });
+    }
+
+    importMetadata(metadata: string): Promise<ApiCallResult<SamlSettings>> {
+        return new Promise<ApiCallResult<SamlSettings>>(((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    result: {
+                        ssoEndpoint: 'some endpoint from metadata',
+                        entityId: 'some entity id from metadata',
+                        publicCertificate: 'some public certificate from metadata',
+                        issuerUrl: 'some issuer url from metadata',
+                        ssoCallbackUrl: 'some callback url from metadata',
+                        hideLoginForm: false,
+                        ssoLoginButtonName: "Login with SSO"
+                    },
+                });
+            }, 1000);
+        }));
     }
 }

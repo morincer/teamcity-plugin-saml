@@ -17,6 +17,8 @@
                             :settings="settings"/>
             <SettingsFacade v-else-if="provider == SsoProvider.OneLogin" :settingsDecoration="oneloginDecoration"
                             :settings="settings"/>
+            <ImportMetadata v-else-if="provider == SsoProvider.ImportMetadata" :settings="settings" />
+
             <RunnerForm>
                 <template v-slot:actions>
                     <input type="submit" value="Save" class="btn btn_primary submitButton"
@@ -43,6 +45,7 @@
     import {appConfig} from "@/main.dependencies";
     import MessagesBox from "@/components/MessagesBox.vue";
     import ProgressIndicator from "@/components/ProgressIndicator.vue";
+    import ImportMetadata from "@/views/ImportMetadata.vue";
 
     enum SsoProvider {
         None, Okta, OneLogin, ImportMetadata
@@ -111,7 +114,7 @@
         ]
     };
 
-    @Component({components: {ProgressIndicator, SettingsFacade, RunnerForm, MessagesBox}})
+    @Component({components: {ImportMetadata, ProgressIndicator, SettingsFacade, RunnerForm, MessagesBox}})
     export default class NewConnectionWizard extends Vue {
 
         public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
