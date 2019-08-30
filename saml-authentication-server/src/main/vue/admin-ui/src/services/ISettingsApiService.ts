@@ -9,14 +9,14 @@ export interface ApiCallResult<T> {
 }
 
 export interface SamlAttributeMapping {
-    mappingType : string;
-    customAttributeName?: string
+    mappingType: string;
+    customAttributeName?: string;
 }
 
 export const SamlAttributeMappingTypes = {
     None: "none",
     NameID: "name_id",
-    Other: "other"
+    Other: "other",
 };
 
 export interface SamlSettings {

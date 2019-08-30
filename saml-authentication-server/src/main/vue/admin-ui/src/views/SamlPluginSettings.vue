@@ -65,20 +65,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import RunnerForm from '@/components/RunnerForm.vue';
-import GroupingHeader from '@/components/GroupingHeader.vue';
-import RunnerFormRow from '@/components/RunnerFormRow.vue';
-import RunnerFormInput from '@/components/RunnerFormInput.vue';
-import {Component} from 'vue-property-decorator';
-import {ApiError, ISettingsApiService, SamlSettings} from '@/services/ISettingsApiService';
-import TextInput from '@/components/TextInput.vue';
-import ProgressIndicator from '@/components/ProgressIndicator.vue';
-import MessagesBox from '@/components/MessagesBox.vue';
-import {appConfig} from '@/main.dependencies';
-import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
+    import Vue from "vue";
+    import RunnerForm from "@/components/RunnerForm.vue";
+    import GroupingHeader from "@/components/GroupingHeader.vue";
+    import RunnerFormRow from "@/components/RunnerFormRow.vue";
+    import RunnerFormInput from "@/components/RunnerFormInput.vue";
+    import {Component} from "vue-property-decorator";
+    import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+    import TextInput from "@/components/TextInput.vue";
+    import ProgressIndicator from "@/components/ProgressIndicator.vue";
+    import MessagesBox from "@/components/MessagesBox.vue";
+    import {appConfig} from "@/main.dependencies";
+    import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
-@Component({ components: {
+    @Component({ components: {
         SamlAttributeSelect,
         MessagesBox,
         TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
@@ -90,7 +90,7 @@ export default class SamlPluginSettings extends Vue {
     public isLoading: boolean = false;
     public isSaving: boolean = false;
     public errors: ApiError[] = [];
-    public successMsg: string = '';
+    public successMsg: string = "";
 
     public async mounted() {
         try {
@@ -110,12 +110,12 @@ export default class SamlPluginSettings extends Vue {
     public async submit() {
         this.isSaving = true;
         this.errors = [];
-        this.successMsg = '';
+        this.successMsg = "";
 
         const result = await this.settingsApiService.save(this.settings);
         this.isSaving = false;
         if (result.result) {
-            this.successMsg = 'Your changes have been saved.';
+            this.successMsg = "Your changes have been saved.";
         } else if (result.errors) {
             this.errors = result.errors;
         }

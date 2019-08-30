@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+    import Vue from "vue";
+    import Component from "vue-class-component";
+    import {Prop} from "vue-property-decorator";
 
-@Component({})
+    @Component({})
 export default class TextInput extends Vue {
     @Prop()
     public value?: string;
@@ -26,7 +26,7 @@ export default class TextInput extends Vue {
     public textarea!: Boolean;
 
     get className(): string {
-        return this.short.valueOf() ? 'textField' : 'textField longField';
+        return this.short.valueOf() ? "textField" : "textField longField";
     }
 }
 </script>

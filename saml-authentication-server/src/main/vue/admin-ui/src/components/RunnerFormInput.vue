@@ -16,13 +16,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {Prop} from 'vue-property-decorator';
-import Component from 'vue-class-component';
-import RunnerFormRow from '@/components/RunnerFormRow.vue';
-import TextInput from '@/components/TextInput.vue';
+    import Vue from "vue";
+    import {Prop} from "vue-property-decorator";
+    import Component from "vue-class-component";
+    import RunnerFormRow from "@/components/RunnerFormRow.vue";
+    import TextInput from "@/components/TextInput.vue";
 
-@Component({
+    @Component({
     components: {TextInput, RunnerFormRow},
 })
 export default class RunnerFormInput extends Vue {

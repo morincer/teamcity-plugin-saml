@@ -25,42 +25,23 @@
 
 <script lang="ts">
     import {Component, Prop} from "vue-property-decorator";
-    import Vue from 'vue';
-    import {ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+    import Vue from "vue";
+    import {SamlSettings} from "@/services/ISettingsApiService";
     import RunnerForm from "@/components/RunnerForm.vue";
     import RunnerFormRow from "@/components/RunnerFormRow.vue";
     import GroupingHeader from "@/components/GroupingHeader.vue";
     import TextInput from "@/components/TextInput.vue";
-    import {appConfig} from "@/main.dependencies";
     import ProgressIndicator from "@/components/ProgressIndicator.vue";
-
-    export interface ParametersGroup {
-        message?: string,
-        title: string,
-        parameters: ParameterDecoration[]
-    }
-
-    export interface ParameterDecoration {
-        fieldName: string,
-        label: string,
-        hint: string,
-        textarea?: boolean,
-        readonly?: boolean,
-    }
-
-    export interface SettingsDecoration {
-        introMessage: string,
-        groups: ParametersGroup[]
-    }
+    import {SettingsDecoration} from "@/resources/ConnectionWizardDecorations";
 
     @Component({components: {TextInput, GroupingHeader, RunnerForm, RunnerFormRow, ProgressIndicator}})
-    export default class SettingsFacade extends Vue {
-        @Prop()
-        settingsDecoration?: SettingsDecoration;
+export default class SettingsFacade extends Vue {
+    @Prop()
+    public settingsDecoration?: SettingsDecoration;
 
-        @Prop()
-        settings?: SamlSettings;
-    }
+    @Prop()
+    public settings?: SamlSettings;
+}
 </script>
 
 <style scoped>

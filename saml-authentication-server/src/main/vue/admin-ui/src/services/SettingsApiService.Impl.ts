@@ -1,5 +1,5 @@
-import axios from 'axios';
-import {ApiCallResult, SamlSettings, ISettingsApiService} from '@/services/ISettingsApiService';
+import axios from "axios";
+import {ApiCallResult, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
 
 export default class SettingsApiServiceImpl implements ISettingsApiService {
     public url: string = process.env.VUE_APP_SERVICE_URL;

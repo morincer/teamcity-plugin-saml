@@ -39,20 +39,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import RunnerForm from '@/components/RunnerForm.vue';
-import GroupingHeader from '@/components/GroupingHeader.vue';
-import RunnerFormRow from '@/components/RunnerFormRow.vue';
-import RunnerFormInput from '@/components/RunnerFormInput.vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {ApiError, ISettingsApiService, SamlSettings} from '@/services/ISettingsApiService';
-import TextInput from '@/components/TextInput.vue';
-import ProgressIndicator from '@/components/ProgressIndicator.vue';
-import MessagesBox from '@/components/MessagesBox.vue';
-import {appConfig} from '@/main.dependencies';
-import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
+    import Vue from "vue";
+    import RunnerForm from "@/components/RunnerForm.vue";
+    import GroupingHeader from "@/components/GroupingHeader.vue";
+    import RunnerFormRow from "@/components/RunnerFormRow.vue";
+    import RunnerFormInput from "@/components/RunnerFormInput.vue";
+    import {Component, Prop} from "vue-property-decorator";
+    import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+    import TextInput from "@/components/TextInput.vue";
+    import ProgressIndicator from "@/components/ProgressIndicator.vue";
+    import MessagesBox from "@/components/MessagesBox.vue";
+    import {appConfig} from "@/main.dependencies";
+    import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
-@Component({ components: {
+    @Component({ components: {
         SamlAttributeSelect,
         MessagesBox,
         TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
@@ -65,13 +65,10 @@ export default class ImportMetadata extends Vue {
 
     public isLoading: boolean = false;
     public isSaving: boolean = false;
-    public successMsg: string = '';
+    public successMsg: string = "";
     public errors: ApiError[] = [];
 
-    public metadata: string = '';
-
-    public async mounted() {
-    }
+    public metadata: string = "";
 
     public async importMetadata() {
         try {
@@ -80,7 +77,8 @@ export default class ImportMetadata extends Vue {
 
             if (result.result) {
                 this.settings = result.result;
-                this.successMsg = "Metadata Imported Successfully. Please review the resulting settings and save them if everything is ok"
+                this.successMsg = "Metadata Imported Successfully. " +
+                    "Please review the resulting settings and save them if everything is ok";
             }
         } catch (e) {
             this.errors = [ { message: e, code: 0 }];

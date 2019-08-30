@@ -20,37 +20,37 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
-    import {Component, Prop} from 'vue-property-decorator';
-    import {SamlAttributeMapping, SamlAttributeMappingTypes } from "@/services/ISettingsApiService";
+    import Vue from "vue";
+    import {Component, Prop} from "vue-property-decorator";
+    import {SamlAttributeMapping, SamlAttributeMappingTypes} from "@/services/ISettingsApiService";
 
     @Component({})
-    export default class SamlAttributeSelect extends Vue {
-        @Prop()
-        public value!: SamlAttributeMapping;
+export default class SamlAttributeSelect extends Vue {
+    @Prop()
+    public value!: SamlAttributeMapping;
 
-        public mappingType: string = SamlAttributeMappingTypes.None;
-        public customAttributeName: string = "";
+    public mappingType: string = SamlAttributeMappingTypes.None;
+    public customAttributeName: string = "";
 
-        SamlAttributeMappingTypes = SamlAttributeMappingTypes;
+    public SamlAttributeMappingTypes = SamlAttributeMappingTypes;
 
-        mounted() {
-            if (this.value) {
-                this.mappingType = this.value.mappingType;
-                this.customAttributeName = this.value.customAttributeName!;
-            }
+    public mounted() {
+        if (this.value) {
+            this.mappingType = this.value.mappingType;
+            this.customAttributeName = this.value.customAttributeName!;
         }
-
-        emitChange() {
-            const value : SamlAttributeMapping = {
-                mappingType: this.mappingType, customAttributeName: this.customAttributeName
-            };
-
-            this.$emit('input', value);
-        }
-
-
     }
+
+    public emitChange() {
+        const value: SamlAttributeMapping = {
+            mappingType: this.mappingType, customAttributeName: this.customAttributeName,
+        };
+
+        this.$emit("input", value);
+    }
+
+
+}
 </script>
 
 <style scoped>
