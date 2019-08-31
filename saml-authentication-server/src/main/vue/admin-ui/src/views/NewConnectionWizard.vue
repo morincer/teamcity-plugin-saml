@@ -9,8 +9,6 @@
             <select v-model="provider" style="margin-bottom: 20px">
                 <option :value="SsoProvider.Okta">Okta</option>
                 <option :value="SsoProvider.OneLogin">OneLogin</option>
-                <option disabled>-----------------</option>
-                <option :value="SsoProvider.ImportMetadata">Other - Import Metadata</option>
             </select>
             <SettingsFacade v-if="provider == SsoProvider.Okta" :settingsDecoration="oktaDecoration"
                             :settings="settings"/>

@@ -68,7 +68,13 @@ public class SamlSettingsJsonController extends BaseJsonController {
             var saml2Settings = new Saml2Settings();
             IdPMetadataParser.injectIntoSettings(saml2Settings, metadataInfo);
 
-            var result = this.settingsStorage.load();
+            var getSettingsResult = this.getSettings(request);
+
+            if (getSettingsResult.getErrors() != null) {
+                return JsonActionResult.fail(getSettingsResult.getErrors());
+            }
+
+            var result = getSettingsResult.getResult();
 
             result.setIssuerUrl(saml2Settings.getIdpEntityId());
             result.setSsoEndpoint(saml2Settings.getIdpSingleSignOnServiceUrl().toString());

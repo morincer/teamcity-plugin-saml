@@ -25,8 +25,8 @@
         @Prop([Boolean])
         public textarea!: Boolean;
 
-        @Prop([Number])
-        public rows?: Number;
+        @Prop()
+        public rows?: string;
 
         get className(): string {
             return this.short.valueOf() ? "textField" : "textField longField";

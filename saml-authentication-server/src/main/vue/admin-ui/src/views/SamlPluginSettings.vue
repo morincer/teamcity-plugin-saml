@@ -3,10 +3,26 @@
 
         <MessagesBox :errors="errors" :successMessage="successMsg"/>
 
-        <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">Run Connection Wizard</router-link>
-
         <RunnerForm>
+            <RunnerFormRow>
+                <template v-slot:label>
+                    <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">Connect Provider</router-link>
+                </template>
+                <template v-slot:note>
+                    Allows you to easily configure connection to one of the pre-defined SSO providers.
+                    Currently, Okta and Onelogin providers are supported
+                </template>
+            </RunnerFormRow>
             <GroupingHeader>Identity Provider Configuration</GroupingHeader>
+            <RunnerFormRow>
+                <template v-slot:label>Single Sign-on URL <span class="mandatoryAsterix">&nbsp;*</span></template>
+                <template v-slot:content>
+                    <TextInput v-model="settings.ssoEndpoint"/>
+                    <router-link to="/import" tag="button" class="btn btn_primary submitButton"
+                                 :disabled="isLoading || isSaving"
+                                 style="margin-left: 10px">Import IdP Metadata</router-link>
+                </template>
+            </RunnerFormRow>
             <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
             <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
             <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />

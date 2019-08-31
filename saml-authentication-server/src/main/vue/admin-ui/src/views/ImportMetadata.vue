@@ -7,7 +7,7 @@
             <RunnerFormRow>
                 <template v-slot:label>Metadata XML</template>
                 <template v-slot:content>
-                    <TextInput textarea rows="10"/>
+                    <TextInput textarea rows=10 v-model="metadata"/>
                     <input type="submit" class="btn btn_primary submitButton"
                            value="Import"
                            :disabled="isSaving"
@@ -20,19 +20,24 @@
                     Paste metadata XML into the field
                 </template>
             </RunnerFormRow>
-        </RunnerForm>
-        <RunnerForm v-if="successMsg">
-            <GroupingHeader>Identity Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
-            <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
-            <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
 
-            <GroupingHeader>Service Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"/>
-            <RunnerFormRow>
-                <template v-slot:label>Single Sign-On URL (Recipient)</template>
-                <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
-            </RunnerFormRow>
+            <template v-if="successMsg">
+                <GroupingHeader>Identity Provider Configuration Preview</GroupingHeader>
+                <RunnerFormInput label="Single Sign-on URL" v-model="previewSettings.ssoEndpoint" readonly/>
+                <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required
+                                 v-model="previewSettings.issuerUrl"/>
+                <RunnerFormInput label="X509 Certificate" textarea required
+                                 v-model="previewSettings.publicCertificate"/>
+            </template>
+
+            <template v-slot:actions>
+                <input type="submit" value="Save" class="btn btn_primary submitButton"
+                       :disabled="isLoading || isSaving || !previewSettings.ssoEndpoint"
+                       @click="save()"/>
+
+                <input type="submit" value="Cancel" class="btn submitButton"
+                       @click="cancel()"/>
+            </template>
         </RunnerForm>
 
     </div>
@@ -52,41 +57,65 @@
     import {appConfig} from "@/main.dependencies";
     import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
-    @Component({ components: {
-        SamlAttributeSelect,
-        MessagesBox,
-        TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
-export default class ImportMetadata extends Vue {
-
-    public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
-
-    @Prop()
-    public settings?: SamlSettings;
-
-    public isLoading: boolean = false;
-    public isSaving: boolean = false;
-    public successMsg: string = "";
-    public errors: ApiError[] = [];
-
-    public metadata: string = "";
-
-    public async importMetadata() {
-        try {
-            this.isSaving = true;
-            const result = await this.settingsApiService.importMetadata(this.metadata);
-
-            if (result.result) {
-                this.settings = result.result;
-                this.successMsg = "Metadata Imported Successfully. " +
-                    "Please review the resulting settings and save them if everything is ok";
-            }
-        } catch (e) {
-            this.errors = [ { message: e, code: 0 }];
-        } finally {
-            this.isSaving = false;
+    @Component({
+        components: {
+            SamlAttributeSelect,
+            MessagesBox,
+            TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator
         }
+    })
+    export default class ImportMetadata extends Vue {
+
+        public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
+
+        public isLoading: boolean = false;
+        public isSaving: boolean = false;
+        public successMsg: string = "";
+        public errors: ApiError[] = [];
+
+        public metadata: string = "";
+
+        previewSettings: SamlSettings = {};
+
+        public async importMetadata() {
+            try {
+                this.isLoading = true;
+                const result = await this.settingsApiService.importMetadata(this.metadata);
+
+                if (result.result) {
+                    this.previewSettings = result.result;
+                    this.successMsg = "Metadata Imported Successfully. " +
+                        "Please review the resulting settings and save them if everything is ok";
+                } else if (result.errors) {
+                    this.errors = result.errors;
+                }
+            } catch (e) {
+                this.errors = [{message: e, code: 0}];
+            } finally {
+                this.isLoading = false;
+            }
+        }
+
+        public async save() {
+            try {
+                this.isSaving = true;
+                const result = await this.settingsApiService.save(this.previewSettings);
+
+                if (result.result) {
+                    this.$router.push("/");
+                }
+            } catch (e) {
+                this.errors = [{message: e, code: 0}];
+            } finally {
+                this.isSaving = false;
+            }
+        }
+
+        public cancel() {
+            this.$router.push("/");
+        }
+
     }
-}
 </script>
 
 <style scoped>
