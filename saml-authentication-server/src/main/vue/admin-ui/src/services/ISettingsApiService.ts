@@ -9,14 +9,14 @@ export interface ApiCallResult<T> {
 }
 
 export interface SamlAttributeMapping {
-    mappingType : string;
-    customAttributeName?: string
+    mappingType: string;
+    customAttributeName?: string;
 }
 
 export const SamlAttributeMappingTypes = {
     None: "none",
     NameID: "name_id",
-    Other: "other"
+    Other: "other",
 };
 
 export interface SamlSettings {
@@ -39,5 +39,6 @@ export interface SamlSettings {
 export interface ISettingsApiService {
     get(): Promise<ApiCallResult<SamlSettings>>;
     save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>>;
+    importMetadata(metadata: string): Promise<ApiCallResult<SamlSettings>>;
 }
 

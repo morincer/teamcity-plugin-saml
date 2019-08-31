@@ -8,6 +8,6 @@
 
 <script lang="ts">
 export default {
-    name: 'GroupingHeader',
+    name: "GroupingHeader",
 };
 </script>

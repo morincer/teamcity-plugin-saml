@@ -4,13 +4,32 @@
         <MessagesBox :errors="errors" :successMessage="successMsg"/>
 
         <RunnerForm>
+            <RunnerFormRow>
+                <template v-slot:label>
+                    <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">Connect Provider</router-link>
+                </template>
+                <template v-slot:note>
+                    Allows you to easily configure connection to one of the pre-defined SSO providers.
+                    Currently, Okta and Onelogin providers are supported
+                </template>
+            </RunnerFormRow>
             <GroupingHeader>Identity Provider Configuration</GroupingHeader>
+            <RunnerFormRow>
+                <template v-slot:label>Single Sign-on URL <span class="mandatoryAsterix">&nbsp;*</span></template>
+                <template v-slot:content>
+                    <TextInput v-model="settings.ssoEndpoint"/>
+                    <router-link to="/import" tag="button" class="btn btn_primary submitButton"
+                                 :disabled="isLoading || isSaving"
+                                 style="margin-left: 10px">Import IdP Metadata</router-link>
+                </template>
+            </RunnerFormRow>
             <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
             <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
             <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
 
             <GroupingHeader>Service Provider Configuration</GroupingHeader>
-            <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"/>
+            <RunnerFormInput label="Entity ID (Audience)" required v-model="settings.entityId"
+                             note="Could be any valid URN - by default it matches the callback URL" />
             <RunnerFormRow>
                 <template v-slot:label>Single Sign-On URL (Recipient)</template>
                 <template v-slot:content>{{settings.ssoCallbackUrl}}</template>
@@ -63,20 +82,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import RunnerForm from '@/components/RunnerForm.vue';
-import GroupingHeader from '@/components/GroupingHeader.vue';
-import RunnerFormRow from '@/components/RunnerFormRow.vue';
-import RunnerFormInput from '@/components/RunnerFormInput.vue';
-import {Component} from 'vue-property-decorator';
-import {ApiError, ISettingsApiService, SamlSettings} from '@/services/ISettingsApiService';
-import TextInput from '@/components/TextInput.vue';
-import ProgressIndicator from '@/components/ProgressIndicator.vue';
-import MessagesBox from '@/components/MessagesBox.vue';
-import {appConfig} from '@/main.dependencies';
-import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
+    import Vue from "vue";
+    import RunnerForm from "@/components/RunnerForm.vue";
+    import GroupingHeader from "@/components/GroupingHeader.vue";
+    import RunnerFormRow from "@/components/RunnerFormRow.vue";
+    import RunnerFormInput from "@/components/RunnerFormInput.vue";
+    import {Component} from "vue-property-decorator";
+    import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+    import TextInput from "@/components/TextInput.vue";
+    import ProgressIndicator from "@/components/ProgressIndicator.vue";
+    import MessagesBox from "@/components/MessagesBox.vue";
+    import {appConfig} from "@/main.dependencies";
+    import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
-@Component({ components: {
+    @Component({ components: {
         SamlAttributeSelect,
         MessagesBox,
         TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator}})
@@ -88,7 +107,7 @@ export default class SamlPluginSettings extends Vue {
     public isLoading: boolean = false;
     public isSaving: boolean = false;
     public errors: ApiError[] = [];
-    public successMsg: string = '';
+    public successMsg: string = "";
 
     public async mounted() {
         try {
@@ -108,12 +127,12 @@ export default class SamlPluginSettings extends Vue {
     public async submit() {
         this.isSaving = true;
         this.errors = [];
-        this.successMsg = '';
+        this.successMsg = "";
 
         const result = await this.settingsApiService.save(this.settings);
         this.isSaving = false;
         if (result.result) {
-            this.successMsg = 'Your changes have been saved.';
+            this.successMsg = "Your changes have been saved.";
         } else if (result.errors) {
             this.errors = result.errors;
         }

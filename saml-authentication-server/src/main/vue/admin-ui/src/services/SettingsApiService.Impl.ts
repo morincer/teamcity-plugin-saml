@@ -1,5 +1,5 @@
-import axios from 'axios';
-import {ApiCallResult, SamlSettings, ISettingsApiService} from '@/services/ISettingsApiService';
+import axios from "axios";
+import {ApiCallResult, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
 
 export default class SettingsApiServiceImpl implements ISettingsApiService {
     public url: string = process.env.VUE_APP_SERVICE_URL;
@@ -10,6 +10,10 @@ export default class SettingsApiServiceImpl implements ISettingsApiService {
 
     public save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>> {
         return axios.post(`${this.url}?action=save`, settings).then((res) => res.data);
+    }
+
+    public importMetadata(metadata: string): Promise<ApiCallResult<SamlSettings>> {
+        return axios.post(`${this.url}?action=import`, { metadataXml: metadata }).then((res) => res.data);
     }
 
 

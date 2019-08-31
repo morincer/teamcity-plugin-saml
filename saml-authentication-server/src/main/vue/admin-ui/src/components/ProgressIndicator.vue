@@ -6,11 +6,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {Prop} from 'vue-property-decorator';
-import Component from 'vue-class-component';
+    import Vue from "vue";
+    import {Prop} from "vue-property-decorator";
+    import Component from "vue-class-component";
 
-@Component({})
+    @Component({})
 export default class ProgressIndicator extends Vue {
     @Prop()
     public title?: string;

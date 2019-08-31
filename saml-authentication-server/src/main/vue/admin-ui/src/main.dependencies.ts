@@ -1,6 +1,6 @@
-import {ISettingsApiService} from '@/services/ISettingsApiService';
-import SettingsApiServiceStub from '@/services/SettingsApiService.Stub';
-import SettingsApiServiceImpl from '@/services/SettingsApiService.Impl';
+import {ISettingsApiService} from "@/services/ISettingsApiService";
+import SettingsApiServiceStub from "@/services/SettingsApiService.Stub";
+import SettingsApiServiceImpl from "@/services/SettingsApiService.Impl";
 
 export class AppConfig {
     public settingsApiService?: ISettingsApiService;
@@ -17,7 +17,7 @@ function prodDependencies() {
 }
 
 export function buildDependencies() {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
         devDependencies();
     } else {
         prodDependencies();

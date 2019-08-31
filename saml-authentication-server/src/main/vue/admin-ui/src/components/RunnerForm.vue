@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-    export default {
-        name: 'RunnerForm',
-    };
+export default {
+    name: "RunnerForm",
+};
 </script>
