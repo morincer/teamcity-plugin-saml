@@ -4,15 +4,18 @@
 
 The plug-in adds ability to authenticate users with SAML-based SSO providers (like Okta, Onelogin etc.).
 
-The plug-in is still under active development (see the [todo list](./teamcity-plugin-saml-server/todo.txt)) and is currently providing only basic functionality - you manually setup SAML interaction parameters and the plugin authenticates users given SAML assertions recieved from IdP.
+The plug-in offers the following functionality:
+
+* Authenticate SAML assertions for existing users
+* Option to automatically create users on login (you may also limit allowed user names by postfix match)
+* Wizard to ease configuration of connectivity to common IdP providers  (currently - Okta and Onelogin, more to come in future)
+* Option to import IdP metadata from XML   
 
 Things the plug-in does NOT currently support (but they're on the roadmap):
 
-* Metadata import and generation
+* SdP Metadata generation
+* Automatic IdP metadata import from URL 
 * Multi-tenancy
-* Creating new users on login
-* Authenticating against the e-mail field
-* Pre-defined profiles for major SAML identity providers
 
 ## Installation
 

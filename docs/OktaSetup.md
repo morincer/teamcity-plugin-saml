@@ -1,5 +1,7 @@
 # Setting up TeamCity SAML Authentication to Work with Okta IdP
 
+**Update 2019-09-01** You may now use Connection Wizard - it makes things bit easier. 
+
 This step-by-step guide outlines steps needed to make TeamCity authenticate through Okta identity provider using the SAML authentication plugin.
 
 ## Pre-requisites
