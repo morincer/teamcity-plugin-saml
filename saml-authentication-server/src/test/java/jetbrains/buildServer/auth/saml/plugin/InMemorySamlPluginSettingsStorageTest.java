@@ -1,9 +1,9 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import lombok.var;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
 import java.util.UUID;

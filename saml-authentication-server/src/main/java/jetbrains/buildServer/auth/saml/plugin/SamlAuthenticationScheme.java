@@ -4,6 +4,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.settings.Saml2Settings;
 import com.onelogin.saml2.settings.SettingsBuilder;
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;

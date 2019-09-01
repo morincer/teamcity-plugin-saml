@@ -1,4 +1,4 @@
-package jetbrains.buildServer.auth.saml.plugin;
+package jetbrains.buildServer.auth.saml.plugin.pojo;
 
 import lombok.Data;
 

@@ -2,7 +2,7 @@
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:useBean id="samlSettings" scope="request" type="jetbrains.buildServer.auth.saml.plugin.SamlPluginSettings"/>
+<jsp:useBean id="samlSettings" scope="request" type="jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings"/>
 
 <c:if test="${samlSettings.hideLoginForm}">
     <style>

@@ -1,7 +1,6 @@
 package jetbrains.buildServer.controllers.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jetbrains.buildServer.auth.saml.plugin.SamlPluginSettings;
 import jetbrains.buildServer.log.Loggers;
 import lombok.Data;
 import lombok.NoArgsConstructor;

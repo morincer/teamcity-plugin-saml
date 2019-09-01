@@ -1,5 +1,7 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
