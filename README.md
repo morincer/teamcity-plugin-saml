@@ -1,5 +1,7 @@
 # TeamCity SAML Authentication Plug-In
 
+[![Build Status](https://travis-ci.org/morincer/teamcity-plugin-saml.svg?branch=master)](https://travis-ci.org/morincer/teamcity-plugin-saml)
+
 ## Overview
 
 The plug-in adds ability to authenticate users with SAML-based SSO providers (like Okta, Onelogin etc.).
@@ -16,6 +18,10 @@ Things the plug-in does NOT currently support (but they're on the roadmap):
 * SdP Metadata generation
 * Automatic IdP metadata import from URL 
 * Multi-tenancy
+
+![Login Screen](docs/img/LoginScreen.png)
+
+![Configurations](docs/img/ConigurationOverview.png)
 
 ## Installation
 
