@@ -19,7 +19,7 @@ Things the plug-in does NOT currently support (but they're on the roadmap):
 
 ## Installation
 
-Grab the [latest release](/releases/latest) of plugin from GitHub and follow the TeamCity installation instructions ([google](https://www.google.com/search?q=teamcity+install+plugin)).  
+Grab the [latest release](https://github.com/morincer/teamcity-plugin-saml/releases/latest) follow the TeamCity installation instructions ([google](https://www.google.com/search?q=teamcity+install+plugin)).  
 
 ## Configuration
 
