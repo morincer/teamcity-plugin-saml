@@ -23,7 +23,6 @@
                                  style="margin-left: 10px">Import IdP Metadata</router-link>
                 </template>
             </RunnerFormRow>
-            <RunnerFormInput label="Single Sign-on URL" v-model="settings.ssoEndpoint" required/>
             <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
             <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
 
