@@ -1,6 +1,7 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.onelogin.saml2.Auth;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
 import jetbrains.buildServer.controllers.BaseController;
 import jetbrains.buildServer.log.Loggers;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SamlLoginController extends BaseController {
 
+    private SamlAuthenticationScheme samlAuthenticationScheme;
     private final SamlPluginSettingsStorage settingsStorage;
 
     private final Logger LOG = Loggers.SERVER;
@@ -25,8 +27,10 @@ public class SamlLoginController extends BaseController {
     public SamlLoginController(@NotNull SBuildServer server,
                                @NotNull WebControllerManager webControllerManager,
                                @NotNull AuthorizationInterceptor interceptor,
+                               @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
                                @NotNull SamlPluginSettingsStorage settingsStorage) {
         super(server);
+        this.samlAuthenticationScheme = samlAuthenticationScheme;
         this.settingsStorage = settingsStorage;
 
         LOG.info("Initializing SAML controller");
@@ -53,9 +57,14 @@ public class SamlLoginController extends BaseController {
             var urlValidator = new UrlValidator();
 
             if (!urlValidator.isValid(endpoint)) throw new Exception(String.format("SSO endpoint (%s) must be a valid URL ", endpoint));
-
-            LOG.info(String.format("Redirecting to %s", endpoint));
-            return new ModelAndView(new RedirectView(endpoint));
+            if (settings.isDedicatedSsoUrlMode()) {
+                LOG.info(String.format("Redirecting to %s", endpoint));
+                return new ModelAndView(new RedirectView(endpoint));
+            } else {
+                LOG.info(String.format("Building AuthNRequest to %s", endpoint));
+                this.samlAuthenticationScheme.sendAuthnRequest(httpServletRequest, httpServletResponse);
+                return null;
+            }
 
         } catch (Exception e) {
             LOG.error(String.format("Error while initating SSO login redirect: ", e.getMessage()), e);

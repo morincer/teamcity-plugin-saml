@@ -25,6 +25,9 @@ public class SamlPluginSettings {
     @NotEmpty(message = "Login button name is mandatory")
     private String ssoLoginButtonName = "Login with SSO";
 
+    // Whether we use a dedicated SSO URL for the application or send AuthnRequest
+    private boolean dedicatedSsoUrlMode = true;
+
     private boolean createUsersAutomatically = false;
     private boolean limitToPostfixes = false;
     private String allowedPostfixes = null;

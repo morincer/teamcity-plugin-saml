@@ -35,8 +35,8 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlLoginController samlLoginController(SBuildServer server, WebControllerManager webControllerManager, AuthorizationInterceptor interceptor, SamlPluginSettingsStorage settingsStorage) {
-        return new SamlLoginController(server, webControllerManager, interceptor, settingsStorage);
+    SamlLoginController samlLoginController(SBuildServer server, WebControllerManager webControllerManager, AuthorizationInterceptor interceptor, SamlAuthenticationScheme samlAuthenticationScheme, SamlPluginSettingsStorage settingsStorage) {
+        return new SamlLoginController(server, webControllerManager, interceptor, samlAuthenticationScheme, settingsStorage);
     }
 
     @Bean
