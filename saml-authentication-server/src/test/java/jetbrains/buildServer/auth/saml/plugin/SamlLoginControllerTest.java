@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import java.net.URL;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
@@ -55,21 +56,7 @@ public class SamlLoginControllerTest {
     }
 
     @Test
-    public void shouldRedirectInDedicatedSsoUrlMode() throws Exception {
-        this.settingsStorage.settings.setDedicatedSsoUrlMode(true);
-
-        var request = mock(HttpServletRequest.class);
-        var response = mock(HttpServletResponse.class);
-
-        ModelAndView result = controller.doHandle(request, response);
-        RedirectView redirectView = (RedirectView) result.getView();
-        assertThat(redirectView, is(notNullValue()));
-        assertThat(redirectView.getUrl(), equalTo(ssoEndpoint));
-    }
-
-    @Test
     public void shouldSendAuthnRequestInNonDedicatedSsoUrlMode() throws Exception {
-        this.settingsStorage.settings.setDedicatedSsoUrlMode(false);
         this.settingsStorage.settings.setEntityId("http://IdP.com");
         this.settingsStorage.settings.setIssuerUrl("http://nowhere.com");
         this.settingsStorage.settings.setPublicCertificate(Files.readFile(Paths.get("src/test/resources/metadata_pub.key").toFile()));
@@ -81,6 +68,10 @@ public class SamlLoginControllerTest {
 
         ModelAndView result = controller.doHandle(request, response);
         assertThat(result, is(nullValue()));
-        assertThat(response.getHeader("Location"), equalTo(ssoEndpoint));
+        String redirectedUrl = response.getRedirectedUrl();
+        assertThat(redirectedUrl, not(isEmptyString()));
+        URL url = new URL(redirectedUrl);
+        assertThat(url.getHost(), equalTo(new URL(ssoEndpoint).getHost()));
+        assertThat(url.getQuery(), containsString("SAMLRequest"));
     }
 }

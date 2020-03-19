@@ -56,16 +56,12 @@ public class SamlLoginController extends BaseController {
 
             var urlValidator = new UrlValidator();
 
-            if (!urlValidator.isValid(endpoint)) throw new Exception(String.format("SSO endpoint (%s) must be a valid URL ", endpoint));
-            if (settings.isDedicatedSsoUrlMode()) {
-                LOG.info(String.format("Redirecting to %s", endpoint));
-                return new ModelAndView(new RedirectView(endpoint));
-            } else {
-                LOG.info(String.format("Building AuthNRequest to %s", endpoint));
-                this.samlAuthenticationScheme.sendAuthnRequest(httpServletRequest, httpServletResponse);
-                return null;
-            }
+            if (!urlValidator.isValid(endpoint))
+                throw new Exception(String.format("SSO endpoint (%s) must be a valid URL ", endpoint));
 
+            LOG.info(String.format("Building AuthNRequest to %s", endpoint));
+            this.samlAuthenticationScheme.sendAuthnRequest(httpServletRequest, httpServletResponse);
+            return null;
         } catch (Exception e) {
             LOG.error(String.format("Error while initating SSO login redirect: ", e.getMessage()), e);
             throw e;

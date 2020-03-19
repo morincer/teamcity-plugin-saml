@@ -186,6 +186,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY,
                 new URL(baseUrl, SamlPluginConstants.SAML_CALLBACK_URL.replace("**", "")));
         samlData.put(SettingsBuilder.IDP_X509CERT_PROPERTY_KEY, pluginSettings.getPublicCertificate());
+        samlData.put(SettingsBuilder.COMPRESS_REQUEST, pluginSettings.isCompressRequest());
 
         var builder = new SettingsBuilder();
         var samlSettings = builder.fromValues(samlData).build();

@@ -1,6 +1,10 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onelogin.saml2.settings.Metadata;
 import jetbrains.buildServer.RootUrlHolder;
+import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.junit.Before;
@@ -78,7 +82,13 @@ public class SamlSettingsJsonControllerTest {
         var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
         var metadataCert = Files.readFile(Paths.get(metadataPubCert).toAbsolutePath().toFile());
 
-        var reader = new BufferedReader(new FileReader(metadataFilePath));
+        var metadataJson = new MetadataImport();
+        metadataJson.setMetadataXml(metadataXml);
+
+        var mapper = new ObjectMapper();
+        var jsonString = mapper.writeValueAsString(metadataJson);
+
+        var reader = new BufferedReader(new StringReader(jsonString));
 
         var request = mock(HttpServletRequest.class);
         when(request.getReader()).thenReturn(reader);
