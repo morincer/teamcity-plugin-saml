@@ -39,6 +39,8 @@ public class SamlSettingsJsonControllerTest {
     public void setUp() throws Exception {
         Mockito.reset();
         this.rootUrlHolder = mock(RootUrlHolder.class);
+        when(rootUrlHolder.getRootUrl()).thenReturn("http://my.url");
+
         this.webControllerManager = mock(WebControllerManager.class);
 
         this.settingsStorage = new InMemorySamlPluginSettingsStorage();
@@ -48,7 +50,6 @@ public class SamlSettingsJsonControllerTest {
     @Test
     public void shouldInitializeCallbackUrlWithRootUrl() {
         var request = mock(HttpServletRequest.class);
-        when(rootUrlHolder.getRootUrl()).thenReturn("http://my.url");
 
         var settings = this.controller.getSettings(request);
         var actualUrl = settings.getResult().getSsoCallbackUrl();
@@ -59,7 +60,6 @@ public class SamlSettingsJsonControllerTest {
     @Test
     public void shouldSetDefaultEntityIdToCallbackUrl() {
         var request = mock(HttpServletRequest.class);
-        when(rootUrlHolder.getRootUrl()).thenReturn("http://my.url");
 
         var settings = this.controller.getSettings(request);
 
