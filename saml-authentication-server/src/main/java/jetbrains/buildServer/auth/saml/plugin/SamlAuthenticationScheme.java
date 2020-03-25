@@ -2,6 +2,7 @@ package jetbrains.buildServer.auth.saml.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.onelogin.saml2.Auth;
+import com.onelogin.saml2.exception.SettingsException;
 import com.onelogin.saml2.settings.Saml2Settings;
 import com.onelogin.saml2.settings.SettingsBuilder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
@@ -55,6 +56,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     @Override
     public boolean isMultipleInstancesAllowed() {
         return false;
+    }
+
+    public void sendAuthnRequest(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) throws IOException, SettingsException {
+        var samlSettings = buildSettings(new URL(request.getRequestURL().toString()));
+        var auth = new Auth(samlSettings, request, response);
+        auth.login();
     }
 
     @NotNull
@@ -179,6 +186,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY,
                 new URL(baseUrl, SamlPluginConstants.SAML_CALLBACK_URL.replace("**", "")));
         samlData.put(SettingsBuilder.IDP_X509CERT_PROPERTY_KEY, pluginSettings.getPublicCertificate());
+        samlData.put(SettingsBuilder.COMPRESS_REQUEST, pluginSettings.isCompressRequest());
 
         var builder = new SettingsBuilder();
         var samlSettings = builder.fromValues(samlData).build();

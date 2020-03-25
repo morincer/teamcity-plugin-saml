@@ -69,6 +69,12 @@
                 <template v-slot:content><input type="checkbox" v-model="settings.hideLoginForm"/></template>
             </RunnerFormRow>
 
+            <RunnerFormRow>
+                <template v-slot:label>Compress SAML Request</template>
+                <template v-slot:content><input type="checkbox" v-model="settings.compressRequest"></template>
+                <template v-slot:note>When making an initial login redirect, the SAMLRequest variable in the URL will be compressed prior Base64 encoding</template>
+            </RunnerFormRow>
+
             <template v-slot:actions>
                 <input type="submit" value="Save" class="btn btn_primary submitButton"
                        :disabled="isLoading || isSaving"

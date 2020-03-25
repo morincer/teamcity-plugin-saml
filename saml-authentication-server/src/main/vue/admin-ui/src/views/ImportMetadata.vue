@@ -44,78 +44,78 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import RunnerForm from "@/components/RunnerForm.vue";
-    import GroupingHeader from "@/components/GroupingHeader.vue";
-    import RunnerFormRow from "@/components/RunnerFormRow.vue";
-    import RunnerFormInput from "@/components/RunnerFormInput.vue";
-    import {Component, Prop} from "vue-property-decorator";
-    import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
-    import TextInput from "@/components/TextInput.vue";
-    import ProgressIndicator from "@/components/ProgressIndicator.vue";
-    import MessagesBox from "@/components/MessagesBox.vue";
-    import {appConfig} from "@/main.dependencies";
-    import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
+import Vue from "vue";
+import RunnerForm from "@/components/RunnerForm.vue";
+import GroupingHeader from "@/components/GroupingHeader.vue";
+import RunnerFormRow from "@/components/RunnerFormRow.vue";
+import RunnerFormInput from "@/components/RunnerFormInput.vue";
+import {Component, Prop} from "vue-property-decorator";
+import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+import TextInput from "@/components/TextInput.vue";
+import ProgressIndicator from "@/components/ProgressIndicator.vue";
+import MessagesBox from "@/components/MessagesBox.vue";
+import {appConfig} from "@/main.dependencies";
+import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
-    @Component({
-        components: {
-            SamlAttributeSelect,
-            MessagesBox,
-            TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator
-        }
-    })
-    export default class ImportMetadata extends Vue {
+@Component({
+    components: {
+        SamlAttributeSelect,
+        MessagesBox,
+        TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator,
+    },
+})
+export default class ImportMetadata extends Vue {
 
-        public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
+    public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
 
-        public isLoading: boolean = false;
-        public isSaving: boolean = false;
-        public successMsg: string = "";
-        public errors: ApiError[] = [];
+    public isLoading: boolean = false;
+    public isSaving: boolean = false;
+    public successMsg: string = "";
+    public errors: ApiError[] = [];
 
-        public metadata: string = "";
+    public metadata: string = "";
 
-        previewSettings: SamlSettings = {};
+    public previewSettings: SamlSettings = {};
 
-        public async importMetadata() {
-            try {
-                this.isLoading = true;
-                const result = await this.settingsApiService.importMetadata(this.metadata);
+    public async importMetadata() {
+        try {
+            this.isLoading = true;
+            const result = await this.settingsApiService.importMetadata(this.metadata);
 
-                if (result.result) {
-                    this.previewSettings = result.result;
-                    this.successMsg = "Metadata Imported Successfully. " +
-                        "Please review the resulting settings and save them if everything is ok";
-                } else if (result.errors) {
-                    this.errors = result.errors;
-                }
-            } catch (e) {
-                this.errors = [{message: e, code: 0}];
-            } finally {
-                this.isLoading = false;
+            if (result.result) {
+                this.previewSettings = result.result;
+                this.successMsg = "Metadata Imported Successfully. " +
+                    "Please review the resulting settings and save them if everything is ok";
+            } else if (result.errors) {
+                this.errors = result.errors;
             }
+        } catch (e) {
+            this.errors = [{message: e, code: 0}];
+        } finally {
+            this.isLoading = false;
         }
-
-        public async save() {
-            try {
-                this.isSaving = true;
-                const result = await this.settingsApiService.save(this.previewSettings);
-
-                if (result.result) {
-                    this.$router.push("/");
-                }
-            } catch (e) {
-                this.errors = [{message: e, code: 0}];
-            } finally {
-                this.isSaving = false;
-            }
-        }
-
-        public cancel() {
-            this.$router.push("/");
-        }
-
     }
+
+    public async save() {
+        try {
+            this.isSaving = true;
+            const result = await this.settingsApiService.save(this.previewSettings);
+
+            if (result.result) {
+                this.$router.push("/");
+            }
+        } catch (e) {
+            this.errors = [{message: e, code: 0}];
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
+    public cancel() {
+        this.$router.push("/");
+    }
+
+}
 </script>
 
 <style scoped>

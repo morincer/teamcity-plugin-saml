@@ -27,7 +27,7 @@ export default new Router({
         {
             path: "/import",
             name: "ImportMetadata",
-            component: ImportMetadata
-        }
+            component: ImportMetadata,
+        },
     ],
 });
