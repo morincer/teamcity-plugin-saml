@@ -8,6 +8,7 @@ import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
+import org.apache.commons.validator.routines.RegexValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SamlLoginController extends BaseController {
 
+    private final RegexValidator anyAuthorityValidator;
     private SamlAuthenticationScheme samlAuthenticationScheme;
     private final SamlPluginSettingsStorage settingsStorage;
 
@@ -32,11 +34,16 @@ public class SamlLoginController extends BaseController {
         super(server);
         this.samlAuthenticationScheme = samlAuthenticationScheme;
         this.settingsStorage = settingsStorage;
+        this.anyAuthorityValidator = new RegexValidator(".*");
 
         LOG.info("Initializing SAML controller");
 
         interceptor.addPathNotRequiringAuth(SamlPluginConstants.SAML_INITIATE_LOGIN_URL);
         webControllerManager.registerController(SamlPluginConstants.SAML_INITIATE_LOGIN_URL, this);
+    }
+
+    public boolean validateUrl(String url) {
+        return new UrlValidator(anyAuthorityValidator, UrlValidator.ALLOW_ALL_SCHEMES + UrlValidator.ALLOW_LOCAL_URLS).isValid(url);
     }
 
     @Nullable
@@ -54,10 +61,10 @@ public class SamlLoginController extends BaseController {
                 throw new Exception("You must configure a valid SSO endpoint");
             }
 
-            var urlValidator = new UrlValidator();
-
-            if (!urlValidator.isValid(endpoint))
+            boolean ssoEndpointIsValid = validateUrl(endpoint);
+            if (!ssoEndpointIsValid) {
                 throw new Exception(String.format("SSO endpoint (%s) must be a valid URL ", endpoint));
+            }
 
             LOG.info(String.format("Building AuthNRequest to %s", endpoint));
             this.samlAuthenticationScheme.sendAuthnRequest(httpServletRequest, httpServletResponse);

@@ -28,6 +28,8 @@ export interface SamlSettings {
     hideLoginForm?: boolean;
     ssoLoginButtonName?: string;
 
+    compressRequest?: boolean;
+
     createUsersAutomatically?: boolean;
     limitToPostfixes?: boolean;
     allowedPostfixes?: string;

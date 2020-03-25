@@ -74,4 +74,13 @@ public class SamlLoginControllerTest {
         assertThat(url.getHost(), equalTo(new URL(ssoEndpoint).getHost()));
         assertThat(url.getQuery(), containsString("SAMLRequest"));
     }
+
+    @Test
+    public void validateUrl() {
+        String url = "http://keycloak.lan:8080/auth/realms/master/protocol/saml";
+        assertThat(controller.validateUrl(url), is(true));
+
+        url = "http://do-openam.localnet.local:8080/openam/";
+        assertThat(controller.validateUrl(url), is(true));
+    }
 }

@@ -28,7 +28,7 @@ public class SamlPluginSettings {
     private boolean createUsersAutomatically = false;
     private boolean limitToPostfixes = false;
     private String allowedPostfixes = null;
-    private boolean compressRequest = false;
+    private boolean compressRequest = true;
 
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();
