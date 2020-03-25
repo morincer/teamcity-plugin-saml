@@ -35,22 +35,22 @@
 
 <script lang="ts">
 import Vue from "vue";
-    import {Component} from "vue-property-decorator";
-    import SettingsFacade from "@/components/SettingsFacade.vue";
-    import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
-    import RunnerForm from "@/components/RunnerForm.vue";
-    import {appConfig} from "@/main.dependencies";
-    import MessagesBox from "@/components/MessagesBox.vue";
-    import ProgressIndicator from "@/components/ProgressIndicator.vue";
-    import ImportMetadata from "@/views/ImportMetadata.vue";
-    import {OktaDecoration, OneloginDecoration} from "@/resources/ConnectionWizardDecorations";
+import {Component} from "vue-property-decorator";
+import SettingsFacade from "@/components/SettingsFacade.vue";
+import {ApiError, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+import RunnerForm from "@/components/RunnerForm.vue";
+import {appConfig} from "@/main.dependencies";
+import MessagesBox from "@/components/MessagesBox.vue";
+import ProgressIndicator from "@/components/ProgressIndicator.vue";
+import ImportMetadata from "@/views/ImportMetadata.vue";
+import {OktaDecoration, OneloginDecoration} from "@/resources/ConnectionWizardDecorations";
 
-    enum SsoProvider {
+enum SsoProvider {
     None, Okta, OneLogin, ImportMetadata,
 }
 
 
-    @Component({components: {ImportMetadata, ProgressIndicator, SettingsFacade, RunnerForm, MessagesBox}})
+@Component({components: {ImportMetadata, ProgressIndicator, SettingsFacade, RunnerForm, MessagesBox}})
 export default class NewConnectionWizard extends Vue {
 
     public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
