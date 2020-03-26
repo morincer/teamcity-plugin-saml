@@ -5,6 +5,7 @@ import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.exception.SettingsException;
 import com.onelogin.saml2.settings.Saml2Settings;
 import com.onelogin.saml2.settings.SettingsBuilder;
+import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
@@ -22,6 +23,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,13 +32,16 @@ import java.util.stream.Collectors;
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
     private final Logger LOG = Loggers.SERVER;
+    private RootUrlHolder rootUrlHolder;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
 
 
     public SamlAuthenticationScheme(
+            @NotNull RootUrlHolder rootUrlHolder,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
             @NotNull UserModel userModel) {
+        this.rootUrlHolder = rootUrlHolder;
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
     }
@@ -59,7 +64,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     }
 
     public void sendAuthnRequest(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) throws IOException, SettingsException {
-        var samlSettings = buildSettings(new URL(request.getRequestURL().toString()));
+        var samlSettings = buildSettings();
         var auth = new Auth(samlSettings, request, response);
         auth.login();
     }
@@ -74,7 +79,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         try {
             var settings = this.settingsStorage.load();
 
-            var saml2Settings = buildSettings(new URL(request.getRequestURL().toString()));
+            var saml2Settings = buildSettings();
             var auth = new Auth(saml2Settings, request, response);
 
             auth.processResponse();
@@ -176,15 +181,18 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         return HttpAuthenticationResult.unauthenticated();
     }
 
-    private Saml2Settings buildSettings(URL baseUrl) throws IOException {
+    public URL getCallbackUrl() throws MalformedURLException {
+        return new URL(new URL(rootUrlHolder.getRootUrl()), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+    }
+
+    private Saml2Settings buildSettings() throws IOException {
         var pluginSettings = settingsStorage.load();
 
         Map<String, Object> samlData = new HashMap<>();
         samlData.put(SettingsBuilder.IDP_SINGLE_SIGN_ON_SERVICE_URL_PROPERTY_KEY, pluginSettings.getSsoEndpoint());
         samlData.put(SettingsBuilder.IDP_ENTITYID_PROPERTY_KEY, pluginSettings.getIssuerUrl());
         samlData.put(SettingsBuilder.SP_ENTITYID_PROPERTY_KEY, pluginSettings.getEntityId());
-        samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY,
-                new URL(baseUrl, SamlPluginConstants.SAML_CALLBACK_URL.replace("**", "")));
+        samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY, getCallbackUrl());
         samlData.put(SettingsBuilder.IDP_X509CERT_PROPERTY_KEY, pluginSettings.getPublicCertificate());
         samlData.put(SettingsBuilder.COMPRESS_REQUEST, pluginSettings.isCompressRequest());
 

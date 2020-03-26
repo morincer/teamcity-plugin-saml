@@ -31,15 +31,17 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
     private static Logger log = Loggers.SERVER;
 
+    private SamlAuthenticationScheme samlAuthenticationScheme;
     private SamlPluginSettingsStorage settingsStorage;
     private RootUrlHolder rootUrlHolder;
 
-    protected SamlSettingsJsonController(@NotNull SamlPluginSettingsStorage settingsStorage,
-                                         WebControllerManager controllerManager,
-                                         RootUrlHolder rootUrlHolder) {
+    protected SamlSettingsJsonController(
+            @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
+            @NotNull SamlPluginSettingsStorage settingsStorage,
+                                         WebControllerManager controllerManager) {
         super("/admin/samlSettingsApi.html", controllerManager);
+        this.samlAuthenticationScheme = samlAuthenticationScheme;
         this.settingsStorage = settingsStorage;
-        this.rootUrlHolder = rootUrlHolder;
 
         registerAction(JsonControllerAction.forParam("action", "get").using(HttpMethod.GET).run(this::getSettings));
         registerAction(JsonControllerAction.forParam("action", "save").using(HttpMethod.POST).run(this::saveSettings));
@@ -133,8 +135,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
     public JsonActionResult<SamlPluginSettings> getSettings(HttpServletRequest request) {
         try {
             var samlPluginSettings = settingsStorage.load();
-            String rootUrl = this.rootUrlHolder.getRootUrl();
-            var callbackUrl = new URL(new URL(rootUrl), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+            var callbackUrl = this.samlAuthenticationScheme.getCallbackUrl();
             samlPluginSettings.setSsoCallbackUrl(callbackUrl.toString());
 
             if (StringUtil.isEmpty(samlPluginSettings.getEntityId())) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onelogin.saml2.settings.Metadata;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
+import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.junit.Before;
@@ -34,6 +35,8 @@ public class SamlSettingsJsonControllerTest {
     private RootUrlHolder rootUrlHolder;
     private SamlPluginSettingsStorage settingsStorage;
     private WebControllerManager webControllerManager;
+    private UserModel userModel;
+    private SamlAuthenticationScheme samlAuthenticationScheme;
 
     @Before
     public void setUp() throws Exception {
@@ -44,7 +47,12 @@ public class SamlSettingsJsonControllerTest {
         this.webControllerManager = mock(WebControllerManager.class);
 
         this.settingsStorage = new InMemorySamlPluginSettingsStorage();
-        controller = new SamlSettingsJsonController(this.settingsStorage, this.webControllerManager, this.rootUrlHolder);
+
+        this.userModel = mock(UserModel.class);
+
+        samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
+
+        controller = new SamlSettingsJsonController(this.samlAuthenticationScheme, this.settingsStorage, this.webControllerManager);
     }
 
     @Test

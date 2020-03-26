@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
@@ -34,6 +35,7 @@ public class SamlAuthenticationSchemeTest {
     private UserModel userModel;
     private SUser validUser;
     private SUser newUser;
+    private RootUrlHolder rootUrlHolder;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -57,7 +59,10 @@ public class SamlAuthenticationSchemeTest {
         when(userModel.createUserAccount(null, "new_user")).thenReturn(newUser);
         when(userModel.createUserAccount(null, "new_user@somemail.com")).thenReturn(newUser);
 
-        this.scheme = new SamlAuthenticationScheme(settingsStorage, userModel);
+        this.rootUrlHolder = mock(RootUrlHolder.class);
+        when(rootUrlHolder.getRootUrl()).thenReturn("http://server.com");
+
+        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
     }
 
     @After

@@ -22,8 +22,8 @@ import java.nio.file.Paths;
 public class SamlPluginConfiguration {
 
     @Bean
-    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage SamlPluginSettingsStorage, UserModel userModel) {
-        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(SamlPluginSettingsStorage, userModel);
+    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel, RootUrlHolder rootUrlHolder) {
+        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel);
         loginConfiguration.registerAuthModuleType(samlAuthenticationScheme);
 
         return samlAuthenticationScheme;
@@ -58,7 +58,7 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, RootUrlHolder rootUrlHolder) throws IOException {
-        return new SamlSettingsJsonController(samlPluginSettingsStorage(null), controllerManager, rootUrlHolder);
+    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, SamlAuthenticationScheme samlAuthenticationScheme) throws IOException {
+        return new SamlSettingsJsonController(samlAuthenticationScheme, samlPluginSettingsStorage(null), controllerManager);
     }
 }
