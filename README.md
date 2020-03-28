@@ -65,7 +65,7 @@ Please refer the example of set up for [Okta](./docs/OktaSetup.md) if you need s
 
 * Make sure you have properly set up users on the TeamCity side - their usernames should match the SAML assertion name ID (usually - e-mail). 
 
-* Make sure your CORS settings allow posts from the IdP site
+* **(IMPORTANT!)** Make sure your CORS settings allow POST requests from the IdP site (check the [Okta](./docs/OktaSetup.md) guide for a sample)
 
 * Logout and click the "Login with SSO" button to test. 
 
