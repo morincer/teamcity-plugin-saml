@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.onelogin.saml2.settings.Saml2Settings;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
@@ -9,6 +10,7 @@ import jetbrains.buildServer.users.UserModel;
 import lombok.var;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.xerces.impl.dv.util.Base64;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -18,14 +20,16 @@ import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.xpath.XPathException;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.cert.CertificateEncodingException;
 import java.util.HashMap;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class SamlAuthenticationSchemeTest {
@@ -246,5 +250,38 @@ public class SamlAuthenticationSchemeTest {
                 "-----END CERTIFICATE-----\n");
 
         this.settingsStorage.save(settings);
+    }
+
+    @Test
+    public void shouldParseADFSMetadata() throws IOException, XPathException, CertificateEncodingException {
+        var metadataFilePath = "src/test/resources/FederationMetadata.xml";
+        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+
+        SamlPluginSettings settings = new SamlPluginSettings();
+        this.scheme.importMetadataIntoSettings(metadataXml, settings);
+
+        assertThat(settings.getPublicCertificate(), is(notNullValue()));
+        assertThat(settings.getPublicCertificate(), is(CoreMatchers.containsString("MIIC9j")));
+        assertThat(settings.getAdditionalCerts(), is(notNullValue()));
+        assertThat(settings.getAdditionalCerts().size(), equalTo(1));
+        assertThat(settings.getAdditionalCerts().get(0), is(notNullValue()));
+        assertThat(settings.getAdditionalCerts().get(0), is(CoreMatchers.containsString("MIIC8DC")));
+    }
+
+    @Test
+    public void shouldBuildProperSaml2SettingsWhenMultipleCertificates() throws IOException, CertificateEncodingException, XPathException {
+        var metadataFilePath = "src/test/resources/FederationMetadata.xml";
+        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+
+        SamlPluginSettings settings = new SamlPluginSettings();
+        this.scheme.importMetadataIntoSettings(metadataXml, settings);
+
+        settings.setEntityId("http://test.entity");
+
+        this.settingsStorage.save(settings);
+
+        Saml2Settings saml2Settings = this.scheme.buildSettings();
+        assertThat(saml2Settings.getIdpx509cert(), is(notNullValue()));
+        assertThat(saml2Settings.getIdpx509certMulti().size(), equalTo(1));
     }
 }
