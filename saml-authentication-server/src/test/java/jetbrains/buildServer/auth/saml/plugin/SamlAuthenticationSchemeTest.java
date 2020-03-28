@@ -75,7 +75,7 @@ public class SamlAuthenticationSchemeTest {
     }
 
     @Test
-    public void shouldAuthenticateValidSamlClaimForValidUser() throws IOException {
+    public void shouldAuthenticateValidSamlClaimForValidUser() throws IOException, XPathException, CertificateEncodingException {
         var request = mock(HttpServletRequest.class);
         var samlResponsePath = "src/test/resources/saml_signed_message.xml";
 
@@ -84,17 +84,7 @@ public class SamlAuthenticationSchemeTest {
 
         createSettings();
 
-        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
-        saml = Base64.encode(saml.getBytes());
-
-        var parameterMap = new HashMap<String, String[]>();
-        parameterMap.put("SAMLResponse", new String[] {saml});
-
-        when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getParameter("SAMLResponse")).thenReturn(saml);
-        var response = mock(HttpServletResponse.class);
-        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        var result = simulateSAMLResponse(samlResponsePath, null, null, null);
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
     }
 
@@ -284,4 +274,52 @@ public class SamlAuthenticationSchemeTest {
         assertThat(saml2Settings.getIdpx509cert(), is(notNullValue()));
         assertThat(saml2Settings.getIdpx509certMulti().size(), equalTo(1));
     }
+
+    @Test
+    public void shouldProperlyAuthenticateWhenMultipleCertificates() throws IOException, CertificateEncodingException, XPathException {
+        var samlResponsePath = "src/test/resources/adfsSignedMessage.xml";
+        var metadataFilePath = "src/test/resources/FederationMetadata.xml";
+
+        HttpAuthenticationResult httpAuthenticationResult = simulateSAMLResponse(samlResponsePath, metadataFilePath, null, null);
+        assertThat(httpAuthenticationResult.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));;
+    }
+
+    private HttpAuthenticationResult simulateSAMLResponse(String samlResponsePath, String metadataFilePath, String callbackUrl, String entityId) throws IOException, CertificateEncodingException, XPathException {
+        var request = mock(HttpServletRequest.class);
+
+        if (entityId == null) {
+            entityId = "http://test.lan/app/callback";
+        }
+
+        if (metadataFilePath != null) {
+            var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+
+            SamlPluginSettings settings = new SamlPluginSettings();
+            this.scheme.importMetadataIntoSettings(metadataXml, settings);
+
+            settings.setEntityId(entityId);
+            this.settingsStorage.save(settings);
+        }
+
+        if (callbackUrl == null) {
+            callbackUrl = "http://test.lan/app/callback";
+        }
+
+        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+
+        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
+        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+
+        var parameterMap = new HashMap<String, String[]>();
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        when(request.getParameterMap()).thenReturn(parameterMap);
+        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        var response = mock(HttpServletResponse.class);
+        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        return result;
+    }
+
+
 }
