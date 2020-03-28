@@ -2,16 +2,32 @@
 
 [![Build Status](https://travis-ci.org/morincer/teamcity-plugin-saml.svg?branch=master)](https://travis-ci.org/morincer/teamcity-plugin-saml)
 
+## What's New
+
+* v1.2
+    - Add support for multi-certificates configurations (like ADFS-generated metadata) 
+* v1.1.1 
+    - Fixed issue with wrong callback URL when running behind load balancer 
+
 ## Overview
 
-The plug-in adds ability to authenticate users with SAML-based SSO providers (like Okta, Onelogin etc.).
+The plug-in adds ability to authenticate users with SAML-based SSO providers. 
+
+Currently tested and reported to work (sometimes - with bit of tweaking) with:
+
+* Okta
+* Onelogin
+* Keycloak
+* ADFS
+
+(Note: if you have other providers you were able to integrate with - drop me a note, please, so I extend the list)
 
 The plug-in offers the following functionality:
 
 * Authenticate SAML assertions for existing users
 * Option to automatically create users on login (you may also limit allowed user names by postfix match)
 * Wizard to ease configuration of connectivity to common IdP providers  (currently - Okta and Onelogin, more to come in future)
-* Option to import IdP metadata from XML   
+* Option to import IdP metadata from XML
 
 Things the plug-in does NOT currently support (but they're on the roadmap):
 
