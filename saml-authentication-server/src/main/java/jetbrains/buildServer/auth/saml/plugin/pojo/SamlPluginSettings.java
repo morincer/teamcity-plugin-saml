@@ -2,6 +2,8 @@ package jetbrains.buildServer.auth.saml.plugin.pojo;
 
 import lombok.Data;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class SamlPluginSettings {
@@ -18,6 +20,8 @@ public class SamlPluginSettings {
     @NotEmpty(message = "X509 certificate is mandatory")
     private String publicCertificate;
 
+    private List<String> additionalCerts = new ArrayList<>();
+
     private String ssoCallbackUrl; // Used for UI-purposes only - calculated automatically
 
     private boolean hideLoginForm;
@@ -29,6 +33,7 @@ public class SamlPluginSettings {
     private boolean limitToPostfixes = false;
     private String allowedPostfixes = null;
     private boolean compressRequest = true;
+    private boolean strict = true;
 
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();

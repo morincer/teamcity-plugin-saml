@@ -27,6 +27,7 @@ export interface SamlSettings {
     ssoCallbackUrl?: string;
     hideLoginForm?: boolean;
     ssoLoginButtonName?: string;
+    strict?: boolean;
 
     compressRequest?: boolean;
 

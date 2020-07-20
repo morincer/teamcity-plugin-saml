@@ -1,9 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.onelogin.saml2.settings.IdPMetadataParser;
-import com.onelogin.saml2.settings.Saml2Settings;
-import com.onelogin.saml2.util.Util;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
@@ -22,9 +19,7 @@ import org.springframework.http.HttpMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validation;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Base64;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
@@ -60,13 +55,6 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
             var metadataXml = metadataImport.getMetadataXml();
 
-            var documentMetadata = Util.loadXML(metadataXml);
-
-            Map<String, Object> metadataInfo = IdPMetadataParser.parseXML(documentMetadata);
-
-            var saml2Settings = new Saml2Settings();
-            IdPMetadataParser.injectIntoSettings(saml2Settings, metadataInfo);
-
             var getSettingsResult = this.getSettings(request);
 
             if (getSettingsResult.getErrors() != null) {
@@ -75,17 +63,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
             var result = getSettingsResult.getResult();
 
-            result.setIssuerUrl(saml2Settings.getIdpEntityId());
-            result.setSsoEndpoint(saml2Settings.getIdpSingleSignOnServiceUrl().toString());
-
-            result.setPublicCertificate(null);
-            if (saml2Settings.getIdpx509cert() != null) {
-                var encoded = saml2Settings.getIdpx509cert().getEncoded();
-                var base64encoded = Base64.getMimeEncoder(64, "\n".getBytes()).encodeToString(encoded);
-                if (!StringUtil.isEmpty(base64encoded)) {
-                    result.setPublicCertificate("-----BEGIN CERTIFICATE-----\n" + base64encoded + "\n-----END CERTIFICATE-----\n");
-                }
-            }
+            this.samlAuthenticationScheme.importMetadataIntoSettings(metadataXml, result);
 
             return JsonActionResult.ok(result);
         } catch (Exception e) {

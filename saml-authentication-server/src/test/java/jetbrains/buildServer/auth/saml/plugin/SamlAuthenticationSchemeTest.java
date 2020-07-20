@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.onelogin.saml2.settings.Saml2Settings;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
@@ -9,6 +10,10 @@ import jetbrains.buildServer.users.UserModel;
 import lombok.var;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.xerces.impl.dv.util.Base64;
+import org.hamcrest.CoreMatchers;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -18,14 +23,16 @@ import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.xpath.XPathException;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.cert.CertificateEncodingException;
 import java.util.HashMap;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class SamlAuthenticationSchemeTest {
@@ -62,16 +69,19 @@ public class SamlAuthenticationSchemeTest {
         this.rootUrlHolder = mock(RootUrlHolder.class);
         when(rootUrlHolder.getRootUrl()).thenReturn("http://server.com");
 
+        this.settingsStorage.settings.setStrict(false);
+
         this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
     }
 
     @After
     public void tearDown() throws Exception {
         Mockito.reset();
+        DateTimeUtils.setCurrentMillisSystem();
     }
 
     @Test
-    public void shouldAuthenticateValidSamlClaimForValidUser() throws IOException {
+    public void shouldAuthenticateValidSamlClaimForValidUser() throws IOException, XPathException, CertificateEncodingException {
         var request = mock(HttpServletRequest.class);
         var samlResponsePath = "src/test/resources/saml_signed_message.xml";
 
@@ -80,17 +90,7 @@ public class SamlAuthenticationSchemeTest {
 
         createSettings();
 
-        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
-        saml = Base64.encode(saml.getBytes());
-
-        var parameterMap = new HashMap<String, String[]>();
-        parameterMap.put("SAMLResponse", new String[] {saml});
-
-        when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getParameter("SAMLResponse")).thenReturn(saml);
-        var response = mock(HttpServletResponse.class);
-        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        var result = simulateSAMLResponse(samlResponsePath, null, null, null);
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
     }
 
@@ -201,6 +201,7 @@ public class SamlAuthenticationSchemeTest {
         settings.setCreateUsersAutomatically(true);
         settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.setStrict(false);
         settingsStorage.save(settings);
 
         var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
@@ -245,6 +246,91 @@ public class SamlAuthenticationSchemeTest {
                 "njo3k6r5gXyl8tk=\n" +
                 "-----END CERTIFICATE-----\n");
 
+        settings.setStrict(false);
         this.settingsStorage.save(settings);
     }
+
+    @Test
+    public void shouldParseADFSMetadata() throws IOException, XPathException, CertificateEncodingException {
+        var metadataFilePath = "src/test/resources/FederationMetadata.xml";
+        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+
+        SamlPluginSettings settings = new SamlPluginSettings();
+        this.scheme.importMetadataIntoSettings(metadataXml, settings);
+
+        assertThat(settings.getPublicCertificate(), is(notNullValue()));
+        assertThat(settings.getPublicCertificate(), is(CoreMatchers.containsString("MIIC9j")));
+        assertThat(settings.getAdditionalCerts(), is(notNullValue()));
+        assertThat(settings.getAdditionalCerts().size(), equalTo(1));
+        assertThat(settings.getAdditionalCerts().get(0), is(notNullValue()));
+        assertThat(settings.getAdditionalCerts().get(0), is(CoreMatchers.containsString("MIIC8DC")));
+    }
+
+    @Test
+    public void shouldBuildProperSaml2SettingsWhenMultipleCertificates() throws IOException, CertificateEncodingException, XPathException {
+        var metadataFilePath = "src/test/resources/FederationMetadata.xml";
+        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+
+        SamlPluginSettings settings = new SamlPluginSettings();
+        this.scheme.importMetadataIntoSettings(metadataXml, settings);
+
+        settings.setEntityId("http://test.entity");
+
+        this.settingsStorage.save(settings);
+
+        Saml2Settings saml2Settings = this.scheme.buildSettings();
+        assertThat(saml2Settings.getIdpx509cert(), is(notNullValue()));
+        assertThat(saml2Settings.getIdpx509certMulti().size(), equalTo(1));
+    }
+
+    @Test
+    public void shouldProperlyAuthenticateWhenMultipleCertificates() throws IOException, CertificateEncodingException, XPathException {
+        var samlResponsePath = "src/test/resources/adfsSignedMessage.xml";
+        var metadataFilePath = "src/test/resources/FederationMetadata.xml";
+
+        when(userModel.findUserAccount(null, "diego.gomes@philips.com")).thenReturn(validUser);
+
+        HttpAuthenticationResult httpAuthenticationResult = simulateSAMLResponse(samlResponsePath, metadataFilePath, null, null);
+        assertThat(httpAuthenticationResult.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));;
+    }
+
+    private HttpAuthenticationResult simulateSAMLResponse(String samlResponsePath, String metadataFilePath, String callbackUrl, String entityId) throws IOException, CertificateEncodingException, XPathException {
+        var request = mock(HttpServletRequest.class);
+
+        if (entityId == null) {
+            entityId = "http://test.lan/app/callback";
+        }
+
+        if (metadataFilePath != null) {
+            var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+
+            SamlPluginSettings settings = new SamlPluginSettings();
+            this.scheme.importMetadataIntoSettings(metadataXml, settings);
+
+            settings.setStrict(false);
+            settings.setEntityId(entityId);
+            this.settingsStorage.save(settings);
+        }
+
+        if (callbackUrl == null) {
+            callbackUrl = "http://test.lan/app/callback";
+        }
+
+        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+
+        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
+        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+
+        var parameterMap = new HashMap<String, String[]>();
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        when(request.getParameterMap()).thenReturn(parameterMap);
+        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        var response = mock(HttpServletResponse.class);
+        var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        return result;
+    }
+
+
 }

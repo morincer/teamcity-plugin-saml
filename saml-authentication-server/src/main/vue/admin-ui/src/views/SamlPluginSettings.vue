@@ -65,6 +65,11 @@
             <GroupingHeader>Misc</GroupingHeader>
             <RunnerFormInput label="Login Button Label" required v-model="settings.ssoLoginButtonName"/>
             <RunnerFormRow>
+                <template v-slot:label>SAML Strict Mode</template>
+                <template v-slot:content><input type="checkbox" v-model="settings.strict"/></template>
+                <template v-slot:note>Runs additional checks on SAML message</template>
+            </RunnerFormRow>
+            <RunnerFormRow>
                 <template v-slot:label>Hide Login Form</template>
                 <template v-slot:content><input type="checkbox" v-model="settings.hideLoginForm"/></template>
             </RunnerFormRow>

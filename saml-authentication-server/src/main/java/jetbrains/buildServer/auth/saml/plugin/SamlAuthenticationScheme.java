@@ -3,10 +3,13 @@ package jetbrains.buildServer.auth.saml.plugin;
 import com.intellij.openapi.diagnostic.Logger;
 import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.exception.SettingsException;
+import com.onelogin.saml2.settings.IdPMetadataParser;
 import com.onelogin.saml2.settings.Saml2Settings;
 import com.onelogin.saml2.settings.SettingsBuilder;
+import com.onelogin.saml2.util.Util;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
@@ -22,11 +25,16 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.xpath.XPathException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
@@ -185,7 +193,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         return new URL(new URL(rootUrlHolder.getRootUrl()), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
     }
 
-    private Saml2Settings buildSettings() throws IOException {
+    public Saml2Settings buildSettings() throws IOException {
         var pluginSettings = settingsStorage.load();
 
         Map<String, Object> samlData = new HashMap<>();
@@ -195,6 +203,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY, getCallbackUrl());
         samlData.put(SettingsBuilder.IDP_X509CERT_PROPERTY_KEY, pluginSettings.getPublicCertificate());
         samlData.put(SettingsBuilder.COMPRESS_REQUEST, pluginSettings.isCompressRequest());
+        samlData.put(SettingsBuilder.STRICT_PROPERTY_KEY, pluginSettings.isStrict());
+
+        for (int i = 0 ; i < pluginSettings.getAdditionalCerts().size(); i++) {
+            var cert = pluginSettings.getAdditionalCerts().get(i);
+            samlData.put(SettingsBuilder.IDP_X509CERTMULTI_PROPERTY_KEY + "." + i, cert);
+        }
 
         var builder = new SettingsBuilder();
         var samlSettings = builder.fromValues(samlData).build();
@@ -206,6 +220,43 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         }
 
         return samlSettings;
+    }
+
+    @NotNull
+    public void importMetadataIntoSettings(String metadataXml, SamlPluginSettings settings) throws XPathException, CertificateEncodingException {
+        var documentMetadata = Util.loadXML(metadataXml);
+
+        Map<String, Object> metadataInfo = IdPMetadataParser.parseXML(documentMetadata);
+
+        var saml2Settings = new Saml2Settings();
+        IdPMetadataParser.injectIntoSettings(saml2Settings, metadataInfo);
+
+        settings.setIssuerUrl(saml2Settings.getIdpEntityId());
+        settings.setSsoEndpoint(saml2Settings.getIdpSingleSignOnServiceUrl().toString());
+
+        settings.setPublicCertificate(null);
+        X509Certificate primaryCertificate = saml2Settings.getIdpx509cert();
+        if (primaryCertificate != null) {
+            settings.setPublicCertificate(getCertificateBase64Encoded(primaryCertificate));
+        }
+
+        if (saml2Settings.getIdpx509certMulti() != null) {
+            settings.getAdditionalCerts().clear();
+            for(X509Certificate cert : saml2Settings.getIdpx509certMulti()) {
+                var encoded = getCertificateBase64Encoded(cert);
+                settings.getAdditionalCerts().add(encoded);
+            }
+        }
+    }
+
+    public String getCertificateBase64Encoded(X509Certificate cert) throws CertificateEncodingException {
+        var encoded = cert.getEncoded();
+        var base64encoded = Base64.getMimeEncoder(64, "\n".getBytes()).encodeToString(encoded);
+        if (!StringUtil.isEmpty(base64encoded)) {
+            return "-----BEGIN CERTIFICATE-----\n" + base64encoded + "\n-----END CERTIFICATE-----\n";
+        }
+
+        return "";
     }
 
 
