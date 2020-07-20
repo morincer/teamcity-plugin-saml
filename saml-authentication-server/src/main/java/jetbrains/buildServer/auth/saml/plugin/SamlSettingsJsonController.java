@@ -11,6 +11,8 @@ import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.CSRFFilter;
+import jetbrains.buildServer.web.CsrfCheck;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,8 @@ public class SamlSettingsJsonController extends BaseJsonController {
     private SamlAuthenticationScheme samlAuthenticationScheme;
     private SamlPluginSettingsStorage settingsStorage;
     private RootUrlHolder rootUrlHolder;
+
+    static final String CSRF_HEADER = "X-TC-CSRF-Token" ;
 
     protected SamlSettingsJsonController(
             @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
