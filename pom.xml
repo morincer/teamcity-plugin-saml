@@ -6,7 +6,8 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
-      <teamcity-version>2018.2</teamcity-version>
+      <teamcity-version-lib>2018.2</teamcity-version-lib>
+      <teamcity-version-runtime>2019.2.2</teamcity-version-runtime>
   </properties>
   <repositories>
     <repository>
@@ -27,7 +28,7 @@
               <artifactId>teamcity-sdk-maven-plugin</artifactId>
               <version>0.4</version>
               <configuration>
-                  <teamcityDir>servers/${teamcity-version}</teamcityDir>
+                  <teamcityDir>servers/${teamcity-version-runtime}</teamcityDir>
               </configuration>
           </plugin>
       </plugins>
@@ -38,6 +39,7 @@
                   <artifactId>teamcity-sdk-maven-plugin</artifactId>
                   <version>0.4</version>
                   <configuration>
+                      <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
                       <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
                   </configuration>
               </plugin>
