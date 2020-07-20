@@ -69,9 +69,9 @@ public class SamlAuthenticationSchemeTest {
         this.rootUrlHolder = mock(RootUrlHolder.class);
         when(rootUrlHolder.getRootUrl()).thenReturn("http://server.com");
 
-        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
+        this.settingsStorage.settings.setStrict(false);
 
-        DateTimeUtils.setCurrentMillisFixed(new DateTime(2019, 8, 19, 12, 5, DateTimeZone.UTC).getMillis());
+        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
     }
 
     @After
@@ -201,6 +201,7 @@ public class SamlAuthenticationSchemeTest {
         settings.setCreateUsersAutomatically(true);
         settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.setStrict(false);
         settingsStorage.save(settings);
 
         var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
@@ -245,6 +246,7 @@ public class SamlAuthenticationSchemeTest {
                 "njo3k6r5gXyl8tk=\n" +
                 "-----END CERTIFICATE-----\n");
 
+        settings.setStrict(false);
         this.settingsStorage.save(settings);
     }
 
@@ -305,6 +307,7 @@ public class SamlAuthenticationSchemeTest {
             SamlPluginSettings settings = new SamlPluginSettings();
             this.scheme.importMetadataIntoSettings(metadataXml, settings);
 
+            settings.setStrict(false);
             settings.setEntityId(entityId);
             this.settingsStorage.save(settings);
         }
