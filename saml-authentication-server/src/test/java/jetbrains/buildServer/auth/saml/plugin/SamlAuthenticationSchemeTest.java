@@ -280,6 +280,8 @@ public class SamlAuthenticationSchemeTest {
         var samlResponsePath = "src/test/resources/adfsSignedMessage.xml";
         var metadataFilePath = "src/test/resources/FederationMetadata.xml";
 
+        when(userModel.findUserAccount(null, "diego.gomes@philips.com")).thenReturn(validUser);
+
         HttpAuthenticationResult httpAuthenticationResult = simulateSAMLResponse(samlResponsePath, metadataFilePath, null, null);
         assertThat(httpAuthenticationResult.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));;
     }
