@@ -11,6 +11,9 @@ import lombok.var;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.xerces.impl.dv.util.Base64;
 import org.hamcrest.CoreMatchers;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -67,11 +70,14 @@ public class SamlAuthenticationSchemeTest {
         when(rootUrlHolder.getRootUrl()).thenReturn("http://server.com");
 
         this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
+
+        DateTimeUtils.setCurrentMillisFixed(new DateTime(2019, 8, 19, 12, 5, DateTimeZone.UTC).getMillis());
     }
 
     @After
     public void tearDown() throws Exception {
         Mockito.reset();
+        DateTimeUtils.setCurrentMillisSystem();
     }
 
     @Test

@@ -33,6 +33,7 @@ public class SamlPluginSettings {
     private boolean limitToPostfixes = false;
     private String allowedPostfixes = null;
     private boolean compressRequest = true;
+    private boolean strict = true;
 
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();

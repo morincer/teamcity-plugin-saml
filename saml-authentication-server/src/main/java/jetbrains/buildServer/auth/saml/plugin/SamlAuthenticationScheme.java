@@ -34,6 +34,7 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
@@ -202,6 +203,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY, getCallbackUrl());
         samlData.put(SettingsBuilder.IDP_X509CERT_PROPERTY_KEY, pluginSettings.getPublicCertificate());
         samlData.put(SettingsBuilder.COMPRESS_REQUEST, pluginSettings.isCompressRequest());
+        samlData.put(SettingsBuilder.STRICT_PROPERTY_KEY, pluginSettings.isStrict());
 
         for (int i = 0 ; i < pluginSettings.getAdditionalCerts().size(); i++) {
             var cert = pluginSettings.getAdditionalCerts().get(i);

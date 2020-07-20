@@ -13,6 +13,7 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
                         ssoCallbackUrl: "some callback url",
                         hideLoginForm: false,
                         ssoLoginButtonName: "Login with SSO",
+                        strict: true
                     },
                 });
             }, 1000);
@@ -56,6 +57,7 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
                         ssoCallbackUrl: "some callback url from metadata",
                         hideLoginForm: false,
                         ssoLoginButtonName: "Login with SSO",
+                        strict: true
                     },
                 });
             }, 1000);
