@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosStatic} from "axios";
-import {ApiCallResult, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+import {ApiCallResult, ISettingsApiService, SamlSettings, SamlSettingsResponse} from "@/services/ISettingsApiService";
 
 export default class SettingsApiServiceImpl implements ISettingsApiService {
     public url: string = process.env.VUE_APP_SERVICE_URL;
@@ -11,8 +11,14 @@ export default class SettingsApiServiceImpl implements ISettingsApiService {
         this.instance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     }
 
-    public get(): Promise<ApiCallResult<SamlSettings>> {
-        return this.instance.get(`${this.url}?action=get`).then((res) => res.data);
+    public get(): Promise<ApiCallResult<SamlSettingsResponse>> {
+        return this.instance.get(`${this.url}?action=get`).then((res) => {
+            var response = res.data as ApiCallResult<SamlSettingsResponse>;
+            if (response.result != null && response.result.csrfToken != "") {
+                this.instance.defaults.headers.common['X-TC-CSRF-Token'] = response.result.csrfToken;
+            }
+            return res.data
+        });
     }
 
     public save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>> {

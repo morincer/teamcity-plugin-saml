@@ -1,19 +1,22 @@
-import {ApiCallResult, ISettingsApiService, SamlSettings} from "@/services/ISettingsApiService";
+import {ApiCallResult, ISettingsApiService, SamlSettings, SamlSettingsResponse} from "@/services/ISettingsApiService";
 
 export default class SettingsApiServiceStub implements ISettingsApiService {
-    public get(): Promise<ApiCallResult<SamlSettings>> {
-        return new Promise<ApiCallResult<SamlSettings>>(((resolve) => {
+    public get(): Promise<ApiCallResult<SamlSettingsResponse>> {
+        return new Promise<ApiCallResult<SamlSettingsResponse>>(((resolve) => {
             setTimeout(() => {
                 resolve({
                     result: {
-                        ssoEndpoint: "some endpoint",
-                        entityId: "some entity id",
-                        publicCertificate: "some public certificate",
-                        issuerUrl: "some issuer url",
-                        ssoCallbackUrl: "some callback url",
-                        hideLoginForm: false,
-                        ssoLoginButtonName: "Login with SSO",
-                        strict: true
+                        settings: {
+                            ssoEndpoint: "some endpoint",
+                            entityId: "some entity id",
+                            publicCertificate: "some public certificate",
+                            issuerUrl: "some issuer url",
+                            ssoCallbackUrl: "some callback url",
+                            hideLoginForm: false,
+                            ssoLoginButtonName: "Login with SSO",
+                            strict: true
+                        },
+                        csrfToken: "token"
                     },
                 });
             }, 1000);
@@ -40,7 +43,7 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
                 setTimeout(() => {
                     resolve({
                         errors: [
-                            { code: 0, message: "Field is required"},
+                            {code: 0, message: "Field is required"},
                         ],
                     });
                 }, 1000);

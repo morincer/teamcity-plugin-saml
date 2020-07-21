@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -60,9 +61,22 @@ public class SamlSettingsJsonControllerTest {
         var request = mock(HttpServletRequest.class);
 
         var settings = this.controller.getSettings(request);
-        var actualUrl = settings.getResult().getSsoCallbackUrl();
+        var actualUrl = settings.getResult().getSettings().getSsoCallbackUrl();
 
         assertThat(actualUrl, org.hamcrest.core.StringStartsWith.startsWith("http://my.url"));
+    }
+
+    @Test
+    public void shouldReturnCsrfToken() {
+        var request = mock(HttpServletRequest.class);
+
+        var session = mock(HttpSession.class);
+        String token = "TOKEN";
+        when(session.getAttribute("tc-csrf-token")).thenReturn(token);
+        when(request.getSession()).thenReturn(session);
+
+        var settings = this.controller.getSettings(request);
+        assertThat(settings.getResult().getCsrfToken(), equalTo(token));
     }
 
     @Test
@@ -75,8 +89,8 @@ public class SamlSettingsJsonControllerTest {
         assertThat(settings.getErrors(), nullValue());
         assertThat(settings.getResult(), notNullValue());
 
-        var enitityId = settings.getResult().getEntityId();
-        var callbackUrl = settings.getResult().getSsoCallbackUrl();
+        var enitityId = settings.getResult().getSettings().getEntityId();
+        var callbackUrl = settings.getResult().getSettings().getSsoCallbackUrl();
 
         assertThat(callbackUrl, notNullValue());
         assertThat(enitityId, equalTo(callbackUrl));
