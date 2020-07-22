@@ -8,16 +8,16 @@ export default class SettingsApiServiceImpl implements ISettingsApiService {
 
     public constructor() {
         this.instance = axios.create();
-        this.instance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        this.instance.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
     }
 
     public get(): Promise<ApiCallResult<SamlSettingsResponse>> {
         return this.instance.get(`${this.url}?action=get`).then((res) => {
-            var response = res.data as ApiCallResult<SamlSettingsResponse>;
-            if (response.result != null && response.result.csrfToken != "") {
-                this.instance.defaults.headers.common['X-TC-CSRF-Token'] = response.result.csrfToken;
+            const response = res.data as ApiCallResult<SamlSettingsResponse>;
+            if (response.result != null && response.result.csrfToken !== "") {
+                this.instance.defaults.headers.common["X-TC-CSRF-Token"] = response.result.csrfToken;
             }
-            return res.data
+            return res.data;
         });
     }
 

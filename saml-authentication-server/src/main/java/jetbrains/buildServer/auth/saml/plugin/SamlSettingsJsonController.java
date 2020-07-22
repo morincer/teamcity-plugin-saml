@@ -127,7 +127,9 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
             var response = new SamlPluginSettingsResponse();
             response.setSettings(samlPluginSettings);
-            response.setCsrfToken(request.getSession().getAttribute("tc-csrf-token").toString());
+            if (request != null && request.getSession() != null) {
+                response.setCsrfToken(request.getSession().getAttribute("tc-csrf-token").toString());
+            }
 
             return JsonActionResult.ok(response);
         } catch (IOException e) {

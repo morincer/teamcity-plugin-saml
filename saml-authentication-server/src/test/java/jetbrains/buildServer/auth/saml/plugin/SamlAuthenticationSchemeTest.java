@@ -8,31 +8,29 @@ import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationRes
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
 import lombok.var;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.xerces.impl.dv.util.Base64;
 import org.hamcrest.CoreMatchers;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
-import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPathException;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.cert.CertificateEncodingException;
 import java.util.HashMap;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class SamlAuthenticationSchemeTest {
@@ -105,7 +103,7 @@ public class SamlAuthenticationSchemeTest {
         createSettings();
 
         // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        var saml = FileUtils.readFileToString(Paths.get(samlResponsePath).toAbsolutePath().toFile());
         saml = Base64.encode(saml.getBytes());
 
         var parameterMap = new HashMap<String, String[]>();
@@ -140,7 +138,7 @@ public class SamlAuthenticationSchemeTest {
         createSettings();
 
         // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePathNoMail).toAbsolutePath().toFile());
+        var saml = FileUtils.readFileToString(Paths.get(samlResponsePathNoMail).toAbsolutePath().toFile());
         saml = Base64.encode(saml.getBytes());
 
         var parameterMap = new HashMap<String, String[]>();
@@ -159,7 +157,7 @@ public class SamlAuthenticationSchemeTest {
         var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.UNAUTHENTICATED));
 
-        saml = Files.readFile(Paths.get(samlResponsePathMail).toAbsolutePath().toFile());
+        saml = FileUtils.readFileToString(Paths.get(samlResponsePathMail).toAbsolutePath().toFile());
         saml = Base64.encode(saml.getBytes());
         parameterMap.put("SAMLResponse", new String[] {saml});
 
@@ -180,7 +178,7 @@ public class SamlAuthenticationSchemeTest {
         createSettings();
 
         // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        var saml = FileUtils.readFileToString(Paths.get(samlResponsePath).toAbsolutePath().toFile());
         saml = Base64.encode(saml.getBytes());
 
         var parameterMap = new HashMap<String, String[]>();
@@ -253,7 +251,7 @@ public class SamlAuthenticationSchemeTest {
     @Test
     public void shouldParseADFSMetadata() throws IOException, XPathException, CertificateEncodingException {
         var metadataFilePath = "src/test/resources/FederationMetadata.xml";
-        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+        var metadataXml = FileUtils.readFileToString(Paths.get(metadataFilePath).toAbsolutePath().toFile());
 
         SamlPluginSettings settings = new SamlPluginSettings();
         this.scheme.importMetadataIntoSettings(metadataXml, settings);
@@ -269,7 +267,7 @@ public class SamlAuthenticationSchemeTest {
     @Test
     public void shouldBuildProperSaml2SettingsWhenMultipleCertificates() throws IOException, CertificateEncodingException, XPathException {
         var metadataFilePath = "src/test/resources/FederationMetadata.xml";
-        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+        var metadataXml = FileUtils.readFileToString(Paths.get(metadataFilePath).toAbsolutePath().toFile());
 
         SamlPluginSettings settings = new SamlPluginSettings();
         this.scheme.importMetadataIntoSettings(metadataXml, settings);
@@ -302,7 +300,7 @@ public class SamlAuthenticationSchemeTest {
         }
 
         if (metadataFilePath != null) {
-            var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+            var metadataXml = FileUtils.readFileToString(Paths.get(metadataFilePath).toAbsolutePath().toFile());
 
             SamlPluginSettings settings = new SamlPluginSettings();
             this.scheme.importMetadataIntoSettings(metadataXml, settings);
@@ -319,7 +317,7 @@ public class SamlAuthenticationSchemeTest {
         when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
 
         // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
-        var saml = Files.readFile(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        var saml = FileUtils.readFileToString(Paths.get(samlResponsePath).toAbsolutePath().toFile());
         saml = Base64.encode(saml.getBytes());
 
         var parameterMap = new HashMap<String, String[]>();
