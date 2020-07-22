@@ -67,10 +67,10 @@ public class SamlSettingsJsonController extends BaseJsonController {
             }
 
             var result = getSettingsResult.getResult();
+            SamlPluginSettings settings = result.getSettings();
 
-            this.samlAuthenticationScheme.importMetadataIntoSettings(metadataXml, result.getSettings());
-
-            return JsonActionResult.ok(result);
+            this.samlAuthenticationScheme.importMetadataIntoSettings(metadataXml, settings);
+            return JsonActionResult.ok(settings);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return JsonActionResult.fail(e);

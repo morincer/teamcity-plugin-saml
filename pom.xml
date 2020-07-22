@@ -40,7 +40,7 @@
                   <version>0.4</version>
                   <configuration>
                       <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
-                      <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
+                      <teamcitySourceURL>https://download-cf.jetbrains.com/teamcity</teamcitySourceURL>
                   </configuration>
               </plugin>
           </plugins>

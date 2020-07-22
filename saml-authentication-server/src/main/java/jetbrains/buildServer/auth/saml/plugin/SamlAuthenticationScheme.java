@@ -14,6 +14,8 @@ import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationRes
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
 import jetbrains.buildServer.log.Loggers;
+import jetbrains.buildServer.serverSide.auth.AuthModuleType;
+import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.serverSide.auth.ServerPrincipal;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
+import javax.security.auth.spi.LoginModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPathException;
@@ -257,6 +260,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         }
 
         return "";
+    }
+
+    public static boolean isConfigured(LoginConfiguration loginConfiguration) {
+        boolean authModuleConfigured = loginConfiguration
+                .getConfiguredAuthModules(AuthModuleType.class).stream()
+                .anyMatch(t -> t.getType().getClass().getName().equals(SamlAuthenticationScheme.class.getName()));
+
+        return authModuleConfigured;
     }
 
 

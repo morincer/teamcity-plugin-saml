@@ -1,6 +1,7 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
+import jetbrains.buildServer.serverSide.auth.AuthModuleType;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PlaceId;
@@ -35,7 +36,7 @@ public class SamlLoginPageExtension extends SimplePageExtension {
 
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
-        return loginConfiguration.isAuthModuleConfigured(SamlAuthenticationScheme.class);
+        return SamlAuthenticationScheme.isConfigured(loginConfiguration);
     }
 
     @Override

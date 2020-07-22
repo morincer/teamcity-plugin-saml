@@ -57,12 +57,8 @@ public class SamlSettingsAdminPage extends AdminPage {
 
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
-        boolean authModuleConfigured = loginConfiguration
-                .getConfiguredAuthModules(AuthModuleType.class).stream()
-                .anyMatch(t -> t.getType().getClass().getName().equals(SamlAuthenticationScheme.class.getName()));
-
         return super.isAvailable(request)
                 && checkHasGlobalPermission(request, Permission.CHANGE_SERVER_SETTINGS)
-                && authModuleConfigured;
+                && SamlAuthenticationScheme.isConfigured(loginConfiguration);
     }
 }
