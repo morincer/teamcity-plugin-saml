@@ -19,6 +19,11 @@ export const SamlAttributeMappingTypes = {
     Other: "other",
 };
 
+export interface SamlSettingsResponse {
+    settings: SamlSettings;
+    csrfToken: string;
+}
+
 export interface SamlSettings {
     issuerUrl?: string;
     entityId?: string;
@@ -40,7 +45,7 @@ export interface SamlSettings {
 }
 
 export interface ISettingsApiService {
-    get(): Promise<ApiCallResult<SamlSettings>>;
+    get(): Promise<ApiCallResult<SamlSettingsResponse>>;
     save(settings: SamlSettings): Promise<ApiCallResult<SamlSettings>>;
     importMetadata(metadata: string): Promise<ApiCallResult<SamlSettings>>;
 }

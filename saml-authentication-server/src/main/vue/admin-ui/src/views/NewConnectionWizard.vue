@@ -74,7 +74,7 @@ export default class NewConnectionWizard extends Vue {
             const result = await this.settingsApiService.get();
 
             if (result.result) {
-                this.settings = result.result;
+                this.settings = result.result.settings;
             }
         } catch (e) {
             this.errors = [{message: e, code: 0}];

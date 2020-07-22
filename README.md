@@ -59,7 +59,7 @@ rest.cors.origins=<value of the remote host address>
 >
 >Starting from version 2020.1 Teamcity changed the way they do CSRF protection: along with standard origin check they now require additional token to be acquired and sent as a header by remote host (read details and rationale [here](https://www.jetbrains.com/help/teamcity/csrf-protection.html)).
 >
->Unfortunately, at the moment it is not clear how to make this mechanism work with SAML flows - as IdPs don't normally send custom headers to SPs consumers. While the issue is being investigated the possible workaround would be to disable the token checking by setting internal property teamcity.csrf.paranoid=false 
+>Unfortunately, at the moment it is not clear how to make this mechanism work with SAML flows - as IdPs don't normally send custom headers to SPs consumers. If you configured CORS and get "token is missing" error, the possible workaround would be to disable the token checking by setting internal property teamcity.csrf.paranoid=false 
 
 * Logout and click the "Login with SSO" button to test. 
 
@@ -84,8 +84,15 @@ The SAML authentication sequence is a following:
  mvn tc-sdk:start
  ```
  
- ...Compile+package the plugin (note that it will also build and package Vue.js part of the plugin)
+ ... Build and package admin-ui
  ```bash
+cd saml-authentication-server/src/main/vue/admin-ui
+npm install
+npm run build 
+```
+ 
+ ...Compile+package the plugin (note that it will also build and package Vue.js part of the plugin)
+ ```bash 
  mvn package 
  ```
 

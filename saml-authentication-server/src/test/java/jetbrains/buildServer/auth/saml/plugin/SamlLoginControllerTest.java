@@ -1,36 +1,28 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
-import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.util.Util;
-import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.util.UriUtils;
-import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.Mockito.mock;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class SamlLoginControllerTest {
@@ -64,7 +56,7 @@ public class SamlLoginControllerTest {
     public void shouldSendAuthnRequest() throws Exception {
         this.settingsStorage.settings.setEntityId("http://IdP.com");
         this.settingsStorage.settings.setIssuerUrl("http://nowhere.com");
-        this.settingsStorage.settings.setPublicCertificate(Files.readFile(Paths.get("src/test/resources/metadata_pub.key").toFile()));
+        this.settingsStorage.settings.setPublicCertificate(FileUtils.readFileToString(Paths.get("src/test/resources/metadata_pub.key").toFile()));
 
         var request = mock(HttpServletRequest.class);
         when(request.getRequestURL()).thenReturn(new StringBuffer(ssoEndpoint));
@@ -93,7 +85,7 @@ public class SamlLoginControllerTest {
     public void shouldUseBaseUrlFromServerConfiguration() throws Exception {
         this.settingsStorage.settings.setEntityId("http://IdP.com");
         this.settingsStorage.settings.setIssuerUrl("http://nowhere.com");
-        this.settingsStorage.settings.setPublicCertificate(Files.readFile(Paths.get("src/test/resources/metadata_pub.key").toFile()));
+        this.settingsStorage.settings.setPublicCertificate(FileUtils.readFileToString(Paths.get("src/test/resources/metadata_pub.key").toFile()));
         this.settingsStorage.settings.getSsoCallbackUrl();
         this.settingsStorage.settings.setCompressRequest(false);
 

@@ -3,12 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.gromozeka.teamcity</groupId>
   <artifactId>saml-authentication</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.2</version>
   <packaging>pom</packaging>
   <properties>
-      <teamcity-version-lib>2018.2</teamcity-version-lib>
-      <teamcity-version-runtime>2019.2.2</teamcity-version-runtime>
+      <pluginVersion>1.2</pluginVersion>
+      <teamcity-version-lib>2020.1</teamcity-version-lib>
+      <teamcity-version-runtime>2020.1.2</teamcity-version-runtime>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
   <repositories>
     <repository>
         <id>JetBrains</id>
@@ -40,7 +43,7 @@
                   <version>0.4</version>
                   <configuration>
                       <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
-                      <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
+                      <teamcitySourceURL>https://download-cf.jetbrains.com/teamcity</teamcitySourceURL>
                   </configuration>
               </plugin>
           </plugins>

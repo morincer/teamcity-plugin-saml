@@ -5,12 +5,15 @@ import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettingsResponse;
 import jetbrains.buildServer.controllers.json.BaseJsonController;
 import jetbrains.buildServer.controllers.json.JsonActionError;
 import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.CSRFFilter;
+import jetbrains.buildServer.web.CsrfCheck;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +32,8 @@ public class SamlSettingsJsonController extends BaseJsonController {
     private SamlAuthenticationScheme samlAuthenticationScheme;
     private SamlPluginSettingsStorage settingsStorage;
     private RootUrlHolder rootUrlHolder;
+
+    static final String CSRF_HEADER = "X-TC-CSRF-Token" ;
 
     protected SamlSettingsJsonController(
             @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
@@ -62,10 +67,10 @@ public class SamlSettingsJsonController extends BaseJsonController {
             }
 
             var result = getSettingsResult.getResult();
+            SamlPluginSettings settings = result.getSettings();
 
-            this.samlAuthenticationScheme.importMetadataIntoSettings(metadataXml, result);
-
-            return JsonActionResult.ok(result);
+            this.samlAuthenticationScheme.importMetadataIntoSettings(metadataXml, settings);
+            return JsonActionResult.ok(settings);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return JsonActionResult.fail(e);
@@ -110,7 +115,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
         }
     }
 
-    public JsonActionResult<SamlPluginSettings> getSettings(HttpServletRequest request) {
+    public JsonActionResult<SamlPluginSettingsResponse> getSettings(HttpServletRequest request) {
         try {
             var samlPluginSettings = settingsStorage.load();
             var callbackUrl = this.samlAuthenticationScheme.getCallbackUrl();
@@ -120,7 +125,13 @@ public class SamlSettingsJsonController extends BaseJsonController {
                 samlPluginSettings.setEntityId(callbackUrl.toString());
             }
 
-            return JsonActionResult.ok(samlPluginSettings);
+            var response = new SamlPluginSettingsResponse();
+            response.setSettings(samlPluginSettings);
+            if (request != null && request.getSession() != null) {
+                response.setCsrfToken(request.getSession().getAttribute("tc-csrf-token").toString());
+            }
+
+            return JsonActionResult.ok(response);
         } catch (IOException e) {
             return JsonActionResult.fail(e);
         }

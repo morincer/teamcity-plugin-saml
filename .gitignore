@@ -38,3 +38,4 @@ servers
 
 # github-linguist specifics
 *.css linguist-detectable=false
+.node

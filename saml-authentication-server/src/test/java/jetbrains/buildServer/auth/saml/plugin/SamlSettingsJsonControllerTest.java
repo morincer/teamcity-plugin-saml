@@ -1,31 +1,26 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
-import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onelogin.saml2.settings.Metadata;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.testng.reporters.Files;
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Paths;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.ArgumentMatchers.startsWith;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -60,9 +55,22 @@ public class SamlSettingsJsonControllerTest {
         var request = mock(HttpServletRequest.class);
 
         var settings = this.controller.getSettings(request);
-        var actualUrl = settings.getResult().getSsoCallbackUrl();
+        var actualUrl = settings.getResult().getSettings().getSsoCallbackUrl();
 
         assertThat(actualUrl, org.hamcrest.core.StringStartsWith.startsWith("http://my.url"));
+    }
+
+    @Test
+    public void shouldReturnCsrfToken() {
+        var request = mock(HttpServletRequest.class);
+
+        var session = mock(HttpSession.class);
+        String token = "TOKEN";
+        when(session.getAttribute("tc-csrf-token")).thenReturn(token);
+        when(request.getSession()).thenReturn(session);
+
+        var settings = this.controller.getSettings(request);
+        assertThat(settings.getResult().getCsrfToken(), equalTo(token));
     }
 
     @Test
@@ -75,8 +83,8 @@ public class SamlSettingsJsonControllerTest {
         assertThat(settings.getErrors(), nullValue());
         assertThat(settings.getResult(), notNullValue());
 
-        var enitityId = settings.getResult().getEntityId();
-        var callbackUrl = settings.getResult().getSsoCallbackUrl();
+        var enitityId = settings.getResult().getSettings().getEntityId();
+        var callbackUrl = settings.getResult().getSettings().getSsoCallbackUrl();
 
         assertThat(callbackUrl, notNullValue());
         assertThat(enitityId, equalTo(callbackUrl));
@@ -87,8 +95,8 @@ public class SamlSettingsJsonControllerTest {
         var metadataFilePath = "src/test/resources/metadata.xml";
         var metadataPubCert = "src/test/resources/metadata_pub.key";
 
-        var metadataXml = Files.readFile(Paths.get(metadataFilePath).toAbsolutePath().toFile());
-        var metadataCert = Files.readFile(Paths.get(metadataPubCert).toAbsolutePath().toFile());
+        var metadataXml = FileUtils.readFileToString(Paths.get(metadataFilePath).toAbsolutePath().toFile());
+        var metadataCert = FileUtils.readFileToString(Paths.get(metadataPubCert).toAbsolutePath().toFile());
 
         var metadataJson = new MetadataImport();
         metadataJson.setMetadataXml(metadataXml);
@@ -112,7 +120,7 @@ public class SamlSettingsJsonControllerTest {
 
         assertThat(settings.getIssuerUrl(), equalTo("entityid"));
         assertThat(settings.getSsoEndpoint(), equalTo("https://mycert.lan"));
-        assertThat(settings.getPublicCertificate(), equalTo(metadataCert));
+        assertThat(settings.getPublicCertificate(), equalToIgnoringWhiteSpace(metadataCert));
     }
 
     @Test
