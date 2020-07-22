@@ -84,8 +84,15 @@ The SAML authentication sequence is a following:
  mvn tc-sdk:start
  ```
  
- ...Compile+package the plugin (note that it will also build and package Vue.js part of the plugin)
+ ... Build and package admin-ui
  ```bash
+cd saml-authentication-server/src/main/vue/admin-ui
+npm install
+npm run build 
+```
+ 
+ ...Compile+package the plugin (note that it will also build and package Vue.js part of the plugin)
+ ```bash 
  mvn package 
  ```
 
