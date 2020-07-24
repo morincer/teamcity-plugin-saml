@@ -6,6 +6,7 @@ import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.users.UserModel;
+import jetbrains.buildServer.web.SamlCsrfCheck;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
@@ -23,15 +24,15 @@ public class SamlPluginConfiguration {
 
     @Bean
     SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel, RootUrlHolder rootUrlHolder) {
-        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel);
+        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel, loginConfiguration);
         loginConfiguration.registerAuthModuleType(samlAuthenticationScheme);
 
         return samlAuthenticationScheme;
     }
 
     @Bean
-    SamlLoginPageExtension samlLoginPageExtension(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, LoginConfiguration loginConfiguration) {
-        return new SamlLoginPageExtension(pagePlaces, descriptor, settingsStorage, loginConfiguration);
+    SamlLoginPageExtension samlLoginPageExtension(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, SamlAuthenticationScheme scheme) {
+        return new SamlLoginPageExtension(pagePlaces, descriptor, settingsStorage, scheme);
     }
 
     @Bean
@@ -45,8 +46,8 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, LoginConfiguration loginConfiguration) {
-        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, loginConfiguration);
+    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, SamlAuthenticationScheme samlAuthenticationScheme) {
+        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, samlAuthenticationScheme);
     }
 
     @Bean
@@ -60,5 +61,10 @@ public class SamlPluginConfiguration {
     @Bean
     SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, SamlAuthenticationScheme samlAuthenticationScheme) throws IOException {
         return new SamlSettingsJsonController(samlAuthenticationScheme, samlPluginSettingsStorage(null), controllerManager);
+    }
+
+    @Bean
+    SamlCsrfCheck samlCsrfCheck(SamlAuthenticationScheme scheme, SamlPluginSettingsStorage settingsStorage) {
+        return new SamlCsrfCheck(scheme, settingsStorage);
     }
 }

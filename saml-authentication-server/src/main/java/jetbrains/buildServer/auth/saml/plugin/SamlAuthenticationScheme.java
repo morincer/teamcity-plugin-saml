@@ -46,15 +46,18 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     private RootUrlHolder rootUrlHolder;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
+    private LoginConfiguration loginConfiguration;
 
 
     public SamlAuthenticationScheme(
             @NotNull RootUrlHolder rootUrlHolder,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
-            @NotNull UserModel userModel) {
+            @NotNull UserModel userModel,
+            @NotNull LoginConfiguration loginConfiguration) {
         this.rootUrlHolder = rootUrlHolder;
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
+        this.loginConfiguration = loginConfiguration;
     }
 
     @NotNull
@@ -262,7 +265,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         return "";
     }
 
-    public static boolean isConfigured(LoginConfiguration loginConfiguration) {
+    public boolean isConfigured() {
         boolean authModuleConfigured = loginConfiguration
                 .getConfiguredAuthModules(AuthModuleType.class).stream()
                 .anyMatch(t -> t.getType().getClass().getName().equals(SamlAuthenticationScheme.class.getName()));

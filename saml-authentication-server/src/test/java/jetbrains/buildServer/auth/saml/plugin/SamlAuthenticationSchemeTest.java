@@ -5,6 +5,7 @@ import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
+import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
 import lombok.var;
@@ -69,7 +70,9 @@ public class SamlAuthenticationSchemeTest {
 
         this.settingsStorage.settings.setStrict(false);
 
-        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel);
+        LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
+
+        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, loginConfiguration);
     }
 
     @After

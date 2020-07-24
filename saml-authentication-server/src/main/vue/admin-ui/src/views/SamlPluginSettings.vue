@@ -70,6 +70,11 @@
                 <template v-slot:note>Runs additional checks on SAML message</template>
             </RunnerFormRow>
             <RunnerFormRow>
+                <template v-slot:label>SAML Callback CORS Filer Exception</template>
+                <template v-slot:content><input type="checkbox" v-model="settings.samlCorsFilter"/></template>
+                <template v-slot:note>Adds CORS filter exception for POST requests sent to the login callback URL</template>
+            </RunnerFormRow>
+            <RunnerFormRow>
                 <template v-slot:label>Hide Login Form</template>
                 <template v-slot:content><input type="checkbox" v-model="settings.hideLoginForm"/></template>
             </RunnerFormRow>

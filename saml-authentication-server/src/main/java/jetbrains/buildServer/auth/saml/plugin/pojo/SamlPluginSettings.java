@@ -34,6 +34,7 @@ public class SamlPluginSettings {
     private String allowedPostfixes = null;
     private boolean compressRequest = true;
     private boolean strict = true;
+    private boolean samlCorsFilter = true;
 
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();
