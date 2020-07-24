@@ -33,7 +33,7 @@ public class SamlCsrfCheck implements CsrfCheck {
                 return UNKNOWN;
             }
 
-            Loggers.AUTH.debug("Evaluating SAML CORS filter conditions");
+            Loggers.AUTH.debug("Evaluating SAML CORS filter conditions for " + request.getRequestURL());
 
             URL callbackUrl = scheme.getCallbackUrl();
             var requestURL = new URL(request.getRequestURL().toString());

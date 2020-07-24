@@ -41,8 +41,13 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlCallbackController samlCallbackController(SBuildServer server, WebControllerManager webControllerManager, AuthorizationInterceptor interceptor) {
+    SamlCallbackController samlCallbackController(SBuildServer server, WebControllerManager webControllerManager) {
         return new SamlCallbackController(server, webControllerManager);
+    }
+
+    @Bean
+    SamlMetadataController samlMetadataController(SBuildServer server, WebControllerManager webControllerManager, AuthorizationInterceptor interceptor, SamlAuthenticationScheme samlAuthenticationScheme, SamlPluginSettingsStorage settingsStorage) {
+        return new SamlMetadataController(server, webControllerManager, interceptor, samlAuthenticationScheme, settingsStorage);
     }
 
     @Bean

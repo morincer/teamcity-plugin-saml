@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
+import com.onelogin.saml2.settings.Metadata;
 import com.onelogin.saml2.settings.Saml2Settings;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
@@ -249,6 +250,13 @@ public class SamlAuthenticationSchemeTest {
 
         settings.setStrict(false);
         this.settingsStorage.save(settings);
+    }
+
+    @Test
+    public void shouldGenerateMetadata() throws IOException, CertificateEncodingException {
+        createSettings();
+        Metadata metadata = this.scheme.generateSPMetadata();
+        assertThat(metadata, is(notNullValue()));
     }
 
     @Test
