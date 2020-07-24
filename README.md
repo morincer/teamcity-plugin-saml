@@ -49,17 +49,7 @@ Please refer the example of set up for [Okta](./docs/OktaSetup.md) if you need s
 
 * Make sure you have properly set up users on the TeamCity side - their usernames should match the SAML assertion name ID (usually - e-mail). 
 
-* **Make sure your CORS settings allow posts from the IdP site**. Go to the Adminstration -> Diagnostics -> Internal Properties -> Edit internal property and add/edit line:
-
-```
-rest.cors.origins=<value of the remote host address> 
-```
-
-> **Teamcity 2020.1+ Update** 
->
->Starting from version 2020.1 Teamcity changed the way they do CSRF protection: along with standard origin check they now require additional token to be acquired and sent as a header by remote host (read details and rationale [here](https://www.jetbrains.com/help/teamcity/csrf-protection.html)).
->
->Unfortunately, at the moment it is not clear how to make this mechanism work with SAML flows - as IdPs don't normally send custom headers to SPs consumers. If you configured CORS and get "token is missing" error, the possible workaround would be to disable the token checking by setting internal property teamcity.csrf.paranoid=false 
+* (Optional) Review CORS configuration - the plugin adds exception to the Teamcity's CORS filter - if request is POST sent to the SAML login callback URL and it contains a SAML message - it is considered CORS safe. If such behavior is by some reason is not acceptable the filter exception can be disabled on the plugin configuration page (Misc -> CORS Filter Exception checkbox) 
 
 * Logout and click the "Login with SSO" button to test. 
 
