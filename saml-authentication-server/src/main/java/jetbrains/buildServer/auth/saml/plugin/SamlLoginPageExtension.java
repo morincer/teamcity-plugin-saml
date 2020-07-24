@@ -20,23 +20,24 @@ public class SamlLoginPageExtension extends SimplePageExtension {
     private final SamlPluginSettingsStorage settingsStorage;
     private static final String PAGE_EXTENSION_ID = "SamlLogin";
     private LoginConfiguration loginConfiguration;
+    private SamlAuthenticationScheme scheme;
 
     public SamlLoginPageExtension(@NotNull PagePlaces pagePlaces,
                                   @NotNull PluginDescriptor descriptor,
                                   @NotNull final SamlPluginSettingsStorage settingsStorage,
-                                  @NotNull LoginConfiguration loginConfiguration) {
+                                  @NotNull SamlAuthenticationScheme scheme) {
         super(pagePlaces,
                 PlaceId.LOGIN_PAGE,
                 PAGE_EXTENSION_ID,
                 descriptor.getPluginResourcesPath("SamlLogin.jsp"));
-        this.loginConfiguration = loginConfiguration;
+        this.scheme = scheme;
         register();
         this.settingsStorage = settingsStorage;
     }
 
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
-        return SamlAuthenticationScheme.isConfigured(loginConfiguration);
+        return scheme.isConfigured();
     }
 
     @Override

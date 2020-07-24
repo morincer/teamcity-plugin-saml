@@ -3,6 +3,7 @@ package jetbrains.buildServer.auth.saml.plugin;
 import com.onelogin.saml2.util.Util;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
 import jetbrains.buildServer.serverSide.SBuildServer;
+import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
@@ -48,7 +49,9 @@ public class SamlLoginControllerTest {
         this.interceptor = mock(AuthorizationInterceptor.class);
         this.userModel = mock(UserModel.class);
 
-        scheme = new SamlAuthenticationScheme(server, settingsStorage, userModel);
+        LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
+
+        scheme = new SamlAuthenticationScheme(server, settingsStorage, userModel, loginConfiguration);
         controller = new SamlLoginController(this.server, this.webControllerManager, this.interceptor, this.scheme, this.settingsStorage);
     }
 

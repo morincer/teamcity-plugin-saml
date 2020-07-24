@@ -17,18 +17,18 @@ import java.util.Map;
 
 public class SamlSettingsAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
-    private LoginConfiguration loginConfiguration;
+    private SamlAuthenticationScheme samlAuthenticationScheme;
     private final Logger LOG = Loggers.SERVER;
     private SamlPluginSettingsStorage settingsStorage;
 
     protected SamlSettingsAdminPage(@NotNull PagePlaces pagePlaces,
                                     @NotNull PluginDescriptor pluginDescriptor,
                                     @NotNull SamlPluginSettingsStorage settingsStorage,
-                                    @NotNull LoginConfiguration loginConfiguration) {
+                                    @NotNull SamlAuthenticationScheme samlAuthenticationScheme) {
         super(pagePlaces);
         this.settingsStorage = settingsStorage;
         this.pluginDescriptor = pluginDescriptor;
-        this.loginConfiguration = loginConfiguration;
+        this.samlAuthenticationScheme = samlAuthenticationScheme;
         setPluginName(SamlPluginConstants.PLUGIN_NAME);
         setIncludeUrl(pluginDescriptor.getPluginResourcesPath("SamlPluginAdminPage.jsp"));
         setTabTitle("SAML Settings");
@@ -59,6 +59,6 @@ public class SamlSettingsAdminPage extends AdminPage {
     public boolean isAvailable(@NotNull HttpServletRequest request) {
         return super.isAvailable(request)
                 && checkHasGlobalPermission(request, Permission.CHANGE_SERVER_SETTINGS)
-                && SamlAuthenticationScheme.isConfigured(loginConfiguration);
+                && samlAuthenticationScheme.isConfigured();
     }
 }
