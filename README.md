@@ -11,11 +11,11 @@ The plug-in offers the following functionality:
 * Authenticate SAML assertions for existing users
 * Option to automatically create users on login (you may also limit allowed user names by postfix match)
 * Wizard to ease configuration of connectivity to common IdP providers  (currently - Okta and Onelogin, more to come in future)
-* Option to import IdP metadata from XML   
+* Option to import IdP metadata from XML
+* SdP Metadata generation   
 
 Things the plug-in does NOT currently support (but they're on the roadmap):
 
-* SdP Metadata generation
 * Automatic IdP metadata import from URL 
 * Multi-tenancy
 
