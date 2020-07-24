@@ -4,6 +4,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.exception.SettingsException;
 import com.onelogin.saml2.settings.IdPMetadataParser;
+import com.onelogin.saml2.settings.Metadata;
 import com.onelogin.saml2.settings.Saml2Settings;
 import com.onelogin.saml2.settings.SettingsBuilder;
 import com.onelogin.saml2.util.Util;
@@ -81,6 +82,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         var samlSettings = buildSettings();
         var auth = new Auth(samlSettings, request, response);
         auth.login();
+    }
+
+    public Metadata generateSPMetadata() throws IOException, CertificateEncodingException {
+        var settings = this.settingsStorage.load();
+        var saml2Settings = buildSettings();
+
+        var metadata = new Metadata(saml2Settings);
+        return metadata;
     }
 
     @NotNull
