@@ -34,11 +34,14 @@ export interface SamlSettings {
     ssoLoginButtonName?: string;
     strict?: boolean;
 
+    samlCorsFilter?: boolean;
     compressRequest?: boolean;
 
     createUsersAutomatically?: boolean;
     limitToPostfixes?: boolean;
     allowedPostfixes?: string;
+
+
 
     emailAttributeMapping?: SamlAttributeMapping;
     nameAttributeMapping?: SamlAttributeMapping;
