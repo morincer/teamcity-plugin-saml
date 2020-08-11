@@ -3,6 +3,7 @@ package jetbrains.buildServer.auth.saml.plugin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
+import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
@@ -32,6 +33,7 @@ public class SamlSettingsJsonControllerTest {
     private SamlPluginSettingsStorage settingsStorage;
     private WebControllerManager webControllerManager;
     private UserModel userModel;
+    private UserGroupManager userGroups;
     private SamlAuthenticationScheme samlAuthenticationScheme;
 
     @Before
@@ -45,9 +47,10 @@ public class SamlSettingsJsonControllerTest {
         this.settingsStorage = new InMemorySamlPluginSettingsStorage();
 
         this.userModel = mock(UserModel.class);
+        this.userGroups = mock(UserGroupManager.class);
 
         LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
-        samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, loginConfiguration);
+        samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroups, loginConfiguration);
 
         controller = new SamlSettingsJsonController(this.samlAuthenticationScheme, this.settingsStorage, this.webControllerManager);
     }

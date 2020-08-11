@@ -38,5 +38,6 @@ public class SamlPluginSettings {
 
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();
+    SamlAttributeMappingSettings groupsAttributeMapping = new SamlAttributeMappingSettings();
 
 }

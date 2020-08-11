@@ -14,6 +14,8 @@ import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
+import jetbrains.buildServer.groups.SUserGroup;
+import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.auth.AuthModuleType;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
@@ -47,6 +49,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     private RootUrlHolder rootUrlHolder;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
+    private UserGroupManager userGroups;
     private LoginConfiguration loginConfiguration;
 
 
@@ -54,10 +57,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             @NotNull RootUrlHolder rootUrlHolder,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
             @NotNull UserModel userModel,
+            @NotNull UserGroupManager userGroups,
             @NotNull LoginConfiguration loginConfiguration) {
         this.rootUrlHolder = rootUrlHolder;
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
+        this.userGroups = userGroups;
         this.loginConfiguration = loginConfiguration;
     }
 
@@ -139,6 +144,22 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
                             if (user == null) {
                                 LOG.warn(String.format("New user %s was not created due to unknown reason", username));
+                            } else {
+                                String groups = getAttribute(auth, settings.getGroupsAttributeMapping());
+                                LOG.debug(String.format("SAML Groups = '%s'", groups));
+
+                                // Look for matching userGroup
+                                String[] assignedGroups = groups.split(",");
+                                for (String group: assignedGroups) {
+                                    SUserGroup matchingGroup = userGroups.findUserGroupByName(group);
+                                    if (matchingGroup == null) {
+                                        LOG.info(String.format("No matching TeamCity group found for '%s'", group));
+                                        continue;
+                                    }
+
+                                    LOG.info(String.format("Matching TeamCity group found for '%s'. Assigning to user", group));
+                                    matchingGroup.addUser(user);
+                                }
                             }
                         }
                     } catch (Exception e) {
@@ -150,6 +171,10 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             if (user == null) {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", username, SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
+
+            //if (settings.updateUserGroups()) {
+            //    //TODO: Support updating assigned groups for user.
+            //}
 
             LOG.info(String.format("SAML request authenticated for user %s/%s", user.getUsername(), user.getName()));
 
