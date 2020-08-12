@@ -36,7 +36,7 @@ public class SamlLoginControllerTest {
     private AuthorizationInterceptor interceptor;
     private static String ssoEndpoint = "http://nowhere.com";
     private UserModel userModel;
-    private UserGroupManager userGroups;
+    private UserGroupManager userGroupManager;
     private SamlAuthenticationScheme scheme;
 
     @Before
@@ -50,11 +50,11 @@ public class SamlLoginControllerTest {
         when(this.server.getRootUrl()).thenReturn("http://server.com");
         this.interceptor = mock(AuthorizationInterceptor.class);
         this.userModel = mock(UserModel.class);
-        this.userGroups = mock(UserGroupManager.class);
+        this.userGroupManager = mock(UserGroupManager.class);
 
         LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
 
-        scheme = new SamlAuthenticationScheme(server, settingsStorage, userModel, userGroups, loginConfiguration);
+        scheme = new SamlAuthenticationScheme(server, settingsStorage, userModel, userGroupManager, loginConfiguration);
         controller = new SamlLoginController(this.server, this.webControllerManager, this.interceptor, this.scheme, this.settingsStorage);
     }
 

@@ -24,8 +24,8 @@ import java.nio.file.Paths;
 public class SamlPluginConfiguration {
 
     @Bean
-    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel, UserGroupManager userGroups, RootUrlHolder rootUrlHolder) {
-        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel, userGroups, loginConfiguration);
+    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel, UserGroupManager userGroupManager, RootUrlHolder rootUrlHolder) {
+        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel, userGroupManager, loginConfiguration);
         loginConfiguration.registerAuthModuleType(samlAuthenticationScheme);
 
         return samlAuthenticationScheme;

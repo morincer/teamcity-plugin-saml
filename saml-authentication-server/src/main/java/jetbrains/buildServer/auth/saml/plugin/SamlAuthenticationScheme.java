@@ -49,7 +49,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     private RootUrlHolder rootUrlHolder;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
-    private UserGroupManager userGroups;
+    private UserGroupManager userGroupManager;
     private LoginConfiguration loginConfiguration;
 
 
@@ -57,12 +57,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             @NotNull RootUrlHolder rootUrlHolder,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
             @NotNull UserModel userModel,
-            @NotNull UserGroupManager userGroups,
+            @NotNull UserGroupManager userGroupManager,
             @NotNull LoginConfiguration loginConfiguration) {
         this.rootUrlHolder = rootUrlHolder;
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
-        this.userGroups = userGroups;
+        this.userGroupManager = userGroupManager;
         this.loginConfiguration = loginConfiguration;
     }
 
@@ -163,7 +163,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 // Look for matching userGroup
                 String[] assignedGroups = groups.split(",");
                 for (String group: assignedGroups) {
-                    SUserGroup matchingGroup = userGroups.findUserGroupByName(group);
+                    SUserGroup matchingGroup = userGroupManager.findUserGroupByName(group);
                     if (matchingGroup == null) {
                         LOG.info(String.format("No matching TeamCity group found for '%s'", group));
                         continue;

@@ -42,7 +42,7 @@ public class SamlAuthenticationSchemeTest {
     SamlAuthenticationScheme scheme;
     private InMemorySamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
-    private UserGroupManager userGroups;
+    private UserGroupManager userGroupManager;
     private SUser validUser;
     private SUser newUser;
     private RootUrlHolder rootUrlHolder;
@@ -69,7 +69,7 @@ public class SamlAuthenticationSchemeTest {
         when(userModel.createUserAccount(null, "new_user")).thenReturn(newUser);
         when(userModel.createUserAccount(null, "new_user@somemail.com")).thenReturn(newUser);
 
-        this.userGroups = mock(UserGroupManager.class);
+        this.userGroupManager = mock(UserGroupManager.class);
 
         this.rootUrlHolder = mock(RootUrlHolder.class);
         when(rootUrlHolder.getRootUrl()).thenReturn("http://server.com");
@@ -78,7 +78,7 @@ public class SamlAuthenticationSchemeTest {
 
         LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
 
-        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroups, loginConfiguration);
+        this.scheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroupManager, loginConfiguration);
     }
 
     @After
@@ -262,8 +262,8 @@ public class SamlAuthenticationSchemeTest {
         when(userMock.getUsername()).thenReturn(userNameId);
         when(userMock.getName()).thenReturn(userNameName);
 
-        when(userGroups.findUserGroupByName("admin")).thenReturn(userGroupMock);
-        when(userGroups.findUserGroupByName("it_admin")).thenReturn(null);
+        when(userGroupManager.findUserGroupByName("admin")).thenReturn(userGroupMock);
+        when(userGroupManager.findUserGroupByName("it_admin")).thenReturn(null);
 
         var settings = settingsStorage.load();
         settings.setCreateUsersAutomatically(true);

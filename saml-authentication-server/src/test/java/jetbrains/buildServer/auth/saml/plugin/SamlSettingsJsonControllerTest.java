@@ -33,7 +33,7 @@ public class SamlSettingsJsonControllerTest {
     private SamlPluginSettingsStorage settingsStorage;
     private WebControllerManager webControllerManager;
     private UserModel userModel;
-    private UserGroupManager userGroups;
+    private UserGroupManager userGroupManager;
     private SamlAuthenticationScheme samlAuthenticationScheme;
 
     @Before
@@ -47,10 +47,10 @@ public class SamlSettingsJsonControllerTest {
         this.settingsStorage = new InMemorySamlPluginSettingsStorage();
 
         this.userModel = mock(UserModel.class);
-        this.userGroups = mock(UserGroupManager.class);
+        this.userGroupManager = mock(UserGroupManager.class);
 
         LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
-        samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroups, loginConfiguration);
+        samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroupManager, loginConfiguration);
 
         controller = new SamlSettingsJsonController(this.samlAuthenticationScheme, this.settingsStorage, this.webControllerManager);
     }
