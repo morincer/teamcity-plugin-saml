@@ -54,6 +54,13 @@
                 </template>
                 <template v-slot:note>Users will only be created if their names end with particular postfixes - for example, @mymail.com (provide comma-separated list for multiple postfixes) </template>
             </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Assign matching TeamCity groups automatically</template>
+                <template v-slot:content>
+                    <input type="checkbox" v-model="settings.assignMatchingGroups">
+                </template>
+                <template v-slot:note>If a user has a group assigned to their Okta profile that matches an existing TeamCity group, then the user will automatically be added to the group in TeamCity</template>
+            </RunnerFormRow>
 
             <RunnerFormRow v-if="settings.createUsersAutomatically">
                 <template v-slot:label>Map E-mail From</template>
@@ -65,6 +72,12 @@
                 <template v-slot:label>Map Full Name From</template>
                 <template v-slot:content>
                     <SamlAttributeSelect v-model="settings.nameAttributeMapping"  />
+                </template>
+            </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Map Groups From</template>
+                <template v-slot:content>
+                    <SamlAttributeSelect v-model="settings.groupsAttributeMapping"  />
                 </template>
             </RunnerFormRow>
 

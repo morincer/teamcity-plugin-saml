@@ -144,22 +144,6 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
                             if (user == null) {
                                 LOG.warn(String.format("New user %s was not created due to unknown reason", username));
-                            } else {
-                                String groups = getAttribute(auth, settings.getGroupsAttributeMapping());
-                                LOG.debug(String.format("SAML Groups = '%s'", groups));
-
-                                // Look for matching userGroup
-                                String[] assignedGroups = groups.split(",");
-                                for (String group: assignedGroups) {
-                                    SUserGroup matchingGroup = userGroups.findUserGroupByName(group);
-                                    if (matchingGroup == null) {
-                                        LOG.info(String.format("No matching TeamCity group found for '%s'", group));
-                                        continue;
-                                    }
-
-                                    LOG.info(String.format("Matching TeamCity group found for '%s'. Assigning to user", group));
-                                    matchingGroup.addUser(user);
-                                }
                             }
                         }
                     } catch (Exception e) {
@@ -172,9 +156,23 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", username, SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
 
-            //if (settings.updateUserGroups()) {
-            //    //TODO: Support updating assigned groups for user.
-            //}
+            if (settings.isAssignMatchingGroups()) {
+                String groups = getAttribute(auth, settings.getGroupsAttributeMapping());
+                LOG.debug(String.format("SAML Groups = '%s'", groups));
+
+                // Look for matching userGroup
+                String[] assignedGroups = groups.split(",");
+                for (String group: assignedGroups) {
+                    SUserGroup matchingGroup = userGroups.findUserGroupByName(group);
+                    if (matchingGroup == null) {
+                        LOG.info(String.format("No matching TeamCity group found for '%s'", group));
+                        continue;
+                    }
+
+                    LOG.info(String.format("Matching TeamCity group found for '%s'. Assigning to user", group));
+                    matchingGroup.addUser(user);
+                }
+            }
 
             LOG.info(String.format("SAML request authenticated for user %s/%s", user.getUsername(), user.getName()));
 

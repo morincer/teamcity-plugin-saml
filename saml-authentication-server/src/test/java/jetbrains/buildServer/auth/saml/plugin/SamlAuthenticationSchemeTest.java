@@ -265,9 +265,9 @@ public class SamlAuthenticationSchemeTest {
         when(userGroups.findUserGroupByName("admin")).thenReturn(userGroupMock);
         when(userGroups.findUserGroupByName("it_admin")).thenReturn(null);
 
-        // For name id
         var settings = settingsStorage.load();
         settings.setCreateUsersAutomatically(true);
+        settings.setAssignMatchingGroups(true);
         settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getGroupsAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
