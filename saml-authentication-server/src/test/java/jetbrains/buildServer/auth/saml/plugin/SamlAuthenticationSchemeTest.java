@@ -7,6 +7,7 @@ import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.groups.SUserGroup;
+import jetbrains.buildServer.groups.UserGroup;
 import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.users.SUser;
@@ -29,7 +30,10 @@ import javax.xml.xpath.XPathException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.cert.CertificateEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -262,8 +266,13 @@ public class SamlAuthenticationSchemeTest {
         when(userMock.getUsername()).thenReturn(userNameId);
         when(userMock.getName()).thenReturn(userNameName);
 
-        when(userGroupManager.findUserGroupByName("admin")).thenReturn(userGroupMock);
-        when(userGroupManager.findUserGroupByName("it_admin")).thenReturn(null);
+        // Setup some TeamCity groups
+        SUserGroup adminGroupMock = mock(SUserGroup.class);
+        when(adminGroupMock.getName()).thenReturn("admin");
+        Collection<SUserGroup> teamcityGroupsMock = new ArrayList<>();
+        teamcityGroupsMock.add(adminGroupMock);
+
+        when(userGroupManager.getUserGroups()).thenReturn(teamcityGroupsMock);
 
         var settings = settingsStorage.load();
         settings.setCreateUsersAutomatically(true);
@@ -278,7 +287,75 @@ public class SamlAuthenticationSchemeTest {
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
 
         verify(userMock).updateUserAccount(userNameId, userNameId, userNameId);
-        verify(userGroupMock, times(1)).addUser(userMock);
+        verify(adminGroupMock, times(1)).addUser(userMock);
+    }
+
+    @Test
+    public void removesUserGroupsFromSamlAttributes() throws IOException {
+        var request = mock(HttpServletRequest.class);
+        var samlResponsePath = "src/test/resources/saml_signed_with_groups_attribute.xml";
+
+        var callbackUrl = "http://sp.example.com/demo1/index.php?acs";
+        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+
+        createSettings();
+
+        // built using https://capriza.github.io/samling/samling.html#samlPropertiesTab
+        var saml = FileUtils.readFileToString(Paths.get(samlResponsePath).toAbsolutePath().toFile());
+        saml = Base64.encode(saml.getBytes());
+
+        var parameterMap = new HashMap<String, String[]>();
+        parameterMap.put("SAMLResponse", new String[] {saml});
+
+        when(request.getParameterMap()).thenReturn(parameterMap);
+        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        var response = mock(HttpServletResponse.class);
+
+        String userNameId = "User_With_Groups";
+        String userNameName = "User With Groups To Remove";
+
+        // Setup some TeamCity groups
+        Collection<SUserGroup> teamcityGroupsMock = new ArrayList<>();
+
+        SUserGroup adminGroupMock = mock(SUserGroup.class);
+        when(adminGroupMock.getKey()).thenReturn("admin");
+        when(adminGroupMock.getName()).thenReturn("admin");
+        when(adminGroupMock.toString()).thenReturn("admin");
+        teamcityGroupsMock.add(adminGroupMock);
+        SUserGroup removeGroupMock = mock(SUserGroup.class);
+        when(removeGroupMock.getKey()).thenReturn("remove_group");
+        when(removeGroupMock.getName()).thenReturn("remove_group");
+        when(removeGroupMock.toString()).thenReturn("remove_group");
+        teamcityGroupsMock.add(removeGroupMock);
+
+        when(userGroupManager.getUserGroups()).thenReturn(teamcityGroupsMock);
+
+        // Setup a valid user with some existing groups
+        var validUserWithGroups = mock(SUser.class);
+        when(validUserWithGroups.getUsername()).thenReturn(userNameId);
+        when(validUserWithGroups.getName()).thenReturn(userNameName);
+
+        List<UserGroup> validUserGroupsMock = new ArrayList<>();
+        validUserGroupsMock.add(adminGroupMock);
+        validUserGroupsMock.add(removeGroupMock);
+        when(validUserWithGroups.getUserGroups()).thenReturn(validUserGroupsMock);
+
+        // Return validUser
+        when(userModel.findUserAccount(null, userNameId)).thenReturn(validUserWithGroups);
+
+        var settings = settingsStorage.load();
+        settings.setCreateUsersAutomatically(true);
+        settings.setAssignMatchingGroups(true);
+        settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.getGroupsAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
+        settings.getGroupsAttributeMapping().setCustomAttributeName("groups");
+        settingsStorage.save(settings);
+
+        HttpAuthenticationResult result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+
+        verify(removeGroupMock, times(1)).removeUser(validUserWithGroups);
     }
 
     private void createSettings() throws IOException {

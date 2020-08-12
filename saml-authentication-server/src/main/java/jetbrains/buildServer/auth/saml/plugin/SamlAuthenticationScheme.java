@@ -24,11 +24,11 @@ import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
 import lombok.var;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
-import javax.security.auth.spi.LoginModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPathException;
@@ -37,10 +37,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
@@ -157,22 +154,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             }
 
             if (settings.isAssignMatchingGroups()) {
-                String groups = getAttribute(auth, settings.getGroupsAttributeMapping());
-                LOG.debug(String.format("SAML Groups = '%s'", groups));
+                String samlGroups = getAttribute(auth, settings.getGroupsAttributeMapping());
+                LOG.debug(String.format("SAML Groups = '%s'", samlGroups));
 
-                // Look for matching userGroup
-                String[] assignedGroups = groups.split(",");
-                for (String group: assignedGroups) {
-                    SUserGroup matchingGroup = userGroupManager.findUserGroupByName(group);
-                    if (matchingGroup == null) {
-                        LOG.info(String.format("No matching TeamCity group found for '%s'", group));
-                        continue;
-                    }
-
-                    LOG.info(String.format("Matching TeamCity group found for '%s'. Assigning to user", group));
-                    matchingGroup.addUser(user);
+                // Process the SAML groups assigned to this user
+                if (!samlGroups.isEmpty()) {
+                    processGroups(user, samlGroups);
                 }
-            }
+           }
 
             LOG.info(String.format("SAML request authenticated for user %s/%s", user.getUsername(), user.getName()));
 
@@ -218,6 +207,65 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
         LOG.warn(String.format("No valid postfixes were detected for username %s", username));
         return false;
+    }
+
+    @NotNull
+    private void processGroups(@NotNull SUser user, @NotNull String groups) {
+
+        // Get a list of TeamCity groups
+        Collection<SUserGroup> teamcityGroups = userGroupManager.getUserGroups();
+
+        // Get a lower-cased list of users current groups
+        List<String> usersCurrentGroups = user.getUserGroups().stream()
+                .map(Object::toString)
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        // Split the 'groups' string, lowercase and trim empty results
+        List<String> usersAssignedGroups = Arrays.stream(groups.split(", "))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(StringUtil::isNotEmpty)
+                .collect(Collectors.toList());
+
+        // What groups to add and what groups to remove
+        List<String> groupsToAdd = new ArrayList<>(CollectionUtils.subtract(usersAssignedGroups, usersCurrentGroups));
+        List<String> groupsToRemove = new ArrayList<>(CollectionUtils.subtract(usersCurrentGroups, usersAssignedGroups));
+
+        LOG.debug(String.format("groupsToAdd = %s", groupsToAdd));
+        LOG.debug(String.format("groupsToRemove = %s", groupsToRemove));
+
+        // Add any new groups
+        groupsToAdd.forEach(addGroup -> {
+           SUserGroup tcGroup = teamcityGroups.stream()
+                   .filter(g -> addGroup.equals(g.getName()))
+                   .findAny()
+                   .orElse(null);
+
+           if (tcGroup == null) {
+               LOG.info(String.format("No matching TeamCity group found for '%s'", addGroup));
+               return;
+           }
+
+           LOG.info(String.format("Adding user to group '%s'", addGroup));
+           tcGroup.addUser(user);
+        });
+
+        // Remove any groups that are no longer mapped
+        groupsToRemove.forEach(removeGroup -> {
+            SUserGroup tcGroup = teamcityGroups.stream()
+                    .filter(g -> removeGroup.equals(g.getName()))
+                    .findAny()
+                    .orElse(null);
+
+            if (tcGroup == null) {
+                LOG.warn(String.format("Existing mapped TeamCity group not found to remove: '%s'", removeGroup));
+                return;
+            }
+
+            LOG.info(String.format("Removing user from group '%s'", removeGroup));
+            tcGroup.removeUser(user);
+        });
     }
 
     private HttpAuthenticationResult sendUnauthorizedRequest(HttpServletRequest request, HttpServletResponse response, String reason) throws IOException {
