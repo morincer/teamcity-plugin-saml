@@ -3,3 +3,11 @@ notifications:
   email:
     on_success: never
     on_failure: always
+deploy:
+  provider: releases
+  api_key:
+    secure: 3FE4Qt1skji/KwJfvkSeTbUEJnUN2vCDvcGCM3N0FEM6Z4xIkwVmLmtLBSwq8OhFk/A6Z2Ueyl0kwWUQRoXfT576XEB1dNhHHKdtxt6pb7ij2xPdmkpWb0Zt1+IUkvXY3d9vH8uyaEmFkg8CU5Gv/lp8GFeEB1rmXsRCfXWrymIz0UligJbQyLPXiVXBzKcDn8jwlCkqfJahstnq59NHQ1tYsvptrNBH5/Yf89whTQ6C6PO2CzT1UW2qaYFb+UFamf409RmVytVIeI7OjfVBCgj6M1APSoN3uwTd/0HvfMjR8TKnwaMP/NEgp2fPX+HXL+hwQmQg+WNUYmtJPHEbuGgUjU25QYpuhxDhFhFKaS0mzHrYmFoYX2USEIO1wG5er921gM/Wvj/k78eX075huGm/6Pu55u30h/mtuQ0x7lEetTOg6XHKa2lbyFToPC5WtsUqE9C6efl+ZiUsw/rOL+tgglIDNYgwAZ5h2EHFDevFqrrVDwblG09o5rcDvMPRsoCk/06gK71UDCXlFC9QX8g+Q4zHAefrGjcUAk8JJTwKrUaGt7vbh4MTvaSdTi97AhJPdpSwkti5yCA02SpDw2xSqSjnFIugtq5s2klXdUbqGGg+jI6Po9IUgrNJe5W7eYMM4GRAfzh4tjZPxgOEFUuPO4DmFYXgNYit5Pktc24=
+  file: 'target/saml-authentication.zip'
+  on:
+    tags: true
+  skip_cleanup: 'true'
