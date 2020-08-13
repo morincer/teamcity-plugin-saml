@@ -10,6 +10,7 @@ The plug-in offers the following functionality:
 
 * Authenticate SAML assertions for existing users
 * Option to automatically create users on login (you may also limit allowed user names by postfix match)
+* Option to automatically assign and unassign TeamCity groups from users based on IdP group membership.
 * Wizard to ease configuration of connectivity to common IdP providers  (currently - Okta and Onelogin, more to come in future)
 * Option to import IdP metadata from XML
 * SdP Metadata generation   
