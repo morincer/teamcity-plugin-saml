@@ -39,6 +39,7 @@ import java.net.URL;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
@@ -159,9 +160,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 LOG.debug(String.format("SAML Groups = '%s'", samlGroups));
 
                 // Process the SAML groups assigned to this user
-                if (!samlGroups.isEmpty()) {
-                    processGroups(user, samlGroups, settings.isRemoveUnassignedGroups());
-                }
+                processGroups(user, samlGroups, settings.isRemoveUnassignedGroups());
            }
 
             LOG.info(String.format("SAML request authenticated for user %s/%s", user.getUsername(), user.getName()));
@@ -215,11 +214,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         return false;
     }
 
-    @NotNull
-    private void processGroups(@NotNull SUser user, @NotNull String groups, Boolean removeUnassignedGroups) {
+    private void processGroups(@NotNull SUser user, String groups, Boolean removeUnassignedGroups) {
 
-        // Get a list of TeamCity groups
-        Collection<SUserGroup> teamcityGroups = userGroupManager.getUserGroups();
+        // Get a Map of TeamCity groups, keyed by lowercase group Key
+        Map<Object, SUserGroup> teamcityGroups = userGroupManager.getUserGroups().stream()
+                .collect(Collectors.toMap(g -> g.getKey().toLowerCase(),
+                        Function.identity()));
 
         // Get a lower-cased list of users current groups
         List<String> usersCurrentGroups = user.getUserGroups().stream()
@@ -241,18 +241,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
         // Add any new groups
         groupsToAdd.forEach(addGroup -> {
-           SUserGroup tcGroup = teamcityGroups.stream()
-                   .filter(g -> addGroup.equals(g.getKey().toLowerCase()))
-                   .findAny()
-                   .orElse(null);
-
-           if (tcGroup == null) {
+           if (teamcityGroups.containsKey(addGroup)) {
+               LOG.info(String.format("Adding user to group '%s'", addGroup));
+               teamcityGroups.get(addGroup).addUser(user);
+           } else {
                LOG.info(String.format("No matching TeamCity group found for '%s'", addGroup));
-               return;
            }
-
-           LOG.info(String.format("Adding user to group '%s'", addGroup));
-           tcGroup.addUser(user);
         });
 
         // Optionally remove groups that are no longer assigned in SAML response.
@@ -261,18 +255,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
             // Remove any groups that are no longer mapped
             groupsToRemove.forEach(removeGroup -> {
-                SUserGroup tcGroup = teamcityGroups.stream()
-                        .filter(g -> removeGroup.equals(g.getKey().toLowerCase()))
-                        .findAny()
-                        .orElse(null);
-
-                if (tcGroup == null) {
+                if (teamcityGroups.containsKey(removeGroup)) {
+                    LOG.info(String.format("Group '%s' has been unassigned from user. Removing...", removeGroup));
+                    teamcityGroups.get(removeGroup).removeUser(user);
+                } else {
                     LOG.warn(String.format("Existing mapped TeamCity group not found to remove: '%s'", removeGroup));
-                    return;
                 }
-
-                LOG.info(String.format("Group '%s' has been unassigned from user. Removing...", removeGroup));
-                tcGroup.removeUser(user);
             });
         }
     }

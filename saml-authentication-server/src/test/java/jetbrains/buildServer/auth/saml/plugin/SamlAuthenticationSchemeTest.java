@@ -396,6 +396,23 @@ public class SamlAuthenticationSchemeTest {
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
 
         verify(removeGroupMock, times(1)).removeUser(validUserWithGroups);
+
+        // Removes all groups from user
+        settings = settingsStorage.load();
+        settings.setCreateUsersAutomatically(true);
+        settings.setAssignGroups(true);
+        settings.setRemoveUnassignedGroups(true);
+        settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.getGroupsAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
+        settings.getGroupsAttributeMapping().setCustomAttributeName("nogroups");
+        settingsStorage.save(settings);
+
+        result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+
+        verify(adminGroupMock, times(1)).removeUser(validUserWithGroups);
+        verify(removeGroupMock, atLeastOnce()).removeUser(validUserWithGroups);
     }
 
     private void createSettings() throws IOException {
