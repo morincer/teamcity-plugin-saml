@@ -186,13 +186,18 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                     return "";
                 }
 
-                var attributeValue = saml.getAttribute(attributeMappingSettings.getCustomAttributeName());
+                String attributeName = attributeMappingSettings.getCustomAttributeName();
+                var attributeValue = saml.getAttribute(attributeName);
+                if (attributeValue == null) {
+                    LOG.warn(String.format("Attribute '%s' not found in SAML response", attributeName));
+                    return "";
+                }
                 if (attributeValue.size() == 0) return "";
 
                 var result = attributeValue.stream().collect(Collectors.joining(", "));
                 return result;
             default:
-                LOG.warn(String.format("Unknow mapping type: %s", attributeMappingSettings.getMappingType()));
+                LOG.warn(String.format("Unknown mapping type: %s", attributeMappingSettings.getMappingType()));
                 return "";
         }
     }
