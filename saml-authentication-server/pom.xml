@@ -5,7 +5,7 @@
     <parent>
         <artifactId>saml-authentication</artifactId>
         <groupId>org.gromozeka.teamcity</groupId>
-        <version>1.2.1</version>
+        <version>1.2.2</version>
     </parent>
     <artifactId>saml-authentication-server</artifactId>
     <packaging>jar</packaging>
