@@ -2,7 +2,7 @@ import axios, {AxiosInstance, AxiosStatic} from "axios";
 import {ApiCallResult, ISettingsApiService, SamlSettings, SamlSettingsResponse} from "@/services/ISettingsApiService";
 
 export default class SettingsApiServiceImpl implements ISettingsApiService {
-    public url: string = process.env.VUE_APP_SERVICE_URL;
+    public url: string = window.location.href.replace(/\/admin.*/, process.env.VUE_APP_SERVICE_URL);
 
     private readonly instance: AxiosInstance;
 

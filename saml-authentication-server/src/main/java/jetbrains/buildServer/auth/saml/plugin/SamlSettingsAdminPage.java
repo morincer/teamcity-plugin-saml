@@ -4,11 +4,10 @@ import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.log.Loggers;
-import jetbrains.buildServer.serverSide.auth.AuthModuleType;
-import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
+import jetbrains.buildServer.web.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +16,9 @@ import java.util.Map;
 
 public class SamlSettingsAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
-    private SamlAuthenticationScheme samlAuthenticationScheme;
+    private final SamlAuthenticationScheme samlAuthenticationScheme;
     private final Logger LOG = Loggers.SERVER;
-    private SamlPluginSettingsStorage settingsStorage;
+    private final SamlPluginSettingsStorage settingsStorage;
 
     protected SamlSettingsAdminPage(@NotNull PagePlaces pagePlaces,
                                     @NotNull PluginDescriptor pluginDescriptor,
@@ -45,7 +44,12 @@ public class SamlSettingsAdminPage extends AdminPage {
     @Override
     public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request) {
         super.fillModel(model, request);
-        model.put("pluginResources", this.pluginDescriptor.getPluginResourcesPath());
+
+        String requestURL = WebUtil.getRequestUrl(request);
+        String pluginResourcesPath = this.pluginDescriptor.getPluginResourcesPath();
+        String resourcesPath = requestURL.replaceAll("/admin.*", pluginResourcesPath);
+
+        model.put("pluginResources", resourcesPath);
 
         try {
             model.put("settings", this.settingsStorage.load());
