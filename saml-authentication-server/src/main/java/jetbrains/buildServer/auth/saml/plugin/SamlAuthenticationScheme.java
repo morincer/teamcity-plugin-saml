@@ -23,6 +23,7 @@ import jetbrains.buildServer.serverSide.auth.ServerPrincipal;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.util.WebUtil;
 import lombok.var;
 import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
@@ -279,7 +282,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     }
 
     public URL getCallbackUrl() throws MalformedURLException {
-        return new URL(new URL(rootUrlHolder.getRootUrl()), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+        String result = WebUtil.combineContextPath(rootUrlHolder.getRootUrl(), SamlPluginConstants.SAML_CALLBACK_URL.replace("**", ""));
+        if (result.startsWith("/")) {
+            result = result.substring(1);
+        }
+
+        return new URL(result);
     }
 
     public Saml2Settings buildSettings() throws IOException {
