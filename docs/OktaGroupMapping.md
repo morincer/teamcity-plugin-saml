@@ -14,6 +14,8 @@ Edit the integration, and on the `Configure SAML` screen, populate the `Group At
 
 ![Okta Group Attributes](img/okta_group_mappings.png)
 
+Give the attribute a name - e.g. `groups`.
+
 Select the appropriate `Filter` that matches your requirements. If you want _all_ the assigned Okta groups to be passed through to TeamCity, then select the `Matches regex` filter and add the following regex: `\w+`.
 
 Save the new application configuration.
@@ -22,15 +24,25 @@ Save the new application configuration.
 
 Create any Okta groups that are required, and map users to the new group.
 
+## Step 3. Configure TeamCity to assign groups from the SAML response.
+
+In TeamCity, navigate to the `SAML Settings` page.
+
+Ensure that `Create Users Automatically` is checked, and then check the `Assign matching TeamCity groups automatically` box.
+Set the `Map Groups from` field to `Custom attribute`, and populate based on the attribute name configured in step 1.
+
+![TeamCity group attribute](img/teamcity_group_attribute_mapping.png)
+
 ## Step 3. Create the corresponding TeamCity groups.
 
 Create a new group in TeamCity to map the corresponding Okta group to.
 
-![TeamCity new group](img/teamcity_new_group.png)
-
-The `Name` value can be whatever value you want to use, as the group matching is performed on the `Key` value.
-Therefore, ensure that the Okta group name and the TeamCity `key` match.
+The `Name` value can be whatever value you want to use, as the group matching is performed on the `Key` value.  
+Therefore, ensure that the Okta group name and the TeamCity `key` match.  
 **N.B:** The group matching is case insensitive, so accepting the default all uppercase TeamCity format is fine.
+
+For example, to map an Okta group called `Okta_group` to TeamCity, create a group with the key `OKTA_GROUP`: 
+![TeamCity new group](img/teamcity_new_group.png)
 
 ## Step 4. Test
 
