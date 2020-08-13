@@ -57,9 +57,16 @@
             <RunnerFormRow v-if="settings.createUsersAutomatically">
                 <template v-slot:label>Assign matching TeamCity groups automatically</template>
                 <template v-slot:content>
-                    <input type="checkbox" v-model="settings.assignMatchingGroups">
+                    <input type="checkbox" v-model="settings.assignGroups">
                 </template>
-                <template v-slot:note>If a user has a group assigned to their Okta profile that matches an existing TeamCity group, then the user will automatically be added to the group in TeamCity</template>
+                <template v-slot:note>If a user has a group assigned to their Okta profile that matches an existing TeamCity group, then the user will automatically be added to the group in TeamCity. Matching is performed on the group Key value, and is case insensitive</template>
+            </RunnerFormRow>
+            <RunnerFormRow v-if="settings.createUsersAutomatically">
+                <template v-slot:label>Remove user from unassigned groups automatically</template>
+                <template v-slot:content>
+                    <input type="checkbox" v-model="settings.removeUnassignedGroups">
+                </template>
+                <template v-slot:note>If a user has a group unassigned from their Okta profile, then remove the corresponding group membership in TeamCity.</template>
             </RunnerFormRow>
 
             <RunnerFormRow v-if="settings.createUsersAutomatically">

@@ -30,7 +30,8 @@ public class SamlPluginSettings {
     private String ssoLoginButtonName = "Login with SSO";
 
     private boolean createUsersAutomatically = false;
-    private boolean assignMatchingGroups = false;
+    private boolean assignGroups = false;
+    private boolean removeUnassignedGroups = true;
     private boolean limitToPostfixes = false;
     private String allowedPostfixes = null;
     private boolean compressRequest = true;

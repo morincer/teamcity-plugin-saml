@@ -153,13 +153,13 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", username, SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
 
-            if (settings.isAssignMatchingGroups()) {
+            if (settings.isAssignGroups()) {
                 String samlGroups = getAttribute(auth, settings.getGroupsAttributeMapping());
                 LOG.debug(String.format("SAML Groups = '%s'", samlGroups));
 
                 // Process the SAML groups assigned to this user
                 if (!samlGroups.isEmpty()) {
-                    processGroups(user, samlGroups);
+                    processGroups(user, samlGroups, settings.isRemoveUnassignedGroups());
                 }
            }
 
@@ -210,16 +210,17 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     }
 
     @NotNull
-    private void processGroups(@NotNull SUser user, @NotNull String groups) {
+    private void processGroups(@NotNull SUser user, @NotNull String groups, Boolean removeUnassignedGroups) {
 
         // Get a list of TeamCity groups
         Collection<SUserGroup> teamcityGroups = userGroupManager.getUserGroups();
 
         // Get a lower-cased list of users current groups
         List<String> usersCurrentGroups = user.getUserGroups().stream()
-                .map(Object::toString)
-                .map(String::toLowerCase)
+                .filter(g -> !g.getKey().equals("ALL_USERS_GROUP")) // We don't want to remove the 'ALL_USERS_GROUP'
+                .map(g -> g.getKey().toLowerCase())
                 .collect(Collectors.toList());
+        LOG.debug(String.format("Users current groups = '%s'", usersCurrentGroups));
 
         // Split the 'groups' string, lowercase and trim empty results
         List<String> usersAssignedGroups = Arrays.stream(groups.split(", "))
@@ -227,18 +228,15 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 .map(String::toLowerCase)
                 .filter(StringUtil::isNotEmpty)
                 .collect(Collectors.toList());
+        LOG.debug(String.format("Users assigned groups from SAML response: '%s'", usersAssignedGroups));
 
         // What groups to add and what groups to remove
         List<String> groupsToAdd = new ArrayList<>(CollectionUtils.subtract(usersAssignedGroups, usersCurrentGroups));
-        List<String> groupsToRemove = new ArrayList<>(CollectionUtils.subtract(usersCurrentGroups, usersAssignedGroups));
-
-        LOG.debug(String.format("groupsToAdd = %s", groupsToAdd));
-        LOG.debug(String.format("groupsToRemove = %s", groupsToRemove));
 
         // Add any new groups
         groupsToAdd.forEach(addGroup -> {
            SUserGroup tcGroup = teamcityGroups.stream()
-                   .filter(g -> addGroup.equals(g.getName()))
+                   .filter(g -> addGroup.equals(g.getKey().toLowerCase()))
                    .findAny()
                    .orElse(null);
 
@@ -251,21 +249,26 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
            tcGroup.addUser(user);
         });
 
-        // Remove any groups that are no longer mapped
-        groupsToRemove.forEach(removeGroup -> {
-            SUserGroup tcGroup = teamcityGroups.stream()
-                    .filter(g -> removeGroup.equals(g.getName()))
-                    .findAny()
-                    .orElse(null);
+        // Optionally remove groups that are no longer assigned in SAML response.
+        if (removeUnassignedGroups) {
+            List<String> groupsToRemove = new ArrayList<>(CollectionUtils.subtract(usersCurrentGroups, usersAssignedGroups));
 
-            if (tcGroup == null) {
-                LOG.warn(String.format("Existing mapped TeamCity group not found to remove: '%s'", removeGroup));
-                return;
-            }
+            // Remove any groups that are no longer mapped
+            groupsToRemove.forEach(removeGroup -> {
+                SUserGroup tcGroup = teamcityGroups.stream()
+                        .filter(g -> removeGroup.equals(g.getKey().toLowerCase()))
+                        .findAny()
+                        .orElse(null);
 
-            LOG.info(String.format("Removing user from group '%s'", removeGroup));
-            tcGroup.removeUser(user);
-        });
+                if (tcGroup == null) {
+                    LOG.warn(String.format("Existing mapped TeamCity group not found to remove: '%s'", removeGroup));
+                    return;
+                }
+
+                LOG.info(String.format("Group '%s' has been unassigned from user. Removing...", removeGroup));
+                tcGroup.removeUser(user);
+            });
+        }
     }
 
     private HttpAuthenticationResult sendUnauthorizedRequest(HttpServletRequest request, HttpServletResponse response, String reason) throws IOException {

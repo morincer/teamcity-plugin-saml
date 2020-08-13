@@ -269,6 +269,7 @@ public class SamlAuthenticationSchemeTest {
         // Setup some TeamCity groups
         SUserGroup adminGroupMock = mock(SUserGroup.class);
         when(adminGroupMock.getName()).thenReturn("admin");
+        when(adminGroupMock.getKey()).thenReturn("ADMIN");
         Collection<SUserGroup> teamcityGroupsMock = new ArrayList<>();
         teamcityGroupsMock.add(adminGroupMock);
 
@@ -276,7 +277,7 @@ public class SamlAuthenticationSchemeTest {
 
         var settings = settingsStorage.load();
         settings.setCreateUsersAutomatically(true);
-        settings.setAssignMatchingGroups(true);
+        settings.setAssignGroups(true);
         settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getGroupsAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
@@ -318,12 +319,12 @@ public class SamlAuthenticationSchemeTest {
         Collection<SUserGroup> teamcityGroupsMock = new ArrayList<>();
 
         SUserGroup adminGroupMock = mock(SUserGroup.class);
-        when(adminGroupMock.getKey()).thenReturn("admin");
+        when(adminGroupMock.getKey()).thenReturn("ADMIN");
         when(adminGroupMock.getName()).thenReturn("admin");
         when(adminGroupMock.toString()).thenReturn("admin");
         teamcityGroupsMock.add(adminGroupMock);
         SUserGroup removeGroupMock = mock(SUserGroup.class);
-        when(removeGroupMock.getKey()).thenReturn("remove_group");
+        when(removeGroupMock.getKey()).thenReturn("REMOVE_GROUP");
         when(removeGroupMock.getName()).thenReturn("remove_group");
         when(removeGroupMock.toString()).thenReturn("remove_group");
         teamcityGroupsMock.add(removeGroupMock);
@@ -343,9 +344,11 @@ public class SamlAuthenticationSchemeTest {
         // Return validUser
         when(userModel.findUserAccount(null, userNameId)).thenReturn(validUserWithGroups);
 
+        // Don't remove group membership when not requested
         var settings = settingsStorage.load();
         settings.setCreateUsersAutomatically(true);
-        settings.setAssignMatchingGroups(true);
+        settings.setAssignGroups(true);
+        settings.setRemoveUnassignedGroups(false);
         settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
         settings.getGroupsAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
@@ -353,6 +356,22 @@ public class SamlAuthenticationSchemeTest {
         settingsStorage.save(settings);
 
         HttpAuthenticationResult result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+
+        verify(removeGroupMock, times(0)).removeUser(validUserWithGroups);
+
+        // Do remove group membership when requested
+        settings = settingsStorage.load();
+        settings.setCreateUsersAutomatically(true);
+        settings.setAssignGroups(true);
+        settings.setRemoveUnassignedGroups(true);
+        settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_NAME_ID);
+        settings.getGroupsAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
+        settings.getGroupsAttributeMapping().setCustomAttributeName("groups");
+        settingsStorage.save(settings);
+
+        result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
 
         verify(removeGroupMock, times(1)).removeUser(validUserWithGroups);
