@@ -14,6 +14,8 @@ import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
+import jetbrains.buildServer.groups.SUserGroup;
+import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.auth.AuthModuleType;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
@@ -23,6 +25,7 @@ import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.util.WebUtil;
 import lombok.var;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -35,9 +38,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
@@ -46,6 +48,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     private RootUrlHolder rootUrlHolder;
     private SamlPluginSettingsStorage settingsStorage;
     private UserModel userModel;
+    private UserGroupManager userGroupManager;
     private LoginConfiguration loginConfiguration;
 
 
@@ -53,10 +56,12 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             @NotNull RootUrlHolder rootUrlHolder,
             @NotNull final SamlPluginSettingsStorage settingsStorage,
             @NotNull UserModel userModel,
+            @NotNull UserGroupManager userGroupManager,
             @NotNull LoginConfiguration loginConfiguration) {
         this.rootUrlHolder = rootUrlHolder;
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
+        this.userGroupManager = userGroupManager;
         this.loginConfiguration = loginConfiguration;
     }
 
@@ -150,6 +155,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 return sendUnauthorizedRequest(request, response, String.format("SAML request NOT authenticated for user id %s: user with such username or %s property value not found", username, SamlPluginConstants.ID_USER_PROPERTY_KEY));
             }
 
+            if (settings.isAssignGroups()) {
+                String samlGroups = getAttribute(auth, settings.getGroupsAttributeMapping());
+                LOG.debug(String.format("SAML Groups = '%s'", samlGroups));
+
+                // Process the SAML groups assigned to this user
+                processGroups(user, samlGroups, settings.isRemoveUnassignedGroups());
+           }
+
             LOG.info(String.format("SAML request authenticated for user %s/%s", user.getUsername(), user.getName()));
 
             return HttpAuthenticationResult.authenticated(
@@ -172,13 +185,18 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                     return "";
                 }
 
-                var attributeValue = saml.getAttribute(attributeMappingSettings.getCustomAttributeName());
+                String attributeName = attributeMappingSettings.getCustomAttributeName();
+                var attributeValue = saml.getAttribute(attributeName);
+                if (attributeValue == null) {
+                    LOG.warn(String.format("Attribute '%s' not found in SAML response", attributeName));
+                    return "";
+                }
                 if (attributeValue.size() == 0) return "";
 
                 var result = attributeValue.stream().collect(Collectors.joining(", "));
                 return result;
             default:
-                LOG.warn(String.format("Unknow mapping type: %s", attributeMappingSettings.getMappingType()));
+                LOG.warn(String.format("Unknown mapping type: %s", attributeMappingSettings.getMappingType()));
                 return "";
         }
     }
@@ -194,6 +212,57 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
         LOG.warn(String.format("No valid postfixes were detected for username %s", username));
         return false;
+    }
+
+    private void processGroups(@NotNull SUser user, String groups, Boolean removeUnassignedGroups) {
+
+        // Get a Map of TeamCity groups, keyed by lowercase group Key
+        Map<Object, SUserGroup> teamcityGroups = userGroupManager.getUserGroups().stream()
+                .collect(Collectors.toMap(g -> g.getKey().toLowerCase(),
+                        Function.identity()));
+
+        // Get a lower-cased list of users current groups
+        List<String> usersCurrentGroups = user.getUserGroups().stream()
+                .filter(g -> !g.getKey().equals("ALL_USERS_GROUP")) // We don't want to remove the 'ALL_USERS_GROUP'
+                .map(g -> g.getKey().toLowerCase())
+                .collect(Collectors.toList());
+        LOG.debug(String.format("Users current groups = '%s'", usersCurrentGroups));
+
+        // Split the 'groups' string, lowercase and trim empty results
+        List<String> usersAssignedGroups = Arrays.stream(groups.split(", "))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(StringUtil::isNotEmpty)
+                .collect(Collectors.toList());
+        LOG.debug(String.format("Users assigned groups from SAML response: '%s'", usersAssignedGroups));
+
+        // What groups to add and what groups to remove
+        List<String> groupsToAdd = new ArrayList<>(CollectionUtils.subtract(usersAssignedGroups, usersCurrentGroups));
+
+        // Add any new groups
+        groupsToAdd.forEach(addGroup -> {
+           if (teamcityGroups.containsKey(addGroup)) {
+               LOG.info(String.format("Adding user to group '%s'", addGroup));
+               teamcityGroups.get(addGroup).addUser(user);
+           } else {
+               LOG.info(String.format("No matching TeamCity group found for '%s'", addGroup));
+           }
+        });
+
+        // Optionally remove groups that are no longer assigned in SAML response.
+        if (removeUnassignedGroups) {
+            List<String> groupsToRemove = new ArrayList<>(CollectionUtils.subtract(usersCurrentGroups, usersAssignedGroups));
+
+            // Remove any groups that are no longer mapped
+            groupsToRemove.forEach(removeGroup -> {
+                if (teamcityGroups.containsKey(removeGroup)) {
+                    LOG.info(String.format("Group '%s' has been unassigned from user. Removing...", removeGroup));
+                    teamcityGroups.get(removeGroup).removeUser(user);
+                } else {
+                    LOG.warn(String.format("Existing mapped TeamCity group not found to remove: '%s'", removeGroup));
+                }
+            });
+        }
     }
 
     private HttpAuthenticationResult sendUnauthorizedRequest(HttpServletRequest request, HttpServletResponse response, String reason) throws IOException {

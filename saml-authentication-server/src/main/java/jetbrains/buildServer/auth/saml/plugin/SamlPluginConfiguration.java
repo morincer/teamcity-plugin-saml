@@ -2,6 +2,7 @@ package jetbrains.buildServer.auth.saml.plugin;
 
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
+import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
@@ -23,8 +24,8 @@ import java.nio.file.Paths;
 public class SamlPluginConfiguration {
 
     @Bean
-    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel, RootUrlHolder rootUrlHolder) {
-        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel, loginConfiguration);
+    SamlAuthenticationScheme samlAuthenticationScheme(LoginConfiguration loginConfiguration, SamlPluginSettingsStorage samlPluginSettingsStorage, UserModel userModel, UserGroupManager userGroupManager, RootUrlHolder rootUrlHolder) {
+        SamlAuthenticationScheme samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, samlPluginSettingsStorage, userModel, userGroupManager, loginConfiguration);
         loginConfiguration.registerAuthModuleType(samlAuthenticationScheme);
 
         return samlAuthenticationScheme;

@@ -30,6 +30,8 @@ public class SamlPluginSettings {
     private String ssoLoginButtonName = "Login with SSO";
 
     private boolean createUsersAutomatically = false;
+    private boolean assignGroups = false;
+    private boolean removeUnassignedGroups = true;
     private boolean limitToPostfixes = false;
     private String allowedPostfixes = null;
     private boolean compressRequest = true;
@@ -38,5 +40,6 @@ public class SamlPluginSettings {
 
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();
+    SamlAttributeMappingSettings groupsAttributeMapping = new SamlAttributeMappingSettings();
 
 }

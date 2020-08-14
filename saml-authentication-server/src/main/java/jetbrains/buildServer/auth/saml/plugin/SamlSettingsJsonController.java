@@ -103,6 +103,12 @@ public class SamlSettingsJsonController extends BaseJsonController {
                 errors.add(new JsonActionError("You must specify non-empty attribute name for the full name attribute mapping"));
             }
 
+            if (settings.isAssignGroups()
+                    && settings.getGroupsAttributeMapping().getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)
+                    && StringUtil.isEmpty(settings.getGroupsAttributeMapping().getCustomAttributeName())) {
+                errors.add(new JsonActionError("You must specify non-empty attribute name for the groups attribute mapping"));
+            }
+
             if (errors.size() > 0) {
                 return JsonActionResult.fail(errors);
             }

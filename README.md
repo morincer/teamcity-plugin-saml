@@ -10,6 +10,7 @@ The plug-in offers the following functionality:
 
 * Authenticate SAML assertions for existing users
 * Option to automatically create users on login (you may also limit allowed user names by postfix match)
+* Option to automatically assign and unassign TeamCity groups from users based on IdP group membership.
 * Wizard to ease configuration of connectivity to common IdP providers  (currently - Okta and Onelogin, more to come in future)
 * Option to import IdP metadata from XML
 * SdP Metadata generation   
@@ -58,6 +59,14 @@ The SAML authentication sequence is a following:
 1. When you click the "Login with SSO" button you are redirected to your IdP login page
 1. You enter credentials on the login screen, your IdP validates them and, if all is fine, posts a signed SAML-assertion XML to the SSO login callback (<YOUR_SITE>/app/saml/callback/)
 1. The assertion contains name ID of the user (usually - e-mail). Plugin searches for users having the same username (not e-mail!) and, if the user is found, authenticates the request. 
+
+### Group mapping
+
+The plugin can optionally support adding users to TeamCity groups based on IdP group membership.
+
+The mapping between IdP group and TeamCity group is perfomed on the TeamCity groups `Key` value, with the matching being case insensitive.
+
+See the [Okta Group Mapping](./docs/OktaGroupMapping.md) doc for an example of how to set this up.
 
  ## Development
  
