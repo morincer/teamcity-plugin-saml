@@ -39,7 +39,7 @@
                 <version>2.5.3</version>
                 <configuration>
                     <pushChanges>false</pushChanges>
-                    <tagNameFormat>${plugin-version}</tagNameFormat>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
             <plugin>
