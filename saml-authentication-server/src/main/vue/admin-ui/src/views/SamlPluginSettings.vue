@@ -36,7 +36,7 @@
 
             <RunnerFormRow>
                 <template v-slot:label>SP Metadata XML</template>
-                <template v-slot:content><a href="/app/saml/metadata.xml" target="_blank">Download</a></template>
+                <template v-slot:content><a href="../app/saml/metadata.xml" target="_blank">Download</a></template>
                 <template v-slot:note>(Reminder) You must save you settings first, so the latest changes become available in the metadata XML</template>
             </RunnerFormRow>
 

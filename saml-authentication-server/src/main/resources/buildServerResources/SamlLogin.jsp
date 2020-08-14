@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="samlSettings" scope="request" type="jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings"/>
+<jsp:useBean id="loginUrl" scope="request" type="java.lang.String"/>
 
 <c:if test="${samlSettings.hideLoginForm}">
     <style>
@@ -13,5 +14,5 @@
 </c:if>
 
 <div class="buttons">
-    <a href="<%=SamlPluginConstants.SAML_INITIATE_LOGIN_URL.replace("**", "")%>" class="btn btn_primary">${samlSettings.ssoLoginButtonName}</a>
+    <a href="<%=loginUrl%>" class="btn btn_primary">${samlSettings.ssoLoginButtonName}</a>
 </div>

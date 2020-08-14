@@ -28,7 +28,7 @@
           <plugin>
               <groupId>org.jetbrains.teamcity</groupId>
               <artifactId>teamcity-sdk-maven-plugin</artifactId>
-              <version>0.4</version>
+              <version>0.5-SNAPSHOT</version>
               <configuration>
                   <teamcityDir>servers/${teamcity-version-runtime}</teamcityDir>
               </configuration>
@@ -39,12 +39,12 @@
               <plugin>
                   <groupId>org.jetbrains.teamcity</groupId>
                   <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                  <version>0.4</version>
+                  <version>0.5-SNAPSHOT</version>
                   <configuration>
                       <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
                       <teamcitySourceURL>https://download-cf.jetbrains.com/teamcity</teamcitySourceURL>
                       <startAgent>false</startAgent>
-<!--                  <contextName>teamcity</contextName>-->
+                  <contextName>teamcity</contextName>
                   </configuration>
               </plugin>
           </plugins>
