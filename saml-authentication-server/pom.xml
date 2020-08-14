@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>saml-authentication-server</artifactId>
-    <version>${plugin-version}</version>
 
     <packaging>jar</packaging>
 

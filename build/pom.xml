@@ -10,13 +10,12 @@
     </parent>
 
     <artifactId>build</artifactId>
-    <version>${plugin-version}</version>
 
     <packaging>pom</packaging>
 
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <teamcity.saml-authentication.plugin.version>${plugin-version}-${maven.build.timestamp}
+        <teamcity.saml-authentication.plugin.version>${version}-${maven.build.timestamp}
         </teamcity.saml-authentication.plugin.version>
         <teamcity.saml-authentication.plugin.vendorName>Morincer</teamcity.saml-authentication.plugin.vendorName>
         <teamcity.saml-authentication.plugin.vendorUrl>http://github.com/morincer

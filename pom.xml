@@ -8,7 +8,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <plugin-version>1.3-SNAPSHOT</plugin-version>
         <teamcity-version-lib>2020.1</teamcity-version-lib>
         <teamcity-version-runtime>2020.1.2</teamcity-version-runtime>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
