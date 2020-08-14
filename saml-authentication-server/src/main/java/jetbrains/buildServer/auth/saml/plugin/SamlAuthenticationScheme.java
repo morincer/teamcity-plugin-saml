@@ -214,10 +214,11 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         return false;
     }
 
-    private void processGroups(@NotNull SUser user, String groups, Boolean removeUnassignedGroups) {
+    private void processGroups(@NotNull SUser user, String groups, boolean removeUnassignedGroups) {
+        if (groups == null) groups = "";
 
         // Get a Map of TeamCity groups, keyed by lowercase group Key
-        Map<Object, SUserGroup> teamcityGroups = userGroupManager.getUserGroups().stream()
+        var teamcityGroups = userGroupManager.getUserGroups().stream()
                 .collect(Collectors.toMap(g -> g.getKey().toLowerCase(),
                         Function.identity()));
 
