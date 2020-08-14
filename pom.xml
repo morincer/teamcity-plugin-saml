@@ -27,9 +27,9 @@
         </pluginRepository>
     </pluginRepositories>
     <scm>
-        <connection>scm:git:git@github.com:morincer/teamcity-plugin-saml.git</connection>
-        <url>scm:git:git@github.com:morincer/teamcity-plugin-saml.git</url>
-        <developerConnection>scm:git:git@github.com:morincer/teamcity-plugin-saml.git</developerConnection>
+        <connection>scm:git:ssh@github.com:morincer/teamcity-plugin-saml.git</connection>
+        <url>https://github.com/morincer/teamcity-plugin-saml</url>
+        <developerConnection>scm:git:ssh@github.com:morincer/teamcity-plugin-saml.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <build>
