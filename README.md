@@ -72,7 +72,7 @@ See the [Okta Group Mapping](./docs/OktaGroupMapping.md) doc for an example of h
 
 ### Additional Logging
 
-General troubleshooting step is to enable common auth logging in Teamcity and check the log output for possible clues. 
+General troubleshooting step is to enable debug auth logging in Teamcity and check the log output for possible clues. 
 
 You may use pre-crafted [logging preset](./docs/debug-auth-saml.xml): just import it into your TC and switch the logging profile (via Admin -> General -> Troubleshooting page). This preset is naturally just a standard debud-auth.xml preset + com.onelogin.saml2 debug logging.
 
