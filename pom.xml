@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <teamcity-version-lib>2020.1</teamcity-version-lib>
+        <teamcity-version-lib>2020.1.1</teamcity-version-lib>
         <teamcity-version-runtime>2020.1.2</teamcity-version-runtime>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
