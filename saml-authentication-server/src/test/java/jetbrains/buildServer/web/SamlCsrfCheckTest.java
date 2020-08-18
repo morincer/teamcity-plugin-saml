@@ -54,6 +54,28 @@ public class SamlCsrfCheckTest {
     }
 
     @Test
+    public void shouldBeTrailingSlashAgnostic() throws MalformedURLException {
+        var request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("POST");
+        String requestUrl = "https://somesite.local/app/callback";
+        String callbackUrl = requestUrl + "/";
+        when(this.scheme.getCallbackUrl()).thenReturn(new URL(callbackUrl));
+        when(request.getRequestURL()).thenReturn(new StringBuffer(requestUrl));
+        when(request.getParameter(SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER)).thenReturn("SAMLResponse=1");
+
+        CsrfCheck.CheckResult result = this.check.isSafe(request);
+
+        assertThat(result.isSafe(), equalTo(true));
+
+        callbackUrl = requestUrl;
+        requestUrl = callbackUrl + "/";
+        when(request.getRequestURL()).thenReturn(new StringBuffer(requestUrl));
+        when(this.scheme.getCallbackUrl()).thenReturn(new URL(callbackUrl));
+        result = this.check.isSafe(request);
+        assertThat(result.isSafe(), equalTo(true));
+    }
+
+    @Test
     public void shouldNotFireWhenSchemeIsDisabled() {
         when(this.scheme.isConfigured()).thenReturn(false);
         var request = mock(HttpServletRequest.class);

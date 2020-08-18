@@ -38,7 +38,18 @@ public class SamlCsrfCheck implements CsrfCheck {
             URL callbackUrl = scheme.getCallbackUrl();
             var requestURL = new URL(request.getRequestURL().toString());
 
-            if (callbackUrl == null) return UNKNOWN;
+            if (callbackUrl == null ) {
+                Loggers.AUTH.debug("Callback URL is not set");
+                return UNKNOWN;
+            }
+
+            if (!requestURL.toString().endsWith("/")) {
+                requestURL = new URL(requestURL.toString() + "/");
+            }
+
+            if (!callbackUrl.toString().endsWith("/")) {
+                callbackUrl = new URL(callbackUrl.toString() + "/");
+            }
 
             if ("POST".equals(request.getMethod()) && callbackUrl.getPath().equals(requestURL.getPath())) {
                 var parameter = request.getParameter(SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER);
