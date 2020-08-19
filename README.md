@@ -96,6 +96,7 @@ Possible solutions:
  - Screenshot of the IdP configuration or metadata file
  - teamcity-auth.log collected with the [debug-auth-saml](./docs/debug-auth-saml.xml) preset enabled (and again make sure no personal data present there - like real e-mail addresses - I don't really need them for troubleshooting)
  
+ 
  ## Development
  
  The plugin was built with the help of [TeamCity SDK Maven Plugin](https://github.com/JetBrains/teamcity-sdk-maven-plugin). It contains the [build](./build) folder with Maven tasks making life easier.

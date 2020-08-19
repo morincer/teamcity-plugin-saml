@@ -16,14 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SamlCallbackController extends BaseController {
 
-    private final Logger LOG = Loggers.SERVER;
+    private final Logger LOG = Loggers.AUTH;
 
     public SamlCallbackController(@NotNull SBuildServer server,
                                   @NotNull WebControllerManager webControllerManager
                                   ) {
         super(server);
-
-        LOG.info("Initializing SAML callback controller");
 
         webControllerManager.registerController(SamlPluginConstants.SAML_CALLBACK_URL, this);
     }
@@ -31,6 +29,7 @@ public class SamlCallbackController extends BaseController {
     @Nullable
     @Override
     protected ModelAndView doHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
+        LOG.debug(String.format("SAML callback initiated at %s", request.getRequestURL()));
         return new ModelAndView(new RedirectView("/"));
     }
 }

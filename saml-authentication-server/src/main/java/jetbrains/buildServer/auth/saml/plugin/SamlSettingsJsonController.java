@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
 
-    private static Logger log = Loggers.SERVER;
+    private static Logger log = Loggers.AUTH;
 
     private SamlAuthenticationScheme samlAuthenticationScheme;
     private SamlPluginSettingsStorage settingsStorage;

@@ -44,12 +44,13 @@ import java.util.stream.Collectors;
 
 public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
-    private final Logger LOG = Loggers.SERVER;
-    private RootUrlHolder rootUrlHolder;
-    private SamlPluginSettingsStorage settingsStorage;
-    private UserModel userModel;
-    private UserGroupManager userGroupManager;
-    private LoginConfiguration loginConfiguration;
+    private final Logger LOG = Loggers.AUTH;
+
+    private final RootUrlHolder rootUrlHolder;
+    private final SamlPluginSettingsStorage settingsStorage;
+    private final UserModel userModel;
+    private final UserGroupManager userGroupManager;
+    private final LoginConfiguration loginConfiguration;
 
 
     public SamlAuthenticationScheme(
@@ -58,6 +59,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             @NotNull UserModel userModel,
             @NotNull UserGroupManager userGroupManager,
             @NotNull LoginConfiguration loginConfiguration) {
+
         this.rootUrlHolder = rootUrlHolder;
         this.settingsStorage = settingsStorage;
         this.userModel = userModel;
@@ -89,20 +91,26 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     }
 
     public Metadata generateSPMetadata() throws IOException, CertificateEncodingException {
-        var settings = this.settingsStorage.load();
         var saml2Settings = buildSettings();
-
         var metadata = new Metadata(saml2Settings);
+
+        LOG.debug(String.format("SAML: SP Metadata generated %s", metadata.getMetadataString()));
+
         return metadata;
     }
 
     @NotNull
     @Override
     public HttpAuthenticationResult processAuthenticationRequest(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Map<String, String> properties) throws IOException {
+        LOG.debug(String.format("SAML: incoming authentication request %s %s",request.getMethod(), request.getRequestURL()));
+
         var saml = request.getParameter(SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER);
+
         if (StringUtil.isEmpty(saml)) {
+            LOG.debug(String.format("%s parameter not found - returning N/A", SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER));
             return HttpAuthenticationResult.notApplicable();
         }
+
         try {
             var settings = this.settingsStorage.load();
 
