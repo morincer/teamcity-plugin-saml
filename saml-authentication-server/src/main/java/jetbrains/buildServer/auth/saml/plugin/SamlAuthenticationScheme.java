@@ -14,7 +14,6 @@ import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
-import jetbrains.buildServer.groups.SUserGroup;
 import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.auth.AuthModuleType;
@@ -25,7 +24,7 @@ import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.util.WebUtil;
 import lombok.var;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -120,7 +119,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
             auth.processResponse();
 
             if (!auth.isAuthenticated()) {
-                return sendUnauthorizedRequest(request, response, String.format("SAML request is not authenticated due to errors: " + String.join(", ", auth.getErrors())));
+                return sendUnauthorizedRequest(request, response, "SAML request is not authenticated due to errors: " + String.join(", ", auth.getErrors()));
             }
 
             String username = auth.getNameId();
@@ -142,15 +141,15 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                             LOG.info(String.format("Creating new user %s from SAML request", username));
                             user = userModel.createUserAccount(null, username);
 
-                            String email = getAttribute(auth, settings.getEmailAttributeMapping());
-                            String fullname = getAttribute(auth, settings.getNameAttributeMapping());
-
-                            LOG.info(String.format("Setting data for new user: username=%s, full name=%s, email=%s", username, fullname, email));
-
-                            user.updateUserAccount(username, fullname, email);
-
                             if (user == null) {
                                 LOG.warn(String.format("New user %s was not created due to unknown reason", username));
+                            } else {
+                                String email = getAttribute(auth, settings.getEmailAttributeMapping());
+                                String fullname = getAttribute(auth, settings.getNameAttributeMapping());
+
+                                LOG.info(String.format("Setting data for new user: username=%s, full name=%s, email=%s", username, fullname, email));
+
+                                user.updateUserAccount(username, fullname, email);
                             }
                         }
                     } catch (Exception e) {
@@ -201,8 +200,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 }
                 if (attributeValue.size() == 0) return "";
 
-                var result = attributeValue.stream().collect(Collectors.joining(", "));
-                return result;
+                return String.join(", ", attributeValue);
             default:
                 LOG.warn(String.format("Unknown mapping type: %s", attributeMappingSettings.getMappingType()));
                 return "";
@@ -319,7 +317,6 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
         return samlSettings;
     }
 
-    @NotNull
     public void importMetadataIntoSettings(String metadataXml, SamlPluginSettings settings) throws XPathException, CertificateEncodingException {
         var documentMetadata = Util.loadXML(metadataXml);
 
@@ -357,11 +354,9 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     }
 
     public boolean isConfigured() {
-        boolean authModuleConfigured = loginConfiguration
+        return loginConfiguration
                 .getConfiguredAuthModules(AuthModuleType.class).stream()
                 .anyMatch(t -> t.getType().getClass().getName().equals(SamlAuthenticationScheme.class.getName()));
-
-        return authModuleConfigured;
     }
 
 
