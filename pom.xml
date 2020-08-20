@@ -60,7 +60,7 @@
                         <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
                         <teamcitySourceURL>https://download-cf.jetbrains.com/teamcity</teamcitySourceURL>
                         <startAgent>false</startAgent>
-                        <contextName>teamcity</contextName>
+<!--                        <contextName>teamcity</contextName>-->
                     </configuration>
                 </plugin>
             </plugins>
