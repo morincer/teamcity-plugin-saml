@@ -61,7 +61,15 @@ public class SamlSettingsAdminPage extends AdminPage {
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
         return super.isAvailable(request)
-                && checkHasGlobalPermission(request, Permission.CHANGE_SERVER_SETTINGS)
+                && checkHasGlobalPermission(request, getRequiredPermission())
                 && samlAuthenticationScheme.isConfigured();
+    }
+
+    private Permission getRequiredPermission() {
+        if (Permission.lookupPermission("MANAGE_AUTHENTICATION_SETTINGS") != null) {
+            //this permission was introduced in TeamCity 2020.1.1, so it may not exist when the server is older than 2020.1.1
+            return Permission.lookupPermission("MANAGE_AUTHENTICATION_SETTINGS");
+        }
+        return Permission.CHANGE_SERVER_SETTINGS;
     }
 }
