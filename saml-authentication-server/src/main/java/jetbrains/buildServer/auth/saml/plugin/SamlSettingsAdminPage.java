@@ -17,7 +17,7 @@ import java.util.Map;
 public class SamlSettingsAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
     private final SamlAuthenticationScheme samlAuthenticationScheme;
-    private final Logger LOG = Loggers.SERVER;
+    private final Logger LOG = Loggers.AUTH;
     private final SamlPluginSettingsStorage settingsStorage;
 
     protected SamlSettingsAdminPage(@NotNull PagePlaces pagePlaces,
@@ -32,7 +32,6 @@ public class SamlSettingsAdminPage extends AdminPage {
         setIncludeUrl(pluginDescriptor.getPluginResourcesPath("SamlPluginAdminPage.jsp"));
         setTabTitle("SAML Settings");
         register();
-        LOG.info("SAML configuration page registered");
     }
 
     @NotNull

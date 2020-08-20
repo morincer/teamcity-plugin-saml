@@ -1,10 +1,10 @@
 package jetbrains.buildServer.web;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.auth.saml.plugin.SamlAuthenticationScheme;
 import jetbrains.buildServer.auth.saml.plugin.SamlPluginConstants;
 import jetbrains.buildServer.auth.saml.plugin.SamlPluginSettingsStorage;
 import jetbrains.buildServer.log.Loggers;
-import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
@@ -16,6 +16,7 @@ public class SamlCsrfCheck implements CsrfCheck {
 
     private SamlAuthenticationScheme scheme;
     private SamlPluginSettingsStorage settingsStorage;
+    private static final Logger LOG = Loggers.AUTH;
 
     public SamlCsrfCheck(SamlAuthenticationScheme scheme, SamlPluginSettingsStorage settingsStorage) {
         this.scheme = scheme;
@@ -54,17 +55,17 @@ public class SamlCsrfCheck implements CsrfCheck {
             if ("POST".equals(request.getMethod()) && callbackUrl.getPath().equals(requestURL.getPath())) {
                 var parameter = request.getParameter(SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER);
                 if (StringUtils.isEmpty(parameter)) {
-                    Loggers.AUTH.debug("SAML CORS Check: " + SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER + " is not found in the request - responding with UNKNOWN result");
+                    LOG.debug("SAML CORS Check: " + SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER + " is not found in the request - responding with UNKNOWN result");
                     return UNKNOWN;
                 }
 
-                Loggers.AUTH.debug("CSRF validated via SAML callback target");
+                LOG.info(String.format("CSRF is marked safe via SAML callback target for %s", request.getRequestURL()));
 
                 return CheckResult.safe();
             }
 
         } catch (Exception e) {
-            Loggers.AUTH.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
 
         return UNKNOWN;

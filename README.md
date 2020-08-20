@@ -74,7 +74,7 @@ See the [Okta Group Mapping](./docs/OktaGroupMapping.md) doc for an example of h
 
 General troubleshooting step is to enable debug auth logging in Teamcity and check the log output for possible clues. 
 
-You may use pre-crafted [logging preset](./docs/debug-auth-saml.xml): just import it into your TC and switch the logging profile (via Admin -> General -> Troubleshooting page). This preset is naturally just a standard debud-auth.xml preset + com.onelogin.saml2 debug logging.
+You may use pre-crafted [logging preset](./docs/debug-auth-saml.xml): just import it into your TC (Server Administration -> Diagnostics -> Logging Presets tab) and switch the logging profile (Server Administration -> Diagnostics -> Troubleshooting tab). This preset is naturally just a copy of standard debud-auth.xml preset + com.onelogin.saml2 debug logging.
 
 The log file would be named "teamcity-auth.log" and in most situations it will give you some ideas on what is wrong.  
 
@@ -95,6 +95,7 @@ Possible solutions:
  - Screenshot of the SP configuration (make sure no sensitive data like has been exposed to public) or SP metadata file
  - Screenshot of the IdP configuration or metadata file
  - teamcity-auth.log collected with the [debug-auth-saml](./docs/debug-auth-saml.xml) preset enabled (and again make sure no personal data present there - like real e-mail addresses - I don't really need them for troubleshooting)
+ 
  
  ## Development
  

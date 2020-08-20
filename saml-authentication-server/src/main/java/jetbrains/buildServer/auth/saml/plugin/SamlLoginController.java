@@ -37,8 +37,6 @@ public class SamlLoginController extends BaseController {
         this.settingsStorage = settingsStorage;
         this.anyAuthorityValidator = new RegexValidator(".*");
 
-        LOG.info("Initializing SAML controller");
-
         interceptor.addPathNotRequiringAuth(SamlPluginConstants.SAML_INITIATE_LOGIN_URL);
         webControllerManager.registerController(SamlPluginConstants.SAML_INITIATE_LOGIN_URL, this);
     }
@@ -52,7 +50,7 @@ public class SamlLoginController extends BaseController {
     protected ModelAndView doHandle(@NotNull HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse) throws Exception {
 
         try {
-            LOG.info("Initiating SSO login");
+            LOG.info(String.format("Initiating SSO login at %s", httpServletRequest.getRequestURL()));
 
             var settings = settingsStorage.load();
 
