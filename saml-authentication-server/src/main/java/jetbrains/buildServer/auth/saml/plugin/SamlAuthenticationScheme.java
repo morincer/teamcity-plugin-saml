@@ -174,7 +174,7 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
 
             return HttpAuthenticationResult.authenticated(
                     new ServerPrincipal(user.getRealm(), user.getUsername(), null, settings.isCreateUsersAutomatically(), new HashMap<>()),
-                    true).withRedirect("/");
+                    true).withRedirect(request.getContextPath() + "/");
         } catch (Exception e) {
             LOG.error(e);
             return sendUnauthorizedRequest(request, response, String.format("Failed to authenticate request: %s", e.getMessage()));
