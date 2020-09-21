@@ -58,7 +58,7 @@ export default class NewConnectionWizard extends Vue {
     public SsoProvider = SsoProvider;
     public provider: SsoProvider = this.SsoProvider.Okta;
 
-    public settings: SamlSettings = {};
+    public settings: SamlSettings = { additionalCerts: [] };
 
     public oktaDecoration = OktaDecoration;
     public oneloginDecoration = OneloginDecoration;

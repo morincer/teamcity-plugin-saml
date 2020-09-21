@@ -9,18 +9,18 @@
     "lint:fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "vue": "^2.6.11",
-    "vue-class-component": "^7.2.4",
+    "axios": "^0.20.0",
+    "vue": "^2.6.12",
+    "vue-class-component": "^7.2.6",
     "vue-inject": "^2.1.1",
     "vue-property-decorator": "^9.0.0",
-    "vue-router": "^3.3.4",
+    "vue-router": "^3.4.3",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-typescript": "^4.4.6",
-    "@vue/cli-service": "^4.4.6",
-    "typescript": "^3.9.7",
-    "vue-template-compiler": "^2.6.11"
+    "@vue/cli-plugin-typescript": "^4.5.6",
+    "@vue/cli-service": "^4.5.6",
+    "typescript": "^4.0.3",
+    "vue-template-compiler": "^2.6.12"
   }
 }

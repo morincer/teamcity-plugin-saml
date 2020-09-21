@@ -3,6 +3,7 @@ package jetbrains.buildServer.auth.saml.plugin;
 import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.authn.SamlResponse;
 import com.onelogin.saml2.exception.SettingsException;
+import com.onelogin.saml2.exception.ValidationError;
 import com.onelogin.saml2.http.HttpRequest;
 import com.onelogin.saml2.settings.Saml2Settings;
 import jetbrains.buildServer.RootUrlHolder;
@@ -16,12 +17,16 @@ import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.Instant;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathException;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.security.cert.CertificateEncodingException;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -58,9 +63,39 @@ public class CasesTest {
         SamlResponse samlResponse = new SamlResponse(saml2Settings, request);
         DateTimeUtils.setCurrentMillisFixed(Instant.parse("2020-07-25T01:19:25.443Z").getMillis());
         assertTrue(samlResponse.isValid());
+    }
 
-        /*var auth = new Auth(saml2Settings, request, mock(HttpServletResponse.class));
+    @Test
+    public void case2ShouldPass() throws Exception {
+        var storage = new InMemorySamlPluginSettingsStorage();
 
-        auth.processResponse();*/
+        RootUrlHolder rootUrlHolder = mock(RootUrlHolder.class);
+        when(rootUrlHolder.getRootUrl()).thenReturn("https://teamcity-ssotest.pri.services-exchange.com");
+
+        SamlAuthenticationScheme scheme = new SamlAuthenticationScheme(
+                rootUrlHolder,
+                storage,
+                mock(UserModel.class),
+                mock(UserGroupManager.class),
+                mock(LoginConfiguration.class));
+
+        var metadataXml = FileUtils.readFileToString(Paths.get("src/test/resources/case 2/metadata.xml").toFile());
+
+        SamlPluginSettings settings = storage.load();
+        settings.setEntityId("teamcity-ssotest");
+        settings.setStrict(true);
+
+        scheme.importMetadataIntoSettings(metadataXml, settings);
+        storage.save(settings);
+
+        var saml2Settings = scheme.buildSettings();
+
+        var request = new HttpRequest("https://teamcity-ssotest.pri.services-exchange.com" + "/app/saml/callback/", "");
+        request = request.addParameter(SamlPluginConstants.SAML_RESPONSE_REQUEST_PARAMETER,
+                FileUtils.readFileToString(Paths.get("src/test/resources/case 2/SAMLResponse").toFile(), "utf-8"));
+
+        SamlResponse samlResponse = new SamlResponse(saml2Settings, request);
+        DateTimeUtils.setCurrentMillisFixed(Instant.parse("2020-08-20T19:24:29.291Z").getMillis());
+        assertTrue(samlResponse.isValid());
     }
 }

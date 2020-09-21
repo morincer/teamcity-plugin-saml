@@ -29,6 +29,7 @@ export interface SamlSettings {
     entityId?: string;
     ssoEndpoint?: string;
     publicCertificate?: string;
+    additionalCerts?: string[];
     ssoCallbackUrl?: string;
     hideLoginForm?: boolean;
     ssoLoginButtonName?: string;
@@ -40,8 +41,6 @@ export interface SamlSettings {
     createUsersAutomatically?: boolean;
     limitToPostfixes?: boolean;
     allowedPostfixes?: string;
-
-
 
     emailAttributeMapping?: SamlAttributeMapping;
     nameAttributeMapping?: SamlAttributeMapping;
