@@ -4,7 +4,7 @@
                type="text" :class="className" v-bind:value="value"
                v-on:input="$emit('input', $event.target.value)"/>
         <textarea v-else :rows="rows"
-                  type="text" :class="className" v-bind:value="value"
+                  :class="className" v-bind:value="value"
                   v-on:input="$emit('input', $event.target.value)"/>
     </span>
 </template>

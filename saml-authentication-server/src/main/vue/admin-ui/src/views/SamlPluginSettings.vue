@@ -27,14 +27,12 @@
         </template>
       </RunnerFormRow>
       <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
-      <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate"/>
+      <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
       <RunnerFormRow>
         <template v-slot:label>Additional Certificates</template>
         <template v-slot:content>
           <div v-for="(cert, key) in additionalCerts" style="margin-bottom: 10px" :key="key">
-            <TextInput v-bind:value="cert"
-                       v-on:input="$emit('input', $event)"
-                       textarea/>
+            <TextInput v-model="cert.value" textarea  class="input_certificate"/>
             <input type="button" class="btn" value="Remove" style="margin-left: 10px; vertical-align: top"
                    @click="removeAdditionalCertificate(key)">
           </div>
@@ -166,23 +164,27 @@ import MessagesBox from "@/components/MessagesBox.vue";
 import {appConfig} from "@/main.dependencies";
 import SamlAttributeSelect from "@/components/SamlAttributeSelect.vue";
 
+interface IValue {
+  value: string;
+}
+
 @Component({
   components: {
     SamlAttributeSelect,
     MessagesBox,
-    TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator
-  }
+    TextInput, RunnerFormInput, RunnerFormRow, GroupingHeader, RunnerForm, ProgressIndicator,
+  },
 })
 export default class SamlPluginSettings extends Vue {
 
   public settingsApiService: ISettingsApiService = appConfig.settingsApiService!;
 
-  public settings: SamlSettings = { additionalCerts: [] };
+  public settings: SamlSettings = {additionalCerts: []};
   public isLoading: boolean = false;
   public isSaving: boolean = false;
   public errors: ApiError[] = [];
   public successMsg: string = "";
-  public additionalCerts: { [key: string] : string} = {}
+  public additionalCerts: { [key: string]: IValue } = {};
 
   public async mounted() {
     try {
@@ -193,7 +195,7 @@ export default class SamlPluginSettings extends Vue {
         this.settings = result.result.settings;
         this.additionalCerts = {};
         if (this.settings.additionalCerts) {
-          this.settings.additionalCerts.forEach(c => this.addAdditionalCertificate(c));
+          this.settings.additionalCerts.forEach((c) => this.addAdditionalCertificate(c));
         }
       }
     } catch (e) {
@@ -208,6 +210,12 @@ export default class SamlPluginSettings extends Vue {
     this.errors = [];
     this.successMsg = "";
 
+    if (this.additionalCerts) {
+      this.settings.additionalCerts = [];
+      Object.keys(this.additionalCerts)
+          .forEach((key) => this.settings.additionalCerts?.push(this.additionalCerts[key].value));
+    }
+
     const result = await this.settingsApiService.save(this.settings);
     this.isSaving = false;
     if (result.result) {
@@ -219,7 +227,7 @@ export default class SamlPluginSettings extends Vue {
 
   public addAdditionalCertificate(c: string = "") {
     const key = "cert_" + new Date().getTime() + "_" + Math.random();
-    Vue.set(this.additionalCerts, key, c);
+    Vue.set(this.additionalCerts, key, { value: c });
   }
 
   public removeAdditionalCertificate(key: string) {
