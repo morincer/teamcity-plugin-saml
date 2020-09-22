@@ -25,9 +25,9 @@
         </pluginRepository>
     </pluginRepositories>
     <scm>
-        <connection>scm:git:ssh@github.com:morincer/teamcity-plugin-saml.git</connection>
+        <connection>scm:git:git@github.com:morincer/teamcity-plugin-saml.git</connection>
         <url>https://github.com/morincer/teamcity-plugin-saml</url>
-        <developerConnection>scm:git:ssh@github.com:morincer/teamcity-plugin-saml.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:morincer/teamcity-plugin-saml.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <build>
@@ -37,7 +37,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.3</version>
                 <configuration>
-                    <pushChanges>false</pushChanges>
+                    <pushChanges>true</pushChanges>
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
