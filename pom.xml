@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.gromozeka.teamcity</groupId>
     <artifactId>saml-authentication</artifactId>
-    <version>1.3.1</version>
+    <version>1.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -28,7 +28,7 @@
         <connection>scm:git:ssh@github.com:morincer/teamcity-plugin-saml.git</connection>
         <url>https://github.com/morincer/teamcity-plugin-saml</url>
         <developerConnection>scm:git:ssh@github.com:morincer/teamcity-plugin-saml.git</developerConnection>
-        <tag>1.3.1</tag>
+        <tag>HEAD</tag>
     </scm>
     <build>
         <plugins>
@@ -44,7 +44,7 @@
             <plugin>
                 <groupId>org.jetbrains.teamcity</groupId>
                 <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                <version>0.4</version>
+                <version>0.5-SNAPSHOT</version>
                 <configuration>
                     <teamcityDir>servers/${teamcity-version-runtime}</teamcityDir>
                 </configuration>
@@ -55,7 +55,7 @@
                 <plugin>
                     <groupId>org.jetbrains.teamcity</groupId>
                     <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                    <version>0.4</version>
+                    <version>0.5-SNAPSHOT</version>
                     <configuration>
                         <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
                         <teamcitySourceURL>https://download-cf.jetbrains.com/teamcity</teamcitySourceURL>
