@@ -17,17 +17,20 @@ import java.util.Map;
 public class SamlSettingsAdminPage extends AdminPage {
     private final PluginDescriptor pluginDescriptor;
     private final SamlAuthenticationScheme samlAuthenticationScheme;
+    private SamlPluginPermissionsManager permissionsManager;
     private final Logger LOG = Loggers.AUTH;
     private final SamlPluginSettingsStorage settingsStorage;
 
     protected SamlSettingsAdminPage(@NotNull PagePlaces pagePlaces,
                                     @NotNull PluginDescriptor pluginDescriptor,
                                     @NotNull SamlPluginSettingsStorage settingsStorage,
-                                    @NotNull SamlAuthenticationScheme samlAuthenticationScheme) {
+                                    @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
+                                    @NotNull SamlPluginPermissionsManager permissionsManager) {
         super(pagePlaces);
         this.settingsStorage = settingsStorage;
         this.pluginDescriptor = pluginDescriptor;
         this.samlAuthenticationScheme = samlAuthenticationScheme;
+        this.permissionsManager = permissionsManager;
         setPluginName(SamlPluginConstants.PLUGIN_NAME);
         setIncludeUrl(pluginDescriptor.getPluginResourcesPath("SamlPluginAdminPage.jsp"));
         setTabTitle("SAML Settings");
@@ -61,15 +64,8 @@ public class SamlSettingsAdminPage extends AdminPage {
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
         return super.isAvailable(request)
-                && checkHasGlobalPermission(request, getRequiredPermission())
+                && permissionsManager.hasPermission(request, permissionsManager.getPermissionReadSettings())
                 && samlAuthenticationScheme.isConfigured();
     }
 
-    private Permission getRequiredPermission() {
-        if (Permission.lookupPermission("MANAGE_AUTHENTICATION_SETTINGS") != null) {
-            //this permission was introduced in TeamCity 2020.1.1, so it may not exist when the server is older than 2020.1.1
-            return Permission.lookupPermission("MANAGE_AUTHENTICATION_SETTINGS");
-        }
-        return Permission.CHANGE_SERVER_SETTINGS;
-    }
 }

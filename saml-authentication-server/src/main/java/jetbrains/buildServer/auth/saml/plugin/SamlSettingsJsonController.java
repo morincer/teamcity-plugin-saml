@@ -12,8 +12,6 @@ import jetbrains.buildServer.controllers.json.JsonActionResult;
 import jetbrains.buildServer.controllers.json.JsonControllerAction;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.util.StringUtil;
-import jetbrains.buildServer.web.CSRFFilter;
-import jetbrains.buildServer.web.CsrfCheck;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +20,6 @@ import org.springframework.http.HttpMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validation;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
@@ -31,17 +28,20 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
     private SamlAuthenticationScheme samlAuthenticationScheme;
     private SamlPluginSettingsStorage settingsStorage;
+    private SamlPluginPermissionsManager permissionsManager;
     private RootUrlHolder rootUrlHolder;
 
-    static final String CSRF_HEADER = "X-TC-CSRF-Token" ;
+    static final String CSRF_HEADER = "X-TC-CSRF-Token";
 
     protected SamlSettingsJsonController(
             @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
             @NotNull SamlPluginSettingsStorage settingsStorage,
-                                         WebControllerManager controllerManager) {
+            @NotNull SamlPluginPermissionsManager permissionsManager,
+            WebControllerManager controllerManager) {
         super("/admin/samlSettingsApi.html", controllerManager);
         this.samlAuthenticationScheme = samlAuthenticationScheme;
         this.settingsStorage = settingsStorage;
+        this.permissionsManager = permissionsManager;
 
         registerAction(JsonControllerAction.forParam("action", "get").using(HttpMethod.GET).run(this::getSettings));
         registerAction(JsonControllerAction.forParam("action", "save").using(HttpMethod.POST).run(this::saveSettings));
@@ -50,6 +50,10 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
     @NotNull
     public JsonActionResult<SamlPluginSettings> importMetadata(HttpServletRequest request) {
+        if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings())) {
+            return JsonActionResult.forbidden();
+        }
+
         try {
 
             var metadataImport = bindFromRequest(request, MetadataImport.class);
@@ -78,6 +82,10 @@ public class SamlSettingsJsonController extends BaseJsonController {
     }
 
     public JsonActionResult<String> saveSettings(HttpServletRequest request) {
+        if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings())) {
+            return JsonActionResult.forbidden();
+        }
+
         try {
             var settings = bindFromRequest(request, SamlPluginSettings.class);
 
@@ -122,6 +130,11 @@ public class SamlSettingsJsonController extends BaseJsonController {
     }
 
     public JsonActionResult<SamlPluginSettingsResponse> getSettings(HttpServletRequest request) {
+
+        if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionReadSettings())) {
+            return JsonActionResult.forbidden();
+        }
+
         try {
             var samlPluginSettings = settingsStorage.load();
             var callbackUrl = this.samlAuthenticationScheme.getCallbackUrl();
@@ -133,6 +146,8 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
             var response = new SamlPluginSettingsResponse();
             response.setSettings(samlPluginSettings);
+            response.setReadonly(!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings()));
+
             if (request != null && request.getSession() != null) {
                 response.setCsrfToken(request.getSession().getAttribute("tc-csrf-token").toString());
             }
@@ -142,4 +157,6 @@ public class SamlSettingsJsonController extends BaseJsonController {
             return JsonActionResult.fail(e);
         }
     }
+
+
 }

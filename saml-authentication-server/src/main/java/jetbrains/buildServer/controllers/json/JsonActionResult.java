@@ -1,6 +1,7 @@
 package jetbrains.buildServer.controllers.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettingsResponse;
 import jetbrains.buildServer.log.Loggers;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,11 @@ public class JsonActionResult<T> {
 
     public static <T> JsonActionResult fail(Set<ConstraintViolation<T>> errors) {
         String message = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+        return fail(new JsonActionError(HttpServletResponse.SC_OK, message));
+    }
+
+    public static JsonActionResult forbidden() {
+        String message = "You are not allowed to perform this action. Please contact your system administrator";
         return fail(new JsonActionError(HttpServletResponse.SC_OK, message));
     }
 }

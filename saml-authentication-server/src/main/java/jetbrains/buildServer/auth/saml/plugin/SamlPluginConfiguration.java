@@ -6,16 +6,20 @@ import jetbrains.buildServer.groups.UserGroupManager;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
+import jetbrains.buildServer.serverSide.auth.Permission;
+import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.web.SamlCsrfCheck;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import jetbrains.buildServer.web.util.SessionUser;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -52,8 +56,13 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, SamlAuthenticationScheme samlAuthenticationScheme) {
-        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, samlAuthenticationScheme);
+    SamlPluginPermissionsManager samlPluginPermissionsManager() {
+        return new SamlPluginPermissionsManager();
+    }
+
+    @Bean
+    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, SamlAuthenticationScheme samlAuthenticationScheme, SamlPluginPermissionsManager permissionsManager) {
+        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, samlAuthenticationScheme, permissionsManager);
     }
 
     @Bean
@@ -65,12 +74,14 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, SamlAuthenticationScheme samlAuthenticationScheme) throws IOException {
-        return new SamlSettingsJsonController(samlAuthenticationScheme, samlPluginSettingsStorage(null), controllerManager);
+    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, SamlAuthenticationScheme samlAuthenticationScheme, SamlPluginPermissionsManager permissionsManager) throws IOException {
+        return new SamlSettingsJsonController(samlAuthenticationScheme, samlPluginSettingsStorage(null), permissionsManager, controllerManager);
     }
 
     @Bean
     SamlCsrfCheck samlCsrfCheck(SamlAuthenticationScheme scheme, SamlPluginSettingsStorage settingsStorage) {
         return new SamlCsrfCheck(scheme, settingsStorage);
     }
+
+
 }
