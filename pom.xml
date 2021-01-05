@@ -8,7 +8,7 @@
 
     <properties>
         <teamcity-version-lib>2020.1</teamcity-version-lib>
-        <teamcity-version-runtime>2020.1.2</teamcity-version-runtime>
+        <teamcity-version-runtime>2020.1.5</teamcity-version-runtime>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -44,7 +44,7 @@
             <plugin>
                 <groupId>org.jetbrains.teamcity</groupId>
                 <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                <version>0.5-SNAPSHOT</version>
+                <version>0.4.1</version>
                 <configuration>
                     <teamcityDir>servers/${teamcity-version-runtime}</teamcityDir>
                 </configuration>
@@ -55,7 +55,7 @@
                 <plugin>
                     <groupId>org.jetbrains.teamcity</groupId>
                     <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                    <version>0.5-SNAPSHOT</version>
+                    <version>0.4.1</version>
                     <configuration>
                         <teamcityVersion>${teamcity-version-runtime}</teamcityVersion>
                         <teamcitySourceURL>https://download-cf.jetbrains.com/teamcity</teamcitySourceURL>
