@@ -22,6 +22,7 @@ export const SamlAttributeMappingTypes = {
 export interface SamlSettingsResponse {
     settings: SamlSettings;
     csrfToken: string;
+    readonly: boolean;
 }
 
 export interface SamlSettings {

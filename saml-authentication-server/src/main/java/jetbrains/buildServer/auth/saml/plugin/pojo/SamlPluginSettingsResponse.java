@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import lombok.Data;
 
 @Data

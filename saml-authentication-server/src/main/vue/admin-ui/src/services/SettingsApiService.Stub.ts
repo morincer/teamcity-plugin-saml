@@ -18,6 +18,7 @@ export default class SettingsApiServiceStub implements ISettingsApiService {
                             strict: true,
                         },
                         csrfToken: "token",
+                        readonly: false
                     },
                 });
             }, 1000);

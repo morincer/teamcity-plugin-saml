@@ -6,7 +6,8 @@
     <RunnerForm>
       <RunnerFormRow>
         <template v-slot:label>
-          <router-link to="/new" tag="button" class="btn btn_primary submitButton" style="margin-bottom: 10px">Connect
+          <router-link to="/new" :disabled="isReadonly" tag="button" class="btn btn_primary submitButton"
+                       style="margin-bottom: 10px">Connect
             Provider
           </router-link>
         </template>
@@ -21,23 +22,24 @@
         <template v-slot:content>
           <TextInput v-model="settings.ssoEndpoint"/>
           <router-link to="/import" tag="button" class="btn btn_primary submitButton"
-                       :disabled="isLoading || isSaving"
+                       :disabled="isLoading || isSaving || isReadonly "
                        style="margin-left: 10px">Import IdP Metadata
           </router-link>
         </template>
       </RunnerFormRow>
       <RunnerFormInput label="Issuer URL (Identity Provider Entity Id)" required v-model="settings.issuerUrl"/>
-      <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate" />
+      <RunnerFormInput label="X509 Certificate" textarea required v-model="settings.publicCertificate"/>
       <RunnerFormRow>
         <template v-slot:label>Additional Certificates</template>
         <template v-slot:content>
           <div v-for="(cert, key) in additionalCerts" style="margin-bottom: 10px" :key="key">
-            <TextInput v-model="cert.value" textarea  class="input_certificate"/>
+            <TextInput v-model="cert.value" textarea class="input_certificate"/>
             <input type="button" class="btn" value="Remove" style="margin-left: 10px; vertical-align: top"
+                   :disabled="isReadonly"
                    @click="removeAdditionalCertificate(key)">
           </div>
           <div>
-            <input type="submit" value="Add" class="btn submitButton"
+            <input type="submit" value="Add" class="btn submitButton" :disabled="isReadonly"
                    @click="addAdditionalCertificate()"/>
           </div>
         </template>
@@ -141,7 +143,7 @@
 
       <template v-slot:actions>
         <input type="submit" value="Save" class="btn btn_primary submitButton"
-               :disabled="isLoading || isSaving"
+               :disabled="isLoading || isSaving || isReadonly"
                @click="submit()"/>
         <ProgressIndicator title="Fetching SSO configuration..." v-if="isLoading"/>
         <ProgressIndicator title="Saving..." v-if="isSaving"/>
@@ -182,6 +184,7 @@ export default class SamlPluginSettings extends Vue {
   public settings: SamlSettings = {additionalCerts: []};
   public isLoading: boolean = false;
   public isSaving: boolean = false;
+  public isReadonly: boolean = false;
   public errors: ApiError[] = [];
   public successMsg: string = "";
   public additionalCerts: { [key: string]: IValue } = {};
@@ -194,6 +197,8 @@ export default class SamlPluginSettings extends Vue {
       if (result.result) {
         this.settings = result.result.settings;
         this.additionalCerts = {};
+        console.log(result);
+        this.isReadonly = result.result.readonly;
         if (this.settings.additionalCerts) {
           this.settings.additionalCerts.forEach((c) => this.addAdditionalCertificate(c));
         }
@@ -227,7 +232,7 @@ export default class SamlPluginSettings extends Vue {
 
   public addAdditionalCertificate(c: string = "") {
     const key = "cert_" + new Date().getTime() + "_" + Math.random();
-    Vue.set(this.additionalCerts, key, { value: c });
+    Vue.set(this.additionalCerts, key, {value: c});
   }
 
   public removeAdditionalCertificate(key: string) {
