@@ -197,7 +197,6 @@ export default class SamlPluginSettings extends Vue {
       if (result.result) {
         this.settings = result.result.settings;
         this.additionalCerts = {};
-        console.log(result);
         this.isReadonly = result.result.readonly;
         if (this.settings.additionalCerts) {
           this.settings.additionalCerts.forEach((c) => this.addAdditionalCertificate(c));

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.serverSide.IOGuard;
 import lombok.Getter;
-import lombok.var;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -44,8 +43,6 @@ public class SamlPluginSettingsStorageImpl implements SamlPluginSettingsStorage 
 
     @Override
     public void save(SamlPluginSettings settings) throws IOException {
-        IOGuard.allowDiskWrite(() -> {
-            this.objectMapper.writeValue(this.configPath.toFile(), settings);
-        });
+        IOGuard.allowDiskWrite(() -> this.objectMapper.writeValue(this.configPath.toFile(), settings));
     }
 }

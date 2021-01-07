@@ -1,7 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
-import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
@@ -24,14 +23,11 @@ import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
 
-    private static Logger log = Loggers.AUTH;
+    private static final Logger log = Loggers.AUTH;
 
-    private SamlAuthenticationScheme samlAuthenticationScheme;
-    private SamlPluginSettingsStorage settingsStorage;
-    private SamlPluginPermissionsManager permissionsManager;
-    private RootUrlHolder rootUrlHolder;
-
-    static final String CSRF_HEADER = "X-TC-CSRF-Token";
+    private final SamlAuthenticationScheme samlAuthenticationScheme;
+    private final SamlPluginSettingsStorage settingsStorage;
+    private final SamlPluginPermissionsManager permissionsManager;
 
     protected SamlSettingsJsonController(
             @NotNull SamlAuthenticationScheme samlAuthenticationScheme,
@@ -81,7 +77,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
         }
     }
 
-    public JsonActionResult<String> saveSettings(HttpServletRequest request) {
+    public JsonActionResult<SamlPluginSettings> saveSettings(HttpServletRequest request) {
         if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings())) {
             return JsonActionResult.forbidden();
         }

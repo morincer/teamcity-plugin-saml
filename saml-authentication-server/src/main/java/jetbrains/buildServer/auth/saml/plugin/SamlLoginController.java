@@ -1,8 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.onelogin.saml2.Auth;
-import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.controllers.AuthorizationInterceptor;
 import jetbrains.buildServer.controllers.BaseController;
 import jetbrains.buildServer.log.Loggers;
@@ -14,7 +12,6 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,7 +66,7 @@ public class SamlLoginController extends BaseController {
             this.samlAuthenticationScheme.sendAuthnRequest(httpServletRequest, httpServletResponse);
             return null;
         } catch (Exception e) {
-            LOG.error(String.format("Error while initating SSO login redirect: ", e.getMessage()), e);
+            LOG.error(String.format("Error while initiating SSO login redirect: %s", e.getMessage()), e);
             throw e;
         }
     }
