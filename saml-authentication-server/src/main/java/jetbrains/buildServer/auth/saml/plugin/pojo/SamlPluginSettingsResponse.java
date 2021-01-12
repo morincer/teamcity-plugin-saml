@@ -6,4 +6,5 @@ import lombok.Data;
 public class SamlPluginSettingsResponse {
     private SamlPluginSettings settings;
     private String csrfToken = "";
+    private boolean isReadonly = false;
 }

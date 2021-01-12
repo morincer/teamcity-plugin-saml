@@ -68,6 +68,13 @@ The mapping between IdP group and TeamCity group is perfomed on the TeamCity gro
 
 See the [Okta Group Mapping](./docs/OktaGroupMapping.md) doc for an example of how to set this up.
 
+### Secondary Node Authentication Support
+
+The plugin supports execution on secondary server instances (nodes) (read [official documentation](https://www.jetbrains.com/help/teamcity/multinode-setup.html) for details). However, few limitations apply:
+
+    1. You are not allowed to change the plugin settings from the secondary node admin UI (as per JetBrains recommendation)
+    2. You should manually configure IdP to send SAML assertion to the secondary node URL (or deal with redirection on the load balancer/proxy level)
+
 ## Troubleshooting
 
 ### Additional Logging

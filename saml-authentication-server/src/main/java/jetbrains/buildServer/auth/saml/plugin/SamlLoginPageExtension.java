@@ -2,7 +2,6 @@ package jetbrains.buildServer.auth.saml.plugin;
 
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
-import jetbrains.buildServer.serverSide.auth.AuthModuleType;
 import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PlaceId;
@@ -12,10 +11,7 @@ import jetbrains.buildServer.web.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
 
 public class SamlLoginPageExtension extends SimplePageExtension {

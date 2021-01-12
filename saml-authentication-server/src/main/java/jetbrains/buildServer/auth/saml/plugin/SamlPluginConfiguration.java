@@ -52,8 +52,13 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, SamlAuthenticationScheme samlAuthenticationScheme) {
-        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, samlAuthenticationScheme);
+    SamlPluginPermissionsManager samlPluginPermissionsManager() {
+        return new SamlPluginPermissionsManager();
+    }
+
+    @Bean
+    SamlSettingsAdminPage samlPluginAdminPage(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor descriptor, SamlPluginSettingsStorage settingsStorage, SamlAuthenticationScheme samlAuthenticationScheme, SamlPluginPermissionsManager permissionsManager) {
+        return new SamlSettingsAdminPage(pagePlaces, descriptor, settingsStorage, samlAuthenticationScheme, permissionsManager);
     }
 
     @Bean
@@ -65,12 +70,14 @@ public class SamlPluginConfiguration {
     }
 
     @Bean
-    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, SamlAuthenticationScheme samlAuthenticationScheme) throws IOException {
-        return new SamlSettingsJsonController(samlAuthenticationScheme, samlPluginSettingsStorage(null), controllerManager);
+    SamlSettingsJsonController samlSettingsAjaxController(WebControllerManager controllerManager, SamlAuthenticationScheme samlAuthenticationScheme, SamlPluginPermissionsManager permissionsManager) throws IOException {
+        return new SamlSettingsJsonController(samlAuthenticationScheme, samlPluginSettingsStorage(null), permissionsManager, controllerManager);
     }
 
     @Bean
     SamlCsrfCheck samlCsrfCheck(SamlAuthenticationScheme scheme, SamlPluginSettingsStorage settingsStorage) {
         return new SamlCsrfCheck(scheme, settingsStorage);
     }
+
+
 }

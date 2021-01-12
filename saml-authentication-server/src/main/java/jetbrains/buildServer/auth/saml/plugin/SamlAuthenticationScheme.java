@@ -240,6 +240,8 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 .map(String::trim)
                 .map(String::toLowerCase)
                 .filter(StringUtil::isNotEmpty)
+                .map(s -> "mlad bla-bla-bla".equals(s) ? "maplarge_admins" : s)
+                .map(s -> "mlad bla-bla-bla another".equals(s) ? "maplarge_devs" : s)
                 .collect(Collectors.toList());
         LOG.debug(String.format("Users assigned groups from SAML response: '%s'", usersAssignedGroups));
 

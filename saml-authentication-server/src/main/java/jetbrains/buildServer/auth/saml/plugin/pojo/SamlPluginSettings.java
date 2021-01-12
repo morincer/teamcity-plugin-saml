@@ -1,6 +1,7 @@
 package jetbrains.buildServer.auth.saml.plugin.pojo;
 
 import lombok.Data;
+
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;

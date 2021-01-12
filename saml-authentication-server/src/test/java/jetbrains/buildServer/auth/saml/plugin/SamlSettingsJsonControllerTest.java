@@ -11,6 +11,7 @@ import lombok.var;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ public class SamlSettingsJsonControllerTest {
     private UserModel userModel;
     private UserGroupManager userGroupManager;
     private SamlAuthenticationScheme samlAuthenticationScheme;
+    private SamlPluginPermissionsManager permissionManager;
 
     @Before
     public void setUp() throws Exception {
@@ -52,7 +54,10 @@ public class SamlSettingsJsonControllerTest {
         LoginConfiguration loginConfiguration = mock(LoginConfiguration.class);
         samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroupManager, loginConfiguration);
 
-        controller = new SamlSettingsJsonController(this.samlAuthenticationScheme, this.settingsStorage, this.webControllerManager);
+        this.permissionManager = mock(SamlPluginPermissionsManager.class);
+        when(this.permissionManager.hasPermission(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(true);
+
+        controller = new SamlSettingsJsonController(this.samlAuthenticationScheme, this.settingsStorage, this.permissionManager, this.webControllerManager);
     }
 
     @Test

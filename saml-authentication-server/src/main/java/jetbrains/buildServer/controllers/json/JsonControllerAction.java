@@ -3,7 +3,6 @@ package jetbrains.buildServer.controllers.json;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jetbrains.buildServer.controllers.GetActionAllowed;
 import jetbrains.buildServer.log.Loggers;
-import jetbrains.buildServer.serverSide.auth.AccessDeniedException;
 import jetbrains.buildServer.web.openapi.ControllerAction;
 import lombok.Getter;
 import lombok.var;
@@ -11,12 +10,10 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.function.Function;
 
 @GetActionAllowed
 public class JsonControllerAction implements ControllerAction {
@@ -59,7 +56,6 @@ public class JsonControllerAction implements ControllerAction {
         boolean canProcess = this.paramName != null && this.paramValue != null
                 && this.paramValue.equals(request.getParameter(this.paramName))
                 && this.method != null && request.getMethod().equals(this.method.name());
-        Loggers.SERVER.info("In Can Process");
         return canProcess;
     }
 

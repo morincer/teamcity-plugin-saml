@@ -19,34 +19,39 @@ public class JsonActionResult<T> {
     JsonActionError[] errors = null;
     T result = null;
 
-    public static JsonActionResult ok(Object result) {
-        var jsonActionResult = new JsonActionResult();
+    public static <T> JsonActionResult<T> ok(T result) {
+        var jsonActionResult = new JsonActionResult<T>();
         jsonActionResult.result = result;
         return jsonActionResult;
     }
 
 
-    public static JsonActionResult fail(Throwable e) {
-        var jsonActionResult = new JsonActionResult();
+    public static <T> JsonActionResult<T> fail(Throwable e) {
+        var jsonActionResult = new JsonActionResult<T>();
         Loggers.SERVER.error(e);
         jsonActionResult.errors = new JsonActionError[] { new JsonActionError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage()) };
         return jsonActionResult;
     }
 
-    public static JsonActionResult fail(List<JsonActionError> errors) {
-        var jsonActionResult = new JsonActionResult();
-        jsonActionResult.errors = errors.toArray(new JsonActionError[errors.size()]);
+    public static <T> JsonActionResult<T> fail(List<JsonActionError> errors) {
+        var jsonActionResult = new JsonActionResult<T>();
+        jsonActionResult.errors = errors.toArray(new JsonActionError[0]);
         return jsonActionResult;
     }
 
-    public static JsonActionResult fail(JsonActionError ... errors) {
-        var jsonActionResult = new JsonActionResult();
+    public static <T> JsonActionResult<T> fail(JsonActionError ... errors) {
+        var jsonActionResult = new JsonActionResult<T>();
         jsonActionResult.errors = errors;
         return jsonActionResult;
     }
 
-    public static <T> JsonActionResult fail(Set<ConstraintViolation<T>> errors) {
-        String message = errors.stream().map(e -> e.getMessage()).collect(Collectors.joining(", "));
+    public static <T> JsonActionResult<T> fail(Set<ConstraintViolation<T>> errors) {
+        String message = errors.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
+        return fail(new JsonActionError(HttpServletResponse.SC_OK, message));
+    }
+
+    public static <T> JsonActionResult<T> forbidden() {
+        String message = "You are not allowed to perform this action. Please contact your system administrator";
         return fail(new JsonActionError(HttpServletResponse.SC_OK, message));
     }
 }
