@@ -56,7 +56,6 @@ public class JsonControllerAction implements ControllerAction {
         boolean canProcess = this.paramName != null && this.paramValue != null
                 && this.paramValue.equals(request.getParameter(this.paramName))
                 && this.method != null && request.getMethod().equals(this.method.name());
-        Loggers.SERVER.info("In Can Process");
         return canProcess;
     }
 
