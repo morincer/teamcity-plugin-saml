@@ -63,7 +63,7 @@ public class SamlSettingsAdminPage extends AdminPage {
     @Override
     public boolean isAvailable(@NotNull HttpServletRequest request) {
         return super.isAvailable(request)
-                && permissionsManager.hasPermission(request, permissionsManager.getPermissionReadSettings())
+                && permissionsManager.canReadSettings(request)
                 && samlAuthenticationScheme.isConfigured();
     }
 

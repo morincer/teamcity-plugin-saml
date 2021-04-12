@@ -46,7 +46,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
     @NotNull
     public JsonActionResult<SamlPluginSettings> importMetadata(HttpServletRequest request) {
-        if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings())) {
+        if (!permissionsManager.canWriteSettings(request)) {
             return JsonActionResult.forbidden();
         }
 
@@ -78,7 +78,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
     }
 
     public JsonActionResult<SamlPluginSettings> saveSettings(HttpServletRequest request) {
-        if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings())) {
+        if (!permissionsManager.canWriteSettings(request)) {
             return JsonActionResult.forbidden();
         }
 
@@ -127,7 +127,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
     public JsonActionResult<SamlPluginSettingsResponse> getSettings(HttpServletRequest request) {
 
-        if (!permissionsManager.hasPermission(request, permissionsManager.getPermissionReadSettings())) {
+        if (!permissionsManager.canReadSettings(request)) {
             return JsonActionResult.forbidden();
         }
 
@@ -142,7 +142,7 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
             var response = new SamlPluginSettingsResponse();
             response.setSettings(samlPluginSettings);
-            response.setReadonly(!permissionsManager.hasPermission(request, permissionsManager.getPermissionWriteSettings()));
+            response.setReadonly(!permissionsManager.canWriteSettings(request));
 
             if (request != null && request.getSession() != null) {
                 response.setCsrfToken(request.getSession().getAttribute("tc-csrf-token").toString());
