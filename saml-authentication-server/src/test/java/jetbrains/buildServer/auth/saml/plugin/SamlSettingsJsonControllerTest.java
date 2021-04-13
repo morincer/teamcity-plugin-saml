@@ -55,7 +55,8 @@ public class SamlSettingsJsonControllerTest {
         samlAuthenticationScheme = new SamlAuthenticationScheme(rootUrlHolder, settingsStorage, userModel, userGroupManager, loginConfiguration);
 
         this.permissionManager = mock(SamlPluginPermissionsManager.class);
-        when(this.permissionManager.hasPermission(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(true);
+        when(this.permissionManager.canWriteSettings(ArgumentMatchers.any())).thenReturn(true);
+        when(this.permissionManager.canReadSettings(ArgumentMatchers.any())).thenReturn(true);
 
         controller = new SamlSettingsJsonController(this.samlAuthenticationScheme, this.settingsStorage, this.permissionManager, this.webControllerManager);
     }
