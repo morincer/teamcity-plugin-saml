@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.gromozeka.teamcity</groupId>
     <artifactId>saml-authentication</artifactId>
-    <version>1.3.2</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
