@@ -203,7 +203,7 @@ export default class SamlPluginSettings extends Vue {
         }
       }
     } catch (e) {
-      this.errors = [{message: e, code: 0}];
+      this.errors = [{message: (e as Error).message, code: 0}];
     } finally {
       this.isLoading = false;
     }

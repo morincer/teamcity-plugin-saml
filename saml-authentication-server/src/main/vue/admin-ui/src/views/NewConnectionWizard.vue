@@ -77,7 +77,7 @@ export default class NewConnectionWizard extends Vue {
                 this.settings = result.result.settings;
             }
         } catch (e) {
-            this.errors = [{message: e, code: 0}];
+            this.errors = [{message: (e as Error).message, code: 0}];
         } finally {
             this.isLoading = false;
         }
@@ -94,7 +94,7 @@ export default class NewConnectionWizard extends Vue {
                 this.$router.push("/");
             }
         } catch (e) {
-            this.errors = [{message: e, code: 0}];
+            this.errors = [{message: (e as Error).message, code: 0}];
         } finally {
             this.isSaving = false;
         }

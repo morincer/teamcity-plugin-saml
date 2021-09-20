@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -128,11 +129,13 @@ public class SamlAuthenticationSchemeTest {
 
     @Test
     public void whenCreationOfNewUsersIsAllowedShouldCreateUserForValidClaim() throws IOException {
-        var request = mock(HttpServletRequest.class);
+        var request = new MockHttpServletRequest();
+
         var samlResponsePath = "src/test/resources/saml_signed_new_user.xml";
 
         var callbackUrl = "http://sp.example.com/demo1/index.php?acs";
-        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+        request.setRequestURI(callbackUrl);
+        //when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
 
         createSettings();
 
@@ -143,8 +146,10 @@ public class SamlAuthenticationSchemeTest {
         var parameterMap = new HashMap<String, String[]>();
         parameterMap.put("SAMLResponse", new String[] {saml});
 
-        when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        request.setParameters(parameterMap);
+
+        //when(request.getParameterMap()).thenReturn(parameterMap);
+        //when(request.getParameter("SAMLResponse")).thenReturn(saml);
         var response = mock(HttpServletResponse.class);
 
         var result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
@@ -162,12 +167,14 @@ public class SamlAuthenticationSchemeTest {
 
     @Test
     public void supportsLimitingNewUsersByPostfixes() throws IOException {
-        var request = mock(HttpServletRequest.class);
+        //var request = mock(HttpServletRequest.class);
+        var request = new MockHttpServletRequest();
         var samlResponsePathNoMail = "src/test/resources/saml_signed_new_user.xml";
         var samlResponsePathMail = "src/test/resources/saml_signed_new_user_somemail.com.xml";
 
         var callbackUrl = "http://sp.example.com/demo1/index.php?acs";
-        when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+        //when(request.getRequestURL()).thenReturn(new StringBuffer(callbackUrl));
+        request.setRequestURI(callbackUrl);
 
         createSettings();
 
@@ -178,8 +185,9 @@ public class SamlAuthenticationSchemeTest {
         var parameterMap = new HashMap<String, String[]>();
         parameterMap.put("SAMLResponse", new String[] {saml});
 
-        when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+//        when(request.getParameterMap()).thenReturn(parameterMap);
+//        when(request.getParameter("SAMLResponse")).thenReturn(saml);
+        request.setParameters(parameterMap);
         var response = mock(HttpServletResponse.class);
 
         var settings = settingsStorage.load();
@@ -194,6 +202,7 @@ public class SamlAuthenticationSchemeTest {
         saml = FileUtils.readFileToString(Paths.get(samlResponsePathMail).toAbsolutePath().toFile());
         saml = Base64.encode(saml.getBytes());
         parameterMap.put("SAMLResponse", new String[] {saml});
+        request.setParameters(parameterMap);
 
         result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
