@@ -1,6 +1,6 @@
 # TeamCity SAML Authentication Plug-In
 
-[![Build Status](https://travis-ci.org/morincer/teamcity-plugin-saml.svg?branch=master)](https://travis-ci.org/morincer/teamcity-plugin-saml)
+[![Java CI with Maven](https://github.com/morincer/teamcity-plugin-saml/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/morincer/teamcity-plugin-saml/actions/workflows/maven.yml)
 
 ## Overview
 
