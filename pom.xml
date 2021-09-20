@@ -39,6 +39,7 @@
                 <configuration>
                     <pushChanges>true</pushChanges>
                     <tagNameFormat>@{project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
             <plugin>

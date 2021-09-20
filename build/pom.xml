@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>saml-authentication</artifactId>
@@ -14,11 +15,9 @@
 
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <teamcity.saml-authentication.plugin.version>${version}-${maven.build.timestamp}
-        </teamcity.saml-authentication.plugin.version>
+        <teamcity.saml-authentication.plugin.version>${version}</teamcity.saml-authentication.plugin.version>
         <teamcity.saml-authentication.plugin.vendorName>Morincer</teamcity.saml-authentication.plugin.vendorName>
-        <teamcity.saml-authentication.plugin.vendorUrl>http://github.com/morincer
-        </teamcity.saml-authentication.plugin.vendorUrl>
+        <teamcity.saml-authentication.plugin.vendorUrl>http://github.com/morincer</teamcity.saml-authentication.plugin.vendorUrl>
     </properties>
     <dependencies>
         <dependency>

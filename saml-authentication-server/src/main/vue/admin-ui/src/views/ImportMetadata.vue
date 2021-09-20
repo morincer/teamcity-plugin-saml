@@ -98,7 +98,7 @@ export default class ImportMetadata extends Vue {
         this.errors = result.errors;
       }
     } catch (e) {
-      this.errors = [{message: e, code: 0}];
+      this.errors = [{message: (e as Error).message, code: 0}];
     } finally {
       this.isLoading = false;
     }
@@ -113,7 +113,7 @@ export default class ImportMetadata extends Vue {
         this.$router.push("/");
       }
     } catch (e) {
-      this.errors = [{message: e, code: 0}];
+      this.errors = [{message: (e as Error).message, code: 0}];
     } finally {
       this.isSaving = false;
     }
