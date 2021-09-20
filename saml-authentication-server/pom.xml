@@ -4,7 +4,7 @@
     <parent>
         <artifactId>saml-authentication</artifactId>
         <groupId>org.gromozeka.teamcity</groupId>
-        <version>1.4.0</version>
+        <version>1.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
