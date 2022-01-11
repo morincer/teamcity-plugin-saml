@@ -81,7 +81,26 @@ In this case you must explicitly specify the source for user full name, e-mail a
 To reference an attribute in the expression you can either use it's key directly (if the attribute name conforms to standard Java variable naming conventions) 
 or by calling *get('attribute name')* function, which effectively does the same.
 
-**Examples:**
+**Note**
+
+If the expression evaluation fails due to any reason (wrong syntax, mentioned attribute is missing from request) the user is stil being created but the respective element is considered to be empty. 
+
+However, to ease the troubleshooting of such cases, the plugin puts into the server log:
+1. Error message describing exception that lead to such behavior
+2. Warning listing all available attributes.
+
+For instance you will see something like lines below: 
+```text 
+[2022-01-11 17:18:16,702]  ERROR -     jetbrains.buildServer.AUTH - EL1008E: Property or field 'fullName' cannot be found on object of type 'java.util.HashMap' - maybe not public or not valid?
+org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'fullName' cannot be found on object of type 'java.util.HashMap' - maybe not public or not valid?
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.readProperty(PropertyOrFieldReference.java:229)
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.getValueInternal(PropertyOrFieldReference.java:97)
+    ... stack trace...
+   
+[2022-01-11 17:18:16,703]   WARN -     jetbrains.buildServer.AUTH - Available properties are: lastassertionid, FullName, nameid
+```
+
+**Expression Examples:**
 
 **Concatenate firstName and lastName**
 
@@ -96,7 +115,7 @@ Assuming we've got custom attributes named First Name and Last Name in SAML asse
 ```spel
 get('First Name') + ' ' + get('Last Name')
 ```
- 
+
 ### Group mapping
 
 The plugin can optionally support adding users to TeamCity groups based on IdP group membership.
