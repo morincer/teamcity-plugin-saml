@@ -252,6 +252,7 @@ public class SamlAuthenticationSchemeTest {
 
         verify(userMock).updateUserAccount(userNameId, userNameId, userNameId);
 
+        Mockito.clearInvocations(userMock);
         // For custom attribute
         settings = settingsStorage.load();
         settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
@@ -264,6 +265,20 @@ public class SamlAuthenticationSchemeTest {
         assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
 
         verify(userMock).updateUserAccount(userNameId, "Full Name", "myemail.com");
+
+        // For formula
+
+        settings = settingsStorage.load();
+        settings.getNameAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_EXPRESSION);
+        settings.getNameAttributeMapping().setCustomAttributeName("fullname + ' ' + email");
+        settings.getEmailAttributeMapping().setMappingType(SamlAttributeMappingSettings.TYPE_OTHER);
+        settings.getEmailAttributeMapping().setCustomAttributeName("email");
+        settingsStorage.save(settings);
+
+        result = this.scheme.processAuthenticationRequest(request, response, new HashMap<>());
+        assertThat(result.getType(), equalTo(HttpAuthenticationResult.Type.AUTHENTICATED));
+
+        verify(userMock).updateUserAccount(userNameId, "Full Name myemail.com", "myemail.com");
     }
 
     @Test
