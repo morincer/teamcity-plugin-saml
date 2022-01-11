@@ -16,6 +16,7 @@ export interface SamlAttributeMapping {
 export const SamlAttributeMappingTypes = {
     None: "none",
     NameID: "name_id",
+    Expression: "expression",
     Other: "other",
 };
 

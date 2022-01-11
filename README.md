@@ -60,6 +60,62 @@ The SAML authentication sequence is a following:
 1. You enter credentials on the login screen, your IdP validates them and, if all is fine, posts a signed SAML-assertion XML to the SSO login callback (<YOUR_SITE>/app/saml/callback/)
 1. The assertion contains name ID of the user (usually - e-mail). Plugin searches for users having the same username (not e-mail!) and, if the user is found, authenticates the request. 
 
+### Automatic Users Creation and Custom Attributes Mapping
+
+You have an option to create users automatically upon first successful login and provision their data basing on SAML assertion attributes.
+
+In this case you must explicitly specify the source for user full name, e-mail and groups. Valid options are:
+
+* None - no value
+* Name ID - value is taken from the NameId attribute
+* Custom Attribute - value is taken from the specified custom attribute
+* Expression - value is taken by evaluating a custom expression.
+
+ Expression is based on [Spring Expression Language (SpEL)](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html)
+ syntax and framework thus allowing to build quite a powerful statements. The context of the expression execution is a HashMap containing (the list is to be extended in future):
+
+* NameId - under *nameid* key
+* LastAssertionId - under *lastassertionid* key
+* All the custom attributes - mapped by their respective names. Single value attributes are mapped as strings, multi-valued attributes - as lists of strings.
+
+To reference an attribute in the expression you can either use it's key directly (if the attribute name conforms to standard Java variable naming conventions) 
+or by calling *get('attribute name')* function, which effectively does the same.
+
+**Note**
+
+If the expression evaluation fails due to any reason (wrong syntax, mentioned attribute is missing from request) the user is stil being created but the respective element is considered to be empty. 
+
+However, to ease the troubleshooting of such cases, the plugin puts into the server log:
+1. Error message describing exception that lead to such behavior
+2. Warning listing all available attributes.
+
+For instance you will see something like lines below: 
+```text 
+[2022-01-11 17:18:16,702]  ERROR -     jetbrains.buildServer.AUTH - EL1008E: Property or field 'fullName' cannot be found on object of type 'java.util.HashMap' - maybe not public or not valid?
+org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'fullName' cannot be found on object of type 'java.util.HashMap' - maybe not public or not valid?
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.readProperty(PropertyOrFieldReference.java:229)
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.getValueInternal(PropertyOrFieldReference.java:97)
+    ... stack trace...
+   
+[2022-01-11 17:18:16,703]   WARN -     jetbrains.buildServer.AUTH - Available properties are: lastassertionid, FullName, nameid
+```
+
+**Expression Examples:**
+
+**Concatenate firstName and lastName**
+
+Assuming we've got custom attributes named firstName and lastName in SAML assertion.
+```spel
+firstName + ' ' + lastName
+```
+
+**Concatenate firstName and lastName using get**
+
+Assuming we've got custom attributes named First Name and Last Name in SAML assertion.
+```spel
+get('First Name') + ' ' + get('Last Name')
+```
+
 ### Group mapping
 
 The plugin can optionally support adding users to TeamCity groups based on IdP group membership.

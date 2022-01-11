@@ -11,6 +11,8 @@ import com.onelogin.saml2.util.Util;
 import jetbrains.buildServer.RootUrlHolder;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
+import jetbrains.buildServer.auth.saml.plugin.utils.SpelExpressionContext;
+import jetbrains.buildServer.auth.saml.plugin.utils.SpelExpressionExecutor;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationResult;
 import jetbrains.buildServer.controllers.interceptors.auth.HttpAuthenticationSchemeAdapter;
 import jetbrains.buildServer.controllers.interceptors.auth.util.HttpAuthUtil;
@@ -201,6 +203,25 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 if (attributeValue.size() == 0) return "";
 
                 return String.join(", ", attributeValue);
+            case SamlAttributeMappingSettings.TYPE_EXPRESSION:
+                if (StringUtil.isEmpty(attributeMappingSettings.getCustomAttributeName())) {
+                    LOG.warn("Expression is not set");
+                    return "";
+                }
+                var expression = attributeMappingSettings.getCustomAttributeName();
+                var executor = new SpelExpressionExecutor();
+                var context = new SpelExpressionContext(saml);
+                try {
+                    String result = executor.evaluate(expression, context);
+                    if (StringUtils.isEmpty(result)) {
+                        LOG.warn(String.format("Expression %s evaluated to empty value.", expression));
+                    }
+                    return result;
+                } catch (Exception e) {
+                    LOG.error(e.getMessage(), e);
+                    LOG.warn(String.format("Available properties are: %s", context.getRootObjectAsMap().keySet().stream().collect(Collectors.joining(", "))));
+                    return "";
+                }
             default:
                 LOG.warn(String.format("Unknown mapping type: %s", attributeMappingSettings.getMappingType()));
                 return "";
@@ -293,16 +314,21 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
     public Saml2Settings buildSettings() throws IOException {
         var pluginSettings = settingsStorage.load();
 
+        return buildSettings(pluginSettings, getCallbackUrl());
+    }
+
+    @NotNull
+    public static Saml2Settings buildSettings(SamlPluginSettings pluginSettings, URL callbackUrl) throws IOException {
         Map<String, Object> samlData = new HashMap<>();
         samlData.put(SettingsBuilder.IDP_SINGLE_SIGN_ON_SERVICE_URL_PROPERTY_KEY, pluginSettings.getSsoEndpoint());
         samlData.put(SettingsBuilder.IDP_ENTITYID_PROPERTY_KEY, pluginSettings.getIssuerUrl());
         samlData.put(SettingsBuilder.SP_ENTITYID_PROPERTY_KEY, pluginSettings.getEntityId());
-        samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY, getCallbackUrl());
+        samlData.put(SettingsBuilder.SP_ASSERTION_CONSUMER_SERVICE_URL_PROPERTY_KEY, callbackUrl);
         samlData.put(SettingsBuilder.IDP_X509CERT_PROPERTY_KEY, pluginSettings.getPublicCertificate());
         samlData.put(SettingsBuilder.COMPRESS_REQUEST, pluginSettings.isCompressRequest());
         samlData.put(SettingsBuilder.STRICT_PROPERTY_KEY, pluginSettings.isStrict());
 
-        for (int i = 0 ; i < pluginSettings.getAdditionalCerts().size(); i++) {
+        for (int i = 0; i < pluginSettings.getAdditionalCerts().size(); i++) {
             var cert = pluginSettings.getAdditionalCerts().get(i);
             samlData.put(SettingsBuilder.IDP_X509CERTMULTI_PROPERTY_KEY + "." + i, cert);
         }

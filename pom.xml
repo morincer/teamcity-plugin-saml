@@ -8,7 +8,7 @@
 
     <properties>
         <teamcity-version-lib>2021.1</teamcity-version-lib>
-        <teamcity-version-runtime>2021.1 EAP2</teamcity-version-runtime>
+        <teamcity-version-runtime>2021.1</teamcity-version-runtime>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
