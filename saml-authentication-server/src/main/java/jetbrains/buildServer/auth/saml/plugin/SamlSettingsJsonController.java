@@ -121,7 +121,9 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
     public static void validateAttributeMapping(SamlAttributeMappingSettings mapping, String attributeName, List<JsonActionError> errors) {
         if (mapping.getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)) {
-            errors.add(new JsonActionError(String.format("You must specify non-empty attribute name for the %s attribute mapping", attributeName)));
+            if (StringUtil.isEmpty(mapping.getCustomAttributeName())) {
+                errors.add(new JsonActionError(String.format("You must specify non-empty attribute name for the %s attribute mapping", attributeName)));
+            }
         } else if (mapping.getMappingType().equals(SamlAttributeMappingSettings.TYPE_EXPRESSION)) {
             if (StringUtil.isEmpty(mapping.getCustomAttributeName())) {
                 errors.add(new JsonActionError(String.format("You must specify non-empty expression for the %s attribute mapping", attributeName)));

@@ -212,9 +212,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                 var executor = new SpelExpressionExecutor();
                 var context = new SpelExpressionContext(saml);
                 try {
-                    return executor.evaluate(expression, context);
+                    String result = executor.evaluate(expression, context);
+                    if (StringUtils.isEmpty(result)) {
+                        LOG.warn(String.format("Expression %s evaluated to empty value."));
+                    }
+                    return result;
                 } catch (Exception e) {
                     LOG.error(e.getMessage(), e);
+                    LOG.warn(String.format("Available properties are: " + context.getRootObjectAsMap().keySet().stream().collect(Collectors.joining(", "))));
                     return "";
                 }
             default:
