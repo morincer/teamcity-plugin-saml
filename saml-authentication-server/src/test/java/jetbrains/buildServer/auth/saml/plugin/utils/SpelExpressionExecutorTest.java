@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -48,10 +49,16 @@ public class SpelExpressionExecutorTest {
 
     @Test
     public void shouldSupportAttributesWithSpaces() {
-        var map = this.context.getRootObjectAsMap();
+        Map<String, Object> map = this.context.getRootObjectAsMap();
         map.put("Variable with long name", "Value");
         var result = executor.evaluate("get('Variable with long name')", context);
         assertThat(result, equalTo("Value"));
+    }
+
+    @Test
+    public void shouldSupportListLikeAttributes() {
+        var map = this.context.getRootObjectAsMap();
+
     }
 
     @SneakyThrows

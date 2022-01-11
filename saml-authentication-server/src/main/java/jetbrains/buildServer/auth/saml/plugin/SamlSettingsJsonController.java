@@ -5,6 +5,7 @@ import jetbrains.buildServer.auth.saml.plugin.pojo.MetadataImport;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlAttributeMappingSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettings;
 import jetbrains.buildServer.auth.saml.plugin.pojo.SamlPluginSettingsResponse;
+import jetbrains.buildServer.auth.saml.plugin.utils.SpelExpressionExecutor;
 import jetbrains.buildServer.controllers.json.BaseJsonController;
 import jetbrains.buildServer.controllers.json.JsonActionError;
 import jetbrains.buildServer.controllers.json.JsonActionResult;
@@ -14,11 +15,13 @@ import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.var;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Validation;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SamlSettingsJsonController extends BaseJsonController {
@@ -95,22 +98,13 @@ public class SamlSettingsJsonController extends BaseJsonController {
                 errors.add(new JsonActionError("You must specify allowed postfixes"));
             }
 
-            if (settings.isCreateUsersAutomatically()
-                    && settings.getEmailAttributeMapping().getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)
-                    && StringUtil.isEmpty(settings.getEmailAttributeMapping().getCustomAttributeName())) {
-                errors.add(new JsonActionError("You must specify non-empty attribute name for the e-mail attribute mapping"));
+            if (settings.isCreateUsersAutomatically()) {
+                validateAttributeMapping(settings.getNameAttributeMapping(), "name", errors);
+                validateAttributeMapping(settings.getEmailAttributeMapping(), "email", errors);
             }
 
-            if (settings.isCreateUsersAutomatically()
-                    && settings.getNameAttributeMapping().getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)
-                    && StringUtil.isEmpty(settings.getNameAttributeMapping().getCustomAttributeName())) {
-                errors.add(new JsonActionError("You must specify non-empty attribute name for the full name attribute mapping"));
-            }
-
-            if (settings.isAssignGroups()
-                    && settings.getGroupsAttributeMapping().getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)
-                    && StringUtil.isEmpty(settings.getGroupsAttributeMapping().getCustomAttributeName())) {
-                errors.add(new JsonActionError("You must specify non-empty attribute name for the groups attribute mapping"));
+            if (settings.isAssignGroups()) {
+                validateAttributeMapping(settings.getGroupsAttributeMapping(), "groups", errors);
             }
 
             if (errors.size() > 0) {
@@ -122,6 +116,23 @@ public class SamlSettingsJsonController extends BaseJsonController {
 
         } catch (Exception e) {
             return JsonActionResult.fail(e);
+        }
+    }
+
+    public static void validateAttributeMapping(SamlAttributeMappingSettings mapping, String attributeName, List<JsonActionError> errors) {
+        if (mapping.getMappingType().equals(SamlAttributeMappingSettings.TYPE_OTHER)) {
+            errors.add(new JsonActionError(String.format("You must specify non-empty attribute name for the %s attribute mapping", attributeName)));
+        } else if (mapping.getMappingType().equals(SamlAttributeMappingSettings.TYPE_EXPRESSION)) {
+            if (StringUtil.isEmpty(mapping.getCustomAttributeName())) {
+                errors.add(new JsonActionError(String.format("You must specify non-empty expression for the %s attribute mapping", attributeName)));
+            } else {
+                String expression = mapping.getCustomAttributeName();
+                var expressionExecutor = new SpelExpressionExecutor();
+                var errorMessage = expressionExecutor.validate(expression);
+                if (errorMessage != null) {
+                    errors.add(new JsonActionError(String.format("Syntax error in expression %s :%s", expression, errorMessage)));
+                }
+            }
         }
     }
 

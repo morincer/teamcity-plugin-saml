@@ -11,28 +11,31 @@ import java.util.Map;
 
 public class SpelExpressionContext extends StandardEvaluationContext {
 
-    public SpelExpressionContext(Map<String, String> attributes) {
+    public SpelExpressionContext(Map<String, ?> attributes) {
         setRootObject(attributes);
         addPropertyAccessor(new MapAccessor());
     }
 
     public SpelExpressionContext(Auth auth) {
-        Map<String, String> attributes = new HashMap<>();
+        Map<String, Object> attributes = new HashMap<>();
 
         for (var entry : auth.getAttributes().entrySet()) {
             var name = entry.getKey();
             var value = entry.getValue() == null || entry.getValue().size() == 0
                     ? ""
-                    : entry.getValue().get(0);
+                    : entry.getValue().size() == 1 ? entry.getValue().get(0) : entry.getValue();
 
             attributes.put(name, value);
         }
+
+        attributes.put("nameid", auth.getNameId());
+        attributes.put("lastassertionid", auth.getLastAssertionId());
 
         setRootObject(attributes);
         addPropertyAccessor(new MapAccessor());
     }
 
-    public Map<String, String> getRootObjectAsMap() {
-        return (Map<String, String>) getRootObject().getValue();
+    public <T> Map<String, T> getRootObjectAsMap() {
+        return (Map<String, T>) getRootObject().getValue();
     }
 }
