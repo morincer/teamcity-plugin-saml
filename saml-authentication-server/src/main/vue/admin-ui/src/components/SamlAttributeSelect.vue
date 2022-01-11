@@ -27,12 +27,9 @@
 
       <span class="smallNote">
         <p>The field uses <a href="https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html">Spring Expression Language (SpEL)</a> syntax with SAML request object attributes mapped as a context</p>
-        <p>NameId is accessible by <i>nameid</i>, custom attributes - by their respective names. To reference a custom attribute, use either it's name directly
+        <p>NameId is accessible by <i>nameid</i>, custom attributes - by their respective names. To reference a custom attribute, either use it's name directly
           (if it matches standard Java variable naming conditions) or utilize <i>get('attribute name')</i> function </p>
-        <p><strong>Examples:</strong></p>
-        <p>Concatenate first name and second name: <i>firstName + ' ' + secondName</i></p>
-        <p>Same using get(): <i>get('firstName') + ' ' + get('secondName')</i></p>
-
+        <p>More info at <a href="https://github.com/morincer/teamcity-plugin-saml#automatic-users-creation-and-custom-attributes-mapping" target="_blank">Readme.md</a></p>
       </span>
     </div>
   </div>
