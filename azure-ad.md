@@ -34,3 +34,14 @@ Now you can log into TeamCity using Azure AD, but TeamCity does not sync the use
 1. **Save** SAML settings.
 
 Now the groups specified in step 1 should be synched. If they are not, enable the `debug-auth` [logging preset](https://www.jetbrains.com/help/teamcity/teamcity-monitoring-and-diagnostics.html#Logging+Presets) and see the SAML Groups in `teamcity-saml.log` to troubleshoot the issue.
+
+## Changing Username Format
+
+The plugin gets the username from the `NameIdentity` claim of the SAML response sent by Azure AD. If it is in the `username@domain` format you might want to drop the `@domain` part and only leave the `username` part. Here's how you can do that:
+
+1. Edit the Attribute & Claims section of the SAML settings of your Enterprise Application in Azure Portal.
+1. Edit the **Unique User Identifier (Name ID)** claim.
+1. Set **Name identifier format** to `Email address`.
+1. Set **Source** to `Transformation`.
+1. Under **Manage transformation**, set **Transformation** to `ExtractMailPrefix()` and set **Parameter 1** to `user.mail`.
+1. Save everything.
