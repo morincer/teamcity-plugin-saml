@@ -23,6 +23,7 @@ import jetbrains.buildServer.serverSide.auth.LoginConfiguration;
 import jetbrains.buildServer.serverSide.auth.ServerPrincipal;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.UserModel;
+import jetbrains.buildServer.users.impl.UserEx;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.util.WebUtil;
 import lombok.var;
@@ -157,10 +158,14 @@ public class SamlAuthenticationScheme extends HttpAuthenticationSchemeAdapter {
                             } else {
                                 String email = getAttribute(auth, settings.getEmailAttributeMapping());
                                 String fullname = getAttribute(auth, settings.getNameAttributeMapping());
+                                String vcsUsername = getAttribute(auth, settings.getVcsUsernameAttributeMapping());
 
                                 LOG.info(String.format("Setting data for new user: username=%s, full name=%s, email=%s", username, fullname, email));
 
                                 user.updateUserAccount(username, fullname, email);
+                                if (StringUtil.isNotEmpty(vcsUsername)) {
+                                    ((UserEx)user).setDefaultVcsUsernames(Collections.singletonList(vcsUsername));
+                                }
                             }
                         }
                     } catch (Exception e) {

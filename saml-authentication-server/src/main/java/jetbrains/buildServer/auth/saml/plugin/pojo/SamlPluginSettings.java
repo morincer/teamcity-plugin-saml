@@ -1,5 +1,6 @@
 package jetbrains.buildServer.auth.saml.plugin.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SamlPluginSettings {
 
     @NotEmpty(message = "Issuer URL is mandatory")
@@ -42,5 +44,6 @@ public class SamlPluginSettings {
     SamlAttributeMappingSettings emailAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings nameAttributeMapping = new SamlAttributeMappingSettings();
     SamlAttributeMappingSettings groupsAttributeMapping = new SamlAttributeMappingSettings();
+    SamlAttributeMappingSettings vcsUsernameAttributeMapping = new SamlAttributeMappingSettings();
 
 }
