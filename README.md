@@ -64,7 +64,7 @@ The SAML authentication sequence is a following:
 
 You have an option to create users automatically upon first successful login and provision their data basing on SAML assertion attributes.
 
-In this case you must explicitly specify the source for user full name, e-mail and groups. Valid options are:
+In this case you must explicitly specify the source for user full name, VCS username, e-mail and groups. Valid options are:
 
 * None - no value
 * Name ID - value is taken from the NameId attribute
