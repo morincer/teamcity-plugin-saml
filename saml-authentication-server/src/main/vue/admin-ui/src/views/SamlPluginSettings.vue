@@ -56,7 +56,7 @@
       <RunnerFormRow>
         <template v-slot:label>SP Metadata XML</template>
         <template v-slot:content><a href="../app/saml/metadata.xml" target="_blank">Download</a></template>
-        <template v-slot:note>(Reminder) You must save you settings first, so the latest changes become available in the
+        <template v-slot:note>(Reminder) You must save your settings first, so the latest changes become available in the
           metadata XML
         </template>
       </RunnerFormRow>
@@ -124,7 +124,7 @@
         <template v-slot:note>Runs additional checks on SAML message</template>
       </RunnerFormRow>
       <RunnerFormRow>
-        <template v-slot:label>SAML Callback CORS Filer Exception</template>
+        <template v-slot:label>SAML Callback CORS Filter Exception</template>
         <template v-slot:content><input type="checkbox" v-model="settings.samlCorsFilter"/></template>
         <template v-slot:note>Adds CORS filter exception for POST requests sent to the login callback URL</template>
       </RunnerFormRow>
@@ -137,7 +137,7 @@
         <template v-slot:label>Compress SAML Request</template>
         <template v-slot:content><input type="checkbox" v-model="settings.compressRequest"></template>
         <template v-slot:note>When making an initial login redirect, the SAMLRequest variable in the URL will be
-          compressed prior Base64 encoding
+          compressed prior to Base64 encoding
         </template>
       </RunnerFormRow>
 
