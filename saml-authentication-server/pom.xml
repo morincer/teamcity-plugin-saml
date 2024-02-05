@@ -32,6 +32,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.jetbrains.teamcity.internal</groupId>
+            <artifactId>server</artifactId>
+            <version>${teamcity-version-lib}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>server-web-api</artifactId>
             <version>${teamcity-version-lib}</version>
@@ -62,7 +69,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>[2.9.9,)</version>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.15.2</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

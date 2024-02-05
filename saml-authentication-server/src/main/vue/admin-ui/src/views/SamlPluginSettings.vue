@@ -110,6 +110,12 @@
         </template>
       </RunnerFormRow>
       <RunnerFormRow v-if="settings.createUsersAutomatically">
+        <template v-slot:label>Map VCS Username From</template>
+        <template v-slot:content>
+          <SamlAttributeSelect v-model="settings.vcsUsernameAttributeMapping"/>
+        </template>
+      </RunnerFormRow>
+      <RunnerFormRow v-if="settings.createUsersAutomatically">
         <template v-slot:label>Map Groups From</template>
         <template v-slot:content>
           <SamlAttributeSelect v-model="settings.groupsAttributeMapping"/>

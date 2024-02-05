@@ -8,6 +8,10 @@ import jetbrains.buildServer.serverSide.IOGuard;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import jetbrains.buildServer.log.Loggers;
+import jetbrains.buildServer.serverSide.IOGuard;
+import lombok.Getter;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -72,7 +76,6 @@ public class SamlPluginSettingsStorageImpl implements SamlPluginSettingsStorage 
             }
 
             cachedSamlPluginSettings = result;
-
             return result;
         } catch (RuntimeException ex) {
             Loggers.SERVER.error("Cannot load SAML plugin settings", ex);
