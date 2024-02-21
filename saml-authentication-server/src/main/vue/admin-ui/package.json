@@ -9,7 +9,7 @@
     "lint:fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^0.28.0",
     "vue": "^2.6.14",
     "vue-class-component": "^7.2.6",
     "vue-inject": "^2.1.1",
