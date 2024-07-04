@@ -131,6 +131,10 @@ The plugin supports execution on secondary server instances (nodes) (read [offic
 1. You are not allowed to change the plugin settings from the secondary node admin UI (as per JetBrains recommendation)
 1. You should manually configure IdP to send SAML assertion to the secondary node URL (or deal with redirection on the load balancer/proxy level)
 
+### Examples
+
+* [Azure AD (Microsoft Azure Active Directory)](docs/AzureAd.md)
+
 ## Troubleshooting
 
 ### Additional Logging
@@ -158,10 +162,6 @@ Possible solutions:
  - Screenshot of the SP configuration (make sure no sensitive data like has been exposed to public) or SP metadata file
  - Screenshot of the IdP configuration or metadata file
  - teamcity-auth.log collected with the [debug-auth-saml](./docs/debug-auth-saml.xml) preset enabled (and again make sure no personal data present there - like real e-mail addresses - I don't really need them for troubleshooting)
-
- ### Examples
-
-* [Azure AD (Microsoft Azure Active Directory)](azure-ad.md)
 
  ## Development
  
