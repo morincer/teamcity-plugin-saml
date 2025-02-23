@@ -1,3 +1,5 @@
+**"Hey everyone, I’m sorry to say that I can’t actively maintain this project anymore — I just don’t have the time. That said, I’m still happy to review and accept pull requests, but I won’t be writing any new code myself. Feel free to fork it and keep it going! Huge thanks to everyone who contributed and supported this project—it really means a lot!"**  
+
 # TeamCity SAML Authentication Plug-In
 
 [![Java CI with Maven](https://github.com/morincer/teamcity-plugin-saml/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/morincer/teamcity-plugin-saml/actions/workflows/maven.yml)
