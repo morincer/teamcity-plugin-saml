@@ -1,3 +1,5 @@
+**IMPORTANT**: The plugin is now being maintained and supported by **JetBrains TeamCity team**. Please follow the fork at [https://github.com/JetBrains/teamcity-plugin-saml](https://github.com/JetBrains/teamcity-plugin-saml) to stay up-to-date.
+
 **Hey everyone, I’m sorry to say that I can’t actively maintain this project anymore — I just don’t have the time. That said, I’m still happy to review and accept pull requests, but I won’t be writing any new code myself. Feel free to fork it and keep it going! Huge thanks to everyone who contributed and supported this project—it really means a lot!**  
 
 # TeamCity SAML Authentication Plug-In
